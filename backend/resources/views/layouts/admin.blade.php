@@ -34,7 +34,7 @@
             <div class="flex items-center gap-3 mb-6">
                 <!-- <img src="{{ asset('img/Easy_Lease_Logo.svg') }}" onerror="this.style.display='none'" class="w-9 h-9" alt="Logo"> -->
                 <div>
-                    <img src="/img/Easy_Lease_Logo.png" alt="Logo" height="46" width="250">
+                    {{-- <img src="/img/Easy_Lease_Logo.png" alt="Logo" height="46" width="250"> --}}
                     <div class="text-white/70 text-lg mt-1">
                         <strong class="text-white">Admin</strong> Control Center
                     </div>
