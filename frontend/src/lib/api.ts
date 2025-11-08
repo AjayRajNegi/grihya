@@ -1,6 +1,6 @@
 // src/lib/api.ts
 const BASE = (
-  import.meta.env.VITE_API_URL || "http://backend.easylease.services/api"
+  import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api"
 ).replace(/\/$/, "");
 
 function buildUrl(path: string): string {
