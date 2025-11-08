@@ -115,6 +115,6 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
-    'logo_url' => env('MAIL_LOGO_URL', 'https://easylease.services/logo.png')
+    'logo_url' => env('MAIL_LOGO_URL', 'https://grihya/logo.png')
 
 ];

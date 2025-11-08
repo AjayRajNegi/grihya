@@ -1,19 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { FaHeart, FaComment, FaShare, FaArrowRight } from 'react-icons/fa';
-import { apiGet } from '@/lib/api';
-import { formatCount, formatDate } from '@/utils/format';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { FaHeart, FaComment, FaShare, FaArrowRight } from "react-icons/fa";
+import { apiGet } from "@/lib/api";
+import { formatCount, formatDate } from "@/utils/format";
 
+type Variant = "info" | "success" | "warning" | "danger";
 
-type Variant = 'info' | 'success' | 'warning' | 'danger';
-
-type HeadingBlock = { type: 'heading'; data: { text: string; level?: number } };
-type ParagraphBlock = { type: 'paragraph'; data: { html: string } };
-type ImageBlock = { type: 'image'; data: { src_url?: string; src?: string; alt?: string; caption?: string } };
-type QuoteBlock = { type: 'quote'; data: { text: string; author?: string } };
-type CalloutBlock = { type: 'callout'; data: { variant?: Variant; html: string } };
-type ProblemSolutionBlock = { type: 'problem_solution'; data: { number?: number; title: string; problem: string; solution: string } };
-type HeroBlock = { type: 'hero'; data: { image_url?: string; image?: string; title?: string } };
+type HeadingBlock = { type: "heading"; data: { text: string; level?: number } };
+type ParagraphBlock = { type: "paragraph"; data: { html: string } };
+type ImageBlock = {
+  type: "image";
+  data: { src_url?: string; src?: string; alt?: string; caption?: string };
+};
+type QuoteBlock = { type: "quote"; data: { text: string; author?: string } };
+type CalloutBlock = {
+  type: "callout";
+  data: { variant?: Variant; html: string };
+};
+type ProblemSolutionBlock = {
+  type: "problem_solution";
+  data: { number?: number; title: string; problem: string; solution: string };
+};
+type HeroBlock = {
+  type: "hero";
+  data: { image_url?: string; image?: string; title?: string };
+};
 
 type Block =
   | HeadingBlock
@@ -41,16 +52,21 @@ export type Post = {
 type ApiPaginated<T> = { data: T[]; meta?: unknown; links?: unknown };
 
 function isPaginated<T>(v: unknown): v is ApiPaginated<T> {
-  return !!v && typeof v === 'object' && 'data' in (v as any) && Array.isArray((v as any).data);
+  return (
+    !!v &&
+    typeof v === "object" &&
+    "data" in (v as any) &&
+    Array.isArray((v as any).data)
+  );
 }
 
 function getErrorMessage(e: unknown): string {
   if (e instanceof Error) return e.message;
-  if (typeof e === 'string') return e;
+  if (typeof e === "string") return e;
   try {
     return JSON.stringify(e);
   } catch {
-    return 'Unknown error';
+    return "Unknown error";
   }
 }
 
@@ -63,20 +79,20 @@ function isNew(iso?: string | null, days = 10): boolean {
 }
 
 function initials(name?: string | null) {
-  if (!name) return 'EL';
+  if (!name) return "EL";
   return name
-    .split(' ')
-    .map(n => n[0])
-    .join('')
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
     .slice(0, 2)
     .toUpperCase();
 }
 
 function clampWords(s?: string | null, maxWords = 30): string {
-  if (!s) return '';
+  if (!s) return "";
   const parts = s.trim().split(/\s+/);
   if (parts.length <= maxWords) return s;
-  return parts.slice(0, maxWords).join(' ') + '…';
+  return parts.slice(0, maxWords).join(" ") + "…";
 }
 
 // Skeleton
@@ -103,7 +119,7 @@ const SkeletonCard: React.FC = () => (
 
 // Card
 const PostCard: React.FC<{ post: Post }> = ({ post }) => {
-  const imgSrc = post.cover_image_url || '/placeholder.jpg';
+  const imgSrc = post.cover_image_url || "/placeholder.jpg";
   const newBadge = isNew(post.published_at, 10);
   const blogHref = `/blog/${encodeURIComponent(post.slug)}`;
 
@@ -116,8 +132,8 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
             src={imgSrc}
             alt={post.title}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            onError={e => {
-              (e.currentTarget as HTMLImageElement).src = '/placeholder.jpg';
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = "/placeholder.jpg";
             }}
           />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-black/0 to-transparent opacity-90" />
@@ -137,15 +153,21 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
           </h3>
         </Link>
 
-        {!!post.excerpt && <p className="mb-4 text-sm text-gray-600">{clampWords(post.excerpt, 28)}</p>}
+        {!!post.excerpt && (
+          <p className="mb-4 text-sm text-gray-600">
+            {clampWords(post.excerpt, 28)}
+          </p>
+        )}
 
         <div className="mb-2 flex items-center gap-3 text-xs text-gray-500">
           <div className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-emerald-50 text-emerald-700 font-semibold">
             {initials(post.author)}
           </div>
-          <span className="truncate">{post.author || 'EasyLease Team'}</span>
+          <span className="truncate">{post.author || "Grihya Team"}</span>
           <span className="select-none text-gray-300">•</span>
-          <time title={post.published_at || ''}>{formatDate(post.published_at || '')}</time>
+          <time title={post.published_at || ""}>
+            {formatDate(post.published_at || "")}
+          </time>
         </div>
       </div>
 
@@ -161,13 +183,16 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
           </Link>
           <div className="flex items-center gap-4 text-sm text-gray-600">
             <span className="inline-flex items-center gap-1" title="Likes">
-              <FaHeart className="text-rose-500" /> {formatCount(post.likes_count)}
+              <FaHeart className="text-rose-500" />{" "}
+              {formatCount(post.likes_count)}
             </span>
             <span className="inline-flex items-center gap-1" title="Comments">
-              <FaComment className="text-sky-500" /> {formatCount(post.comments_count)}
+              <FaComment className="text-sky-500" />{" "}
+              {formatCount(post.comments_count)}
             </span>
             <span className="inline-flex items-center gap-1" title="Shares">
-              <FaShare className="text-emerald-600" /> {formatCount(post.shares_count)}
+              <FaShare className="text-emerald-600" />{" "}
+              {formatCount(post.shares_count)}
             </span>
           </div>
         </div>
@@ -179,17 +204,17 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
 export default function BlogSection() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [err, setErr] = useState<string>('');
+  const [err, setErr] = useState<string>("");
 
   useEffect(() => {
     let mounted = true;
     (async () => {
       try {
-        const res = await apiGet<Post[] | ApiPaginated<Post>>('/posts?limit=6');
+        const res = await apiGet<Post[] | ApiPaginated<Post>>("/posts?limit=6");
         const list = isPaginated<Post>(res) ? res.data : res;
         if (mounted) setPosts(list || []);
       } catch (e: unknown) {
-        if (mounted) setErr(getErrorMessage(e) || 'Failed to load posts');
+        if (mounted) setErr(getErrorMessage(e) || "Failed to load posts");
       } finally {
         if (mounted) setLoading(false);
       }
@@ -201,7 +226,8 @@ export default function BlogSection() {
 
   // Sort latest first by published_at, fallback by id
   const sortedPosts = React.useMemo(() => {
-    const getTime = (p: Post) => (p.published_at ? new Date(p.published_at).getTime() : 0);
+    const getTime = (p: Post) =>
+      p.published_at ? new Date(p.published_at).getTime() : 0;
     return [...posts].sort((a, b) => getTime(b) - getTime(a) || b.id - a.id);
   }, [posts]);
 
@@ -215,9 +241,14 @@ export default function BlogSection() {
         <div className="text-center mb-8">
           <h2 className="relative inline-block text-2xl md:text-3xl font-bold text-gray-900">
             Latest Blog Posts
-            <span aria-hidden="true" className="absolute left-1/2 -bottom-2 h-1 w-20 md:w-24 -translate-x-1/2 rounded-full bg-[#2AB09C]" />
+            <span
+              aria-hidden="true"
+              className="absolute left-1/2 -bottom-2 h-1 w-20 md:w-24 -translate-x-1/2 rounded-full bg-[#2AB09C]"
+            />
           </h2>
-          <p className="mt-3 text-sm text-gray-600">Fresh insights, guides, and tips from the EasyLease team</p>
+          <p className="mt-3 text-sm text-gray-600">
+            Fresh insights, guides, and tips from the Grihya team
+          </p>
           {err && (
             <div className="mx-auto mt-3 inline-block rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
               {err}
@@ -234,9 +265,12 @@ export default function BlogSection() {
           </div>
         ) : sortedPosts.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-300 bg-white p-12 text-center">
-            <div className="mb-2 text-lg font-semibold text-gray-800">No blog posts found</div>
+            <div className="mb-2 text-lg font-semibold text-gray-800">
+              No blog posts found
+            </div>
             <p className="mb-4 max-w-md text-sm text-gray-600">
-              When new articles are published, you’ll see them here. Check back soon!
+              When new articles are published, you’ll see them here. Check back
+              soon!
             </p>
             <Link
               to="/"
@@ -248,14 +282,17 @@ export default function BlogSection() {
         ) : (
           <>
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {visiblePosts.map(post => (
+              {visiblePosts.map((post) => (
                 <PostCard key={post.id} post={post} />
               ))}
             </div>
 
             {showViewAll && (
               <div className="mt-8 text-center">
-                <Link to="/blog" className="inline-flex items-center gap-2 text-[#2AB09C] hover:text-[#1C7E70FF] font-medium">
+                <Link
+                  to="/blog"
+                  className="inline-flex items-center gap-2 text-[#2AB09C] hover:text-[#1C7E70FF] font-medium"
+                >
                   View All <FaArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </div>

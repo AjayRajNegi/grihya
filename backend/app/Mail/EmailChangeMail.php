@@ -21,9 +21,9 @@ class EmailChangeMail extends Mailable
 
     public function build()
     {
-        $logoUrl = config('app.logo_url', 'https://easylease.services/logo-email.png');
-        $facebookUrl = config('app.facebook_url', 'https://facebook.com/easylease');
-        $instagramUrl = config('app.instagram_url', 'https://instagram.com/easylease');
+        $logoUrl = config('app.logo_url', 'https://griya/logo-email.png');
+        $facebookUrl = config('app.facebook_url', 'https://facebook.com/grihya');
+        $instagramUrl = config('app.instagram_url', 'https://instagram.com/grihya');
 
         // Optional embed PNG if available locally
         $logoCid = null;
@@ -32,7 +32,7 @@ class EmailChangeMail extends Mailable
 
         $this->withSymfonyMessage(function (\Symfony\Component\Mime\Email $message) use (&$logoCid, $publicPath) {
             if ($publicPath && is_file($publicPath)) {
-                $logoCid = $message->embedFromPath($publicPath, 'easylease-logo', 'image/png');
+                $logoCid = $message->embedFromPath($publicPath, 'Grihya-logo', 'image/png');
             }
         });
 
@@ -41,7 +41,7 @@ class EmailChangeMail extends Mailable
             ->with([
                 'name'         => $this->name,
                 'url'          => $this->verifyUrl,
-                'appName'      => config('app.name', 'EasyLease'),
+                'appName'      => config('app.name', 'Grihya'),
                 'logoUrl'      => $logoCid ?: $logoUrl,
                 'facebookUrl'  => $facebookUrl,
                 'instagramUrl' => $instagramUrl,

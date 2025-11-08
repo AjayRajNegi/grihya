@@ -39,7 +39,7 @@ class AppServiceProvider extends ServiceProvider
 
             $frontend = config('app.frontend_url', env('FRONTEND_URL', 'http://localhost:5173'));
 
-            $appName = config('app.name', 'EasyLease');
+            $appName = config('app.name', 'Grihya');
 
             $isUrl = str_starts_with($arg, 'http://') || str_starts_with($arg, 'https://');
 
@@ -51,7 +51,7 @@ class AppServiceProvider extends ServiceProvider
             Log::info('reset.toMailUsing', ['email' => $user->email, 'arg' => $arg, 'final_url' => $finalUrl]);
 
 
-            return (new MailMessage)->subject('Reset your ' . $appName . ' password')->view('emails.password-reset', ['url' => $finalUrl, 'name' => $user->name ?? null, 'appName' => $appName, 'logoUrl' => config('mail.logo_url', 'https://easylease.services/logo.png'), 'instagramUrl' => config('app.instagram_url', null), 'facebookUrl' => config('app.facebook_url', null), 'expires' => $expires,]);
+            return (new MailMessage)->subject('Reset your ' . $appName . ' password')->view('emails.password-reset', ['url' => $finalUrl, 'name' => $user->name ?? null, 'appName' => $appName, 'logoUrl' => config('mail.logo_url', 'https://grihya/logo.png'), 'instagramUrl' => config('app.instagram_url', null), 'facebookUrl' => config('app.facebook_url', null), 'expires' => $expires,]);
         });
     }
 }

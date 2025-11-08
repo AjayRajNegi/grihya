@@ -208,7 +208,7 @@ class AuthController extends Controller
         $pending->delete();
 
         // Issue token so user is logged in immediately
-        $token = $user->createToken('EasyLease')->plainTextToken;
+        $token = $user->createToken('Grihya')->plainTextToken;
 
         return response()->json([
             'user'  => [
@@ -293,7 +293,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'Email not verified.'], 403);
         }
 
-        $token = $user->createToken('EasyLease')->plainTextToken;
+        $token = $user->createToken('Grihya')->plainTextToken;
 
         return response()->json([
             'user' => [

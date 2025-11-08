@@ -7,8 +7,8 @@ return [
     'allowed_headers' => ['*'],
 
     'allowed_origins' => [
-        'https://easylease.services',
-        'https://www.easylease.services',
+        'https://grihya',
+        'https://www.grihya',
         'http://localhost:5173',
         'http://127.0.0.1:5173',
     ],
@@ -19,8 +19,8 @@ return [
     'max_age' => 0,
 
     'stateful' => [
-        'https://easylease.services',
-        'https://www.easylease.services',
+        'https://grihya',
+        'https://www.grihya',
         'localhost:5173',
         '127.0.0.1:5173',
     ],

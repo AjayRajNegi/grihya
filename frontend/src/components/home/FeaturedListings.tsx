@@ -7,7 +7,7 @@ import type { Property } from "../../data/mockData"; // type-only import
 const API_URL =
   import.meta.env.VITE_API_URL ||
   import.meta.env.VITE_API_BASE_URL ||
-  "http://backend.easylease.services/api";
+  "http://backend.grihya/api";
 
 // API origin for absolutizing relative image paths (e.g., /storage/...)
 const API_ORIGIN = API_URL.replace(/\/api\/?$/, "");

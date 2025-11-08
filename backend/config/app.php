@@ -128,8 +128,8 @@ return [
 
 
     'frontend_url' => env('FRONTEND_URL',  env('APP_URL')),
-    'logo_url'     => env('LOGO_URL', 'https://easylease.services/logo.png'),
+    'logo_url'     => env('LOGO_URL', 'https://grihya/logo.png'),
 
-    'facebook_url' => env('FACEBOOK_URL', 'https://facebook.com/easylease'),
-    'instagram_url' => env('INSTAGRAM_URL', 'https://instagram.com/easylease'),
+    'facebook_url' => env('FACEBOOK_URL', 'https://facebook.com/grihya'),
+    'instagram_url' => env('INSTAGRAM_URL', 'https://instagram.com/grihya'),
 ];

@@ -2,4 +2,4 @@ User-agent: *
 Disallow: /admin
 Disallow: /api
 Disallow: /account
-Sitemap: https://easylease.services/sitemap.xml
+Sitemap: https://grihya/sitemap.xml

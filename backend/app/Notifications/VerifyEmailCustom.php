@@ -16,8 +16,8 @@ class VerifyEmailCustom extends BaseVerifyEmail
             ->view('emails.verify-email', [
                 'name'    => $notifiable->name,
                 'url'     => $url,
-                'appName' => config('app.name', 'EasyLease'),
-                'logoUrl' => config('app.logo_url', 'https://easylease.services/logo.png'),
+                'appName' => config('app.name', 'Grihya'),
+                'logoUrl' => config('app.logo_url', 'https://grihya/logo.png'),
                 'facebookUrl'  => config('app.facebook_url'),
                 'instagramUrl' => config('app.instagram_url'),
             ]);
