@@ -54,11 +54,11 @@ export function App() {
               <Route path="/reset-password" element={<ResetPasswordPage />} />
 
               {/* Onboarding routes without header/footer */}
-              <Route path="/onboarding/buyer" element={<BuyerOnboarding />} />
+              {/* <Route path="/onboarding/buyer" element={<BuyerOnboarding />} />
               <Route path="/onboarding/owner" element={<OwnerOnboarding />} />
               <Route path="/onboarding/kyc" element={<KYCFlow />} />
               <Route path="/onboarding/kyc-status" element={<KYCStatus />} />
-              <Route path="/verify-email" element={<VerifyEmailPage />} />
+              <Route path="/verify-email" element={<VerifyEmailPage />} /> */}
 
               <Route path="/account" element={<Account />} />
               <Route path="/properties/:id/edit" element={<ListProperty />} />

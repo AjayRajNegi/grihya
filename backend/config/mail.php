@@ -111,10 +111,10 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'hello@grihya.in'),
+        'name' => env('MAIL_FROM_NAME', 'Grihya'),
     ],
 
-    'logo_url' => env('MAIL_LOGO_URL', 'https://grihya/logo.png')
+    'logo_url' => env('MAIL_LOGO_URL', 'https://grihya.in/logo.png')
 
 ];

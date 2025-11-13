@@ -37,7 +37,7 @@ export default function VerifyEmailPage() {
   const [verified, setVerified] = useState(false);
   const timerRef = useRef<number | null>(null);
 
-  const API_BASE = import.meta.env.VITE_API_URL || "http://grihya/api";
+  const API_BASE = import.meta.env.VITE_API_URL || "http://grihya.in/api";
 
   // Cross-tab auto-redirect: if verification completes in another tab,
   // that tab will write a verified_event to localStorage; this tab will listen and redirect to Home.

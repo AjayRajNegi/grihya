@@ -128,7 +128,7 @@ return [
 
 
     'frontend_url' => env('FRONTEND_URL',  env('APP_URL')),
-    'logo_url'     => env('LOGO_URL', 'https://grihya/logo.png'),
+    'logo_url'     => env('LOGO_URL', 'https://grihya.in/logo.png'),
 
     'facebook_url' => env('FACEBOOK_URL', 'https://facebook.com/grihya'),
     'instagram_url' => env('INSTAGRAM_URL', 'https://instagram.com/grihya'),

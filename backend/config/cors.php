@@ -7,8 +7,8 @@ return [
     'allowed_headers' => ['*'],
 
     'allowed_origins' => [
-        'https://grihya',
-        'https://www.grihya',
+        'https://grihya.in',
+        'https://www.grihya.in',
         'http://localhost:5173',
         'http://127.0.0.1:5173',
     ],
@@ -19,8 +19,8 @@ return [
     'max_age' => 0,
 
     'stateful' => [
-        'https://grihya',
-        'https://www.grihya',
+        'https://grihya.in',
+        'https://www.grihya.in',
         'localhost:5173',
         '127.0.0.1:5173',
     ],

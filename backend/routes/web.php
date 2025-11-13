@@ -13,6 +13,17 @@ use Illuminate\Support\Facades\Storage;
 Route::get('/', function () {
     return view('adminauth.login');
 });
+Route::get('/test-mail', function () {
+    try {
+        Mail::raw('This is a test email sent using Mailtrap.', function ($message) {
+            $message->to('ajayrajnegi111@gmail.com')
+                    ->subject('Test Email from Laravel');
+        });
+        return '✅ Test email sent! Check your Mailtrap inbox.';
+    } catch (\Exception $e) {
+        return '❌ Mail failed: ' . $e->getMessage();
+    }
+});
 
 Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])
     ->name('verification.verify')
