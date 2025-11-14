@@ -20,6 +20,7 @@ import AgentProperties from "./pages/AgentProperties";
 import ChatWithUs from "./pages/ChatWithUs";
 import ResetPasswordPage from "./pages/auth/ResetPassword";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import VerifyEmailPage from "./pages/VerifyEmailPage";
 // import BuyerOnboarding from "./pages/onboarding/BuyerOnboarding";
 // import OwnerOnboarding from "./pages/onboarding/OwnerOnboarding";
 // import KYCFlow from "./pages/onboarding/KYCFlow";
@@ -57,8 +58,8 @@ export function App() {
               {/* <Route path="/onboarding/buyer" element={<BuyerOnboarding />} />
               <Route path="/onboarding/owner" element={<OwnerOnboarding />} />
               <Route path="/onboarding/kyc" element={<KYCFlow />} />
-              <Route path="/onboarding/kyc-status" element={<KYCStatus />} />
-              <Route path="/verify-email" element={<VerifyEmailPage />} /> */}
+              <Route path="/onboarding/kyc-status" element={<KYCStatus />} /> */}
+              <Route path="/verify-email" element={<VerifyEmailPage />} />
 
               <Route path="/account" element={<Account />} />
               <Route path="/properties/:id/edit" element={<ListProperty />} />
