@@ -81,10 +81,6 @@ const ROLE_LABEL: Record<Role, string> = {
   builder: "Builder",
 };
 
-// const TENANT_BENEFITS: Benefit[] = [
-//   { text: 'Browse thousands of verified properties', icon: <Home as={HomeIcon} /> } // placeholder, will replace below
-// ];
-
 const TENANT_BENEFITS: Benefit[] = [
   {
     text: "Browse thousands of verified properties",
@@ -166,10 +162,6 @@ function RoleBenefitsPanel({ role }: { role: Role }) {
             </li>
           ))}
         </ul>
-
-        {/* <div className="mt-6 rounded-lg border border-white/20 bg-white/10 p-3 text-xs text-emerald-50"> */}
-        {/* Tip: You can always change your role later from your profile. */}
-        {/* </div> */}
       </div>
     </aside>
   );
@@ -203,7 +195,6 @@ function MobileBenefits({ role }: { role: Role }) {
     </details>
   );
 }
-// ===== End helpers =====
 
 const Account: React.FC = () => {
   const navigate = useNavigate();
@@ -214,13 +205,12 @@ const Account: React.FC = () => {
 
   const [mode, setMode] = useState<"login" | "signup">("login");
 
-  // Profile state
   const [editingProfile, setEditingProfile] = useState(false);
   const [profile, setProfile] = useState({
     name: user?.name || "",
     email: user?.email || "",
     phoneLocal: "",
-    city: user?.city || "", // CHANGE: include city in local profile state
+    city: user?.city || "",
   });
   const [country, setCountry] = useState<CountryOpt>(COUNTRY_OPTIONS[0]);
 
@@ -229,7 +219,7 @@ const Account: React.FC = () => {
     email?: string;
     phone?: string;
     city?: string;
-  }>({}); // CHANGE: add city error
+  }>({});
   const [emailChecking, setEmailChecking] = useState(false);
   const [phoneChecking, setPhoneChecking] = useState(false);
   const [savingProfile, setSavingProfile] = useState(false);
@@ -259,7 +249,6 @@ const Account: React.FC = () => {
   >("all");
 
   const role = (user?.role || "tenant").toLowerCase();
-  // CHANGE: treat builder as lister (optional; remove || role === 'builder' if not desired)
   const isLister = role === "owner" || role === "broker" || role === "builder";
 
   const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
@@ -286,7 +275,7 @@ const Account: React.FC = () => {
         name: user.name || "",
         email: user.email || "",
         phoneLocal: local,
-        city: user.city || "", // CHANGE: seed city from user
+        city: user.city || "",
       });
       setFieldErrors({});
     }
@@ -297,7 +286,6 @@ const Account: React.FC = () => {
     [country, profile.phoneLocal]
   );
 
-  // CHANGE: compute if city is missing for notice
   const needsCity = !user?.city || !String(user.city).trim();
 
   const hasChanges = useMemo(() => {
@@ -307,41 +295,23 @@ const Account: React.FC = () => {
       (profile.name || "") !== (user.name || "") ||
       (profile.email || "") !== (user.email || "") ||
       fullPhone !== currentFull ||
-      (profile.city || "") !== (user.city || "") // CHANGE: include city in change detection
+      (profile.city || "") !== (user.city || "")
     );
   }, [profile, fullPhone, user]);
 
-  // const filteredProps = useMemo(() => {
-  //   if (statusFilter === 'all') return myProps;
-  //   if (statusFilter === 'active') return myProps.filter(p => p.status === 'active');
-  //   Inactive: includes 'pending', null, undefined, anything not 'active'
-  //   return myProps.filter(p => p.status !== 'active');
-  // }, [myProps, statusFilter]);
-
-  // Show server pagination only for 'all'.
-  // For filtered lists: show pagination only if filteredProps > perPage (6).
-  // const showPagination = useMemo(
-  //   () => (statusFilter === 'all' ? lastPage > 1 : filteredProps.length > perPage),
-  //   [statusFilter, lastPage, filteredProps.length, perPage]
-  // );
-
-  // When filter changes, jump to page 1 to avoid empty results on page 2+
   useEffect(() => {
     if (statusFilter !== "all" && page !== 1) setPage(1);
-  }, [statusFilter]); // page is from state above
+  }, [statusFilter]);
 
-  // Kebab menu (three-dots) state + status update progress
   const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
   const [statusSavingId, setStatusSavingId] = useState<string | null>(null);
 
-  // Close menu when clicking anywhere
   useEffect(() => {
     const close = () => setMenuOpenId(null);
     document.addEventListener("click", close);
     return () => document.removeEventListener("click", close);
   }, []);
 
-  // Email availability (unchanged)
   useEffect(() => {
     if (!editingProfile || !user) return;
     const emailTrim = profile.email.trim();
@@ -392,7 +362,6 @@ const Account: React.FC = () => {
     };
   }, [editingProfile, profile.email, user]);
 
-  // Phone availability (unchanged)
   useEffect(() => {
     if (!editingProfile || !user) return;
 
@@ -448,7 +417,6 @@ const Account: React.FC = () => {
     };
   }, [editingProfile, fullPhone, profile.phoneLocal, user]);
 
-  // Load my properties (unchanged)
   useEffect(() => {
     if (!isAuthenticated || !user || !isLister) return;
 
@@ -465,7 +433,7 @@ const Account: React.FC = () => {
           per_page: String(perPage),
         });
         if (statusFilter !== "all") {
-          qs.set("status", statusFilter); // 'active' | 'inactive'
+          qs.set("status", statusFilter);
         }
 
         const res = await fetch(`${API_URL}/my/properties?${qs.toString()}`, {
@@ -559,7 +527,6 @@ const Account: React.FC = () => {
       fieldErrors.name ||
       fieldErrors.city
     ) {
-      // CHANGE: include city errors
       setProfileError("Please fix the errors in the fields above.");
       return;
     }
@@ -721,7 +688,6 @@ const Account: React.FC = () => {
       }.`;
       setListMessage(message);
 
-      // clear the message after 5 seconds
       setTimeout(() => {
         setListMessage(null);
       }, 5000);
@@ -786,7 +752,6 @@ const Account: React.FC = () => {
       .trim()
       .charAt(0)
       .toUpperCase();
-    // CHANGE: include builder in role label mapping
     const roleLabel =
       role === "owner"
         ? "Owner"
@@ -838,7 +803,6 @@ const Account: React.FC = () => {
                     </div>
 
                     {!editingProfile ? (
-                      // CHANGE: clean view-mode grid with City row + notice if missing
                       <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-gray-700 text-sm">
                         <div className="flex items-center">
                           <MailIcon className="h-4 w-4 mr-2 text-gray-500" />
@@ -931,7 +895,6 @@ const Account: React.FC = () => {
                           )}
                         </div>
 
-                        {/* CHANGE: City input in edit mode */}
                         <div>
                           <label className="block text-sm text-gray-600 mb-1">
                             City
@@ -1137,7 +1100,7 @@ const Account: React.FC = () => {
                           !!fieldErrors.email ||
                           !!fieldErrors.phone ||
                           !!fieldErrors.name ||
-                          !!fieldErrors.city // CHANGE: block save if city has error
+                          !!fieldErrors.city
                         }
                         className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-[#2AB09C] text-white hover:bg-[#229882] disabled:opacity-60"
                       >
@@ -1153,7 +1116,7 @@ const Account: React.FC = () => {
                             user?.phone || ""
                           );
                           setCountry(c);
-                          // CHANGE: restore city from user on cancel
+
                           setProfile({
                             name: user?.name || "",
                             email: user?.email || "",
@@ -1558,7 +1521,6 @@ const Account: React.FC = () => {
     );
   }
 
-  // Unauthenticated: show Login/Signup with benefits
   return (
     <>
       <Header />
