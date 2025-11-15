@@ -16,7 +16,6 @@ import {
   LogOut as LogOutIcon,
   Trash2 as TrashIcon,
   MoreVertical as MoreIcon,
-  // NEW (for benefits panel)
   CheckCircle2 as CheckIcon,
   ShieldCheck as ShieldIcon,
   Zap as ZapIcon,

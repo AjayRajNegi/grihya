@@ -1,47 +1,53 @@
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import HeroSection from '../components/home/HeroSection';
-import FeaturedListings from '../components/home/FeaturedListings';
-import FAQSection from '../components/home/FAQSection';
-import Blog from '../components/blog/Blog';
-import { ArrowRightIcon, HomeIcon, BuildingIcon, UserIcon } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import HeroSection from "../components/home/HeroSection";
+import FeaturedListings from "../components/home/FeaturedListings";
+import FAQSection from "../components/home/FAQSection";
+import Blog from "../components/blog/Blog";
+import { ArrowRightIcon, HomeIcon, BuildingIcon, UserIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Home = () => {
-  const [role, setRole] = useState<'tenant' | 'owner'>('tenant');
+  const [role, setRole] = useState<"tenant" | "owner">("tenant");
 
-  const [heroCoords, setHeroCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [heroCoords, setHeroCoords] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
 
   useEffect(() => {
     const title =
-      'Buy your dream home | sell your property faster | find the ideal space for rent';
+      "Buy your dream home | sell your property faster | find the ideal space for rent";
     const description =
-      'Find your perfect home or tenant with EasyLease. Browse thousands of 100% verified properties for sale and rent across India. Connect directly with owners. Safe, simple, and secure.';
+      "Find your perfect home or tenant with EasyLease. Browse thousands of 100% verified properties for sale and rent across India. Connect directly with owners. Safe, simple, and secure.";
 
-    const currentUrl = (typeof window !== 'undefined' ? window.location.href : 'https://easylease.services/') || 'https://easylease.services/';
-    const ogImage = 'https://easylease.services/og-default.jpg';
+    const currentUrl =
+      (typeof window !== "undefined"
+        ? window.location.href
+        : "https://easylease.services/") || "https://easylease.services/";
+    const ogImage = "https://easylease.services/og-default.jpg";
 
     document.title = title;
-    upsertMetaByName('description', description);
+    upsertMetaByName("description", description);
 
-    upsertMetaByProperty('og:title', title);
-    upsertMetaByProperty('og:description', description);
-    upsertMetaByProperty('og:type', 'website');
-    upsertMetaByProperty('og:url', currentUrl);
-    upsertMetaByProperty('og:image', ogImage);
+    upsertMetaByProperty("og:title", title);
+    upsertMetaByProperty("og:description", description);
+    upsertMetaByProperty("og:type", "website");
+    upsertMetaByProperty("og:url", currentUrl);
+    upsertMetaByProperty("og:image", ogImage);
 
-    upsertMetaByName('twitter:card', 'summary_large_image');
-    upsertMetaByName('twitter:title', title);
-    upsertMetaByName('twitter:description', description);
-    upsertMetaByName('twitter:image', ogImage);
+    upsertMetaByName("twitter:card", "summary_large_image");
+    upsertMetaByName("twitter:title", title);
+    upsertMetaByName("twitter:description", description);
+    upsertMetaByName("twitter:image", ogImage);
 
-    upsertLinkCanonical('https://easylease.services/');
+    upsertLinkCanonical("https://easylease.services/");
   }, []);
 
   const stepsTenant = [
     {
-      title: 'Search Properties',
-      desc: 'Browse thousands of listings with smart filters to find your perfect match.',
+      title: "Search Properties",
+      desc: "Browse thousands of listings with smart filters to find your perfect match.",
       icon: (
         <div className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#CCF0E1] text-[#2AB09C] ring-1 ring-teal-200">
           <SearchIcon className="h-7 w-7" />
@@ -49,8 +55,8 @@ const Home = () => {
       ),
     },
     {
-      title: 'Connect with Owners',
-      desc: 'Contact owners directly without intermediaries or brokerage fees.',
+      title: "Connect with Owners",
+      desc: "Contact owners directly without intermediaries or brokerage fees.",
       icon: (
         <div className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#CCF0E1] text-[#2AB09C] ring-1 ring-teal-200">
           <UserIcon className="h-7 w-7" />
@@ -58,8 +64,8 @@ const Home = () => {
       ),
     },
     {
-      title: 'Move In',
-      desc: 'Schedule visits, finalize terms and move in with confidence.',
+      title: "Move In",
+      desc: "Schedule visits, finalize terms and move in with confidence.",
       icon: (
         <div className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#CCF0E1] text-[#2AB09C] ring-1 ring-teal-200">
           <HomeIcon className="h-7 w-7" />
@@ -70,8 +76,8 @@ const Home = () => {
 
   const stepsOwner = [
     {
-      title: 'List Your Property',
-      desc: 'Add details, photos, pricing and publish your listing for free.',
+      title: "List Your Property",
+      desc: "Add details, photos, pricing and publish your listing for free.",
       icon: (
         <div className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#CCF0E1] text-[#2AB09C] ring-1 ring-teal-200">
           <HomeIcon className="h-7 w-7" />
@@ -79,8 +85,8 @@ const Home = () => {
       ),
     },
     {
-      title: 'Get Leads Directly',
-      desc: 'Tenants contact you directly - no middlemen, no platform fee.',
+      title: "Get Leads Directly",
+      desc: "Tenants contact you directly - no middlemen, no platform fee.",
       icon: (
         <div className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#CCF0E1] text-[#2AB09C] ring-1 ring-teal-200">
           <UserIcon className="h-7 w-7" />
@@ -88,8 +94,8 @@ const Home = () => {
       ),
     },
     {
-      title: 'Close Faster',
-      desc: 'Schedule visits, negotiate, and close the deal quickly.',
+      title: "Close Faster",
+      desc: "Schedule visits, negotiate, and close the deal quickly.",
       icon: (
         <div className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#CCF0E1] text-[#2AB09C] ring-1 ring-teal-200">
           <BuildingIcon className="h-7 w-7" />
@@ -132,7 +138,11 @@ const Home = () => {
               show: {
                 opacity: 1,
                 y: 0,
-                transition: { duration: 0.4, ease: 'easeOut', staggerChildren: 0.07 },
+                transition: {
+                  duration: 0.4,
+                  ease: "easeOut",
+                  staggerChildren: 0.07,
+                },
               },
             }}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
@@ -203,17 +213,23 @@ const Home = () => {
             <div className="inline-flex rounded-xl border border-teal-200 bg-white p-1 shadow-sm">
               <button
                 type="button"
-                onClick={() => setRole('tenant')}
-                className={`px-4 py-2 text-sm rounded-lg transition ${role === 'tenant' ? 'bg-[#2AB09C] text-white' : 'text-slate-700 hover:bg-slate-50'
-                  }`}
+                onClick={() => setRole("tenant")}
+                className={`px-4 py-2 text-sm rounded-lg transition ${
+                  role === "tenant"
+                    ? "bg-[#2AB09C] text-white"
+                    : "text-slate-700 hover:bg-slate-50"
+                }`}
               >
                 For Tenants
               </button>
               <button
                 type="button"
-                onClick={() => setRole('owner')}
-                className={`px-4 py-2 text-sm rounded-lg transition ${role === 'owner' ? 'bg-[#2AB09C] text-white' : 'text-slate-700 hover:bg-slate-50'
-                  }`}
+                onClick={() => setRole("owner")}
+                className={`px-4 py-2 text-sm rounded-lg transition ${
+                  role === "owner"
+                    ? "bg-[#2AB09C] text-white"
+                    : "text-slate-700 hover:bg-slate-50"
+                }`}
               >
                 For Owners & Brokers
               </button>
@@ -228,8 +244,14 @@ const Home = () => {
             transition={{ duration: 0.45 }}
             className="grid grid-cols-1 md:grid-cols-3 gap-8"
           >
-            {(role === 'tenant' ? stepsTenant : stepsOwner).map((s, i) => (
-              <StepCard key={s.title} step={`${i + 1}`} icon={s.icon} title={s.title} desc={s.desc} />
+            {(role === "tenant" ? stepsTenant : stepsOwner).map((s, i) => (
+              <StepCard
+                key={s.title}
+                step={`${i + 1}`}
+                icon={s.icon}
+                title={s.title}
+                desc={s.desc}
+              />
             ))}
           </motion.div>
 
@@ -258,10 +280,12 @@ const Home = () => {
                 Direct leads
               </span>
             </div>
-            <h2 className="text-2xl md:text-3xl font-bold mb-4">Own a Property? List it on EasyLease</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">
+              Own a Property? List it on EasyLease
+            </h2>
             <p className="text-lg opacity-95 mb-6">
-              Get discovered by thousands of active tenants. Publish in minutes and start receiving direct calls and
-              messages - no platform fee.
+              Get discovered by thousands of active tenants. Publish in minutes
+              and start receiving direct calls and messages - no platform fee.
             </p>
             <ul className="text-left sm:text-center list-none space-y-2 text:white/95 mb-8">
               <li>• Unlimited listings at ₹0</li>
@@ -309,7 +333,12 @@ const BrowseCard = ({
   <motion.div
     variants={{
       hidden: { opacity: 0, y: 14, scale: 0.98 },
-      show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.35, ease: 'easeOut' } },
+      show: {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        transition: { duration: 0.35, ease: "easeOut" },
+      },
     }}
   >
     <Link to={to} className="group block focus:outline-none">
@@ -319,14 +348,16 @@ const BrowseCard = ({
             className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
             style={{
               background:
-                'radial-gradient(140px 70px at 50% 0%, rgba(42,176,156,0.08), transparent 70%)',
+                "radial-gradient(140px 70px at 50% 0%, rgba(42,176,156,0.08), transparent 70%)",
             }}
           />
           <div className="relative">
             <div className="mx-auto mb-4 transform transition-transform duration-300 group-hover:-translate-y-0.5">
               {icon}
             </div>
-            <h3 className="text-lg font-semibold mb-2 text-slate-900">{title}</h3>
+            <h3 className="text-lg font-semibold mb-2 text-slate-900">
+              {title}
+            </h3>
             <p className="text-gray-600 mb-4">{desc}</p>
             <span className="text-[#2AB09C] inline-flex items-center justify-center font-medium">
               {cta}
@@ -390,36 +421,42 @@ const SearchIcon = ({ className }: { className?: string }) => (
 
 // -- Head tag helpers (no Helmet needed) --
 function upsertMetaByName(name: string, content: string) {
-  const head = document.head || document.getElementsByTagName('head')[0];
-  let el = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement | null;
+  const head = document.head || document.getElementsByTagName("head")[0];
+  let el = document.querySelector(
+    `meta[name="${name}"]`
+  ) as HTMLMetaElement | null;
   if (!el) {
-    el = document.createElement('meta');
-    el.setAttribute('name', name);
+    el = document.createElement("meta");
+    el.setAttribute("name", name);
     head.appendChild(el);
   }
-  el.setAttribute('content', content);
+  el.setAttribute("content", content);
 }
 
 function upsertMetaByProperty(property: string, content: string) {
-  const head = document.head || document.getElementsByTagName('head')[0];
-  let el = document.querySelector(`meta[property="${property}"]`) as HTMLMetaElement | null;
+  const head = document.head || document.getElementsByTagName("head")[0];
+  let el = document.querySelector(
+    `meta[property="${property}"]`
+  ) as HTMLMetaElement | null;
   if (!el) {
-    el = document.createElement('meta');
-    el.setAttribute('property', property);
+    el = document.createElement("meta");
+    el.setAttribute("property", property);
     head.appendChild(el);
   }
-  el.setAttribute('content', content);
+  el.setAttribute("content", content);
 }
 
 function upsertLinkCanonical(href: string) {
-  const head = document.head || document.getElementsByTagName('head')[0];
-  let link = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+  const head = document.head || document.getElementsByTagName("head")[0];
+  let link = document.querySelector(
+    'link[rel="canonical"]'
+  ) as HTMLLinkElement | null;
   if (!link) {
-    link = document.createElement('link');
-    link.setAttribute('rel', 'canonical');
+    link = document.createElement("link");
+    link.setAttribute("rel", "canonical");
     head.appendChild(link);
   }
-  link.setAttribute('href', href);
+  link.setAttribute("href", href);
 }
 
 export default Home;
