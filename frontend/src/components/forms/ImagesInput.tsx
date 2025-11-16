@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 type ImagesInputProps = {
   files: File[];
@@ -8,14 +8,22 @@ type ImagesInputProps = {
   maxSizeMB?: number;
 };
 
-const ImagesInput: React.FC<ImagesInputProps> = ({ files, existingImages = [], onChange, max = 10, maxSizeMB = 15 }) => {
+const ImagesInput: React.FC<ImagesInputProps> = ({
+  files,
+  existingImages = [],
+  onChange,
+  max = 10,
+  maxSizeMB = 15,
+}) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
   const previews = useMemo(() => {
     const filePreviews = files.map((f) => {
       const key = `${f.name}-${f.size}-${f.lastModified}`;
-      const isUnsupported = ['image/heic', 'image/heif', 'image/tiff'].includes(f.type);
+      const isUnsupported = ["image/heic", "image/heif", "image/tiff"].includes(
+        f.type
+      );
       return {
         key,
         url: isUnsupported ? null : URL.createObjectURL(f),
@@ -28,7 +36,7 @@ const ImagesInput: React.FC<ImagesInputProps> = ({ files, existingImages = [], o
       key: `existing-${index}-${url}`,
       url,
       isUnsupported: false,
-      name: url.split('/').pop() || `Image ${index + 1}`,
+      name: url.split("/").pop() || `Image ${index + 1}`,
       isExisting: true,
     }));
     return [...filePreviews, ...existingPreviews];
@@ -46,22 +54,23 @@ const ImagesInput: React.FC<ImagesInputProps> = ({ files, existingImages = [], o
     if (!incoming.length) return;
 
     const allowedTypes = [
-      'image/jpeg',
-      'image/jpg',
-      'image/png',
-      'image/webp',
-      'image/avif',
-      'image/heic',
-      'image/heif',
-      'image/gif',
-      'image/bmp',
-      'image/tiff',
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/webp",
+      "image/avif",
+      "image/heic",
+      "image/heif",
+      "image/gif",
+      "image/bmp",
+      "image/tiff",
     ];
 
     const valid = incoming.filter((f) => {
       const okType = allowedTypes.includes(f.type);
       const okSize = f.size <= maxSizeMB * 1024 * 1024;
-      const okExtension = /\.(jpe?g|png|webp|avif|heic|heif|gif|bmp|tif?t)$/i.test(f.name);
+      const okExtension =
+        /\.(jpe?g|png|webp|avif|heic|heif|gif|bmp|tif?t)$/i.test(f.name);
       return okType && okSize && okExtension;
     });
 
@@ -74,7 +83,7 @@ const ImagesInput: React.FC<ImagesInputProps> = ({ files, existingImages = [], o
     const allFiles = [...files, ...valid];
     const map = new Map<string, File>();
     for (const f of allFiles) {
-      if (!f.name.startsWith('existing-image-')) {
+      if (!f.name.startsWith("existing-image-")) {
         map.set(`${f.name}-${f.size}-${f.lastModified}`, f);
       }
     }
@@ -91,7 +100,7 @@ const ImagesInput: React.FC<ImagesInputProps> = ({ files, existingImages = [], o
   const onSelect: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const incoming = Array.from(e.target.files || []);
     addFiles(incoming);
-    if (inputRef.current) inputRef.current.value = '';
+    if (inputRef.current) inputRef.current.value = "";
   };
 
   const onDrop: React.DragEventHandler<HTMLDivElement> = (e) => {
@@ -131,7 +140,7 @@ const ImagesInput: React.FC<ImagesInputProps> = ({ files, existingImages = [], o
     <div className="space-y-3">
       <div
         className={`border-2 border-dashed rounded-md p-6 text-center transition ${
-          isDragging ? 'border-[#2AB09C] bg-[#E6F7F3]' : 'border-gray-300'
+          isDragging ? "border-[#2AB09C] bg-[#E6F7F3]" : "border-gray-300"
         }`}
         onDrop={onDrop}
         onDragOver={onDragOver}
@@ -143,7 +152,7 @@ const ImagesInput: React.FC<ImagesInputProps> = ({ files, existingImages = [], o
           onClick={() => inputRef.current?.click()}
           className="mt-2 inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#2AB09C]"
         >
-          Select Images 
+          Select Images
         </button>
         <p className="mt-1 text-xs text-gray-500">
           JPEG, PNG, WEBP, AVIF, HEIC, GIF, BMP, TIFF
@@ -161,7 +170,10 @@ const ImagesInput: React.FC<ImagesInputProps> = ({ files, existingImages = [], o
       {(files.length > 0 || existingImages.length > 0) && (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
           {previews.map((p, idx) => (
-            <div key={p.key} className="relative group border rounded overflow-hidden">
+            <div
+              key={p.key}
+              className="relative group border rounded overflow-hidden"
+            >
               {p.url ? (
                 <img
                   src={p.url}
@@ -169,16 +181,22 @@ const ImagesInput: React.FC<ImagesInputProps> = ({ files, existingImages = [], o
                   alt={`image-${idx}`}
                   onError={(e) => {
                     console.error(`Failed to load image: ${p.url}`);
-                    e.currentTarget.style.display = 'none';
-                    (e.currentTarget.nextElementSibling as HTMLElement).style.display = 'flex';
+                    e.currentTarget.style.display = "none";
+                    (
+                      e.currentTarget.nextElementSibling as HTMLElement
+                    ).style.display = "flex";
                   }}
                 />
               ) : null}
               <div
-                className={`w-full h-28 flex items-center justify-center bg-gray-100 text-gray-600 text-xs ${p.url ? 'hidden' : 'flex'}`}
+                className={`w-full h-28 flex items-center justify-center bg-gray-100 text-gray-600 text-xs ${
+                  p.url ? "hidden" : "flex"
+                }`}
                 title={p.name}
               >
-                {p.isUnsupported ? `${p.name} (Preview not available)` : `Image failed to load: ${p.name}`}
+                {p.isUnsupported
+                  ? `${p.name} (Preview not available)`
+                  : `Image failed to load: ${p.name}`}
               </div>
               <button
                 type="button"
