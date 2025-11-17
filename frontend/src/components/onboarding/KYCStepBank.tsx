@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { AlertCircleIcon, UploadIcon, InfoIcon } from 'lucide-react';
+import React, { useState } from "react";
+import { AlertCircleIcon, UploadIcon, InfoIcon } from "lucide-react";
 interface KYCStepBankProps {
   formData: any;
   updateFormData: (data: any) => void;
@@ -10,24 +10,21 @@ const KYCStepBank: React.FC<KYCStepBankProps> = ({
   formData,
   updateFormData,
   onNext,
-  onPrevious
+  onPrevious,
 }) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [chequeFile, setChequeFile] = useState<File | null>(null);
   const [skipBankDetails, setSkipBankDetails] = useState(false);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {
-      name,
-      value
-    } = e.target;
+    const { name, value } = e.target;
     updateFormData({
-      [name]: value
+      [name]: value,
     });
     // Clear error when field is edited
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ''
+        [name]: "",
       }));
     }
   };
@@ -39,30 +36,35 @@ const KYCStepBank: React.FC<KYCStepBankProps> = ({
     const file = files[0];
     // Check file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        cancelledCheque: 'File size should not exceed 5MB'
+        cancelledCheque: "File size should not exceed 5MB",
       }));
       return;
     }
     // Check file type
-    const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
+    const validTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/jpg",
+      "application/pdf",
+    ];
     if (!validTypes.includes(file.type)) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        cancelledCheque: 'Only JPEG, PNG, and PDF files are allowed'
+        cancelledCheque: "Only JPEG, PNG, and PDF files are allowed",
       }));
       return;
     }
     setChequeFile(file);
     updateFormData({
-      cancelledCheque: file
+      cancelledCheque: file,
     });
     // Clear error
     if (errors.cancelledCheque) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        cancelledCheque: ''
+        cancelledCheque: "",
       }));
     }
   };
@@ -73,26 +75,27 @@ const KYCStepBank: React.FC<KYCStepBankProps> = ({
     }
     const newErrors: Record<string, string> = {};
     if (!formData.bankName) {
-      newErrors.bankName = 'Bank name is required';
+      newErrors.bankName = "Bank name is required";
     }
     if (!formData.accountNumber) {
-      newErrors.accountNumber = 'Account number is required';
+      newErrors.accountNumber = "Account number is required";
     }
     if (!formData.confirmAccountNumber) {
-      newErrors.confirmAccountNumber = 'Please confirm your account number';
+      newErrors.confirmAccountNumber = "Please confirm your account number";
     } else if (formData.accountNumber !== formData.confirmAccountNumber) {
-      newErrors.confirmAccountNumber = 'Account numbers do not match';
+      newErrors.confirmAccountNumber = "Account numbers do not match";
     }
     if (!formData.ifscCode) {
-      newErrors.ifscCode = 'IFSC code is required';
+      newErrors.ifscCode = "IFSC code is required";
     } else if (!/^[A-Z]{4}0[A-Z0-9]{6}$/.test(formData.ifscCode)) {
-      newErrors.ifscCode = 'Invalid IFSC code format';
+      newErrors.ifscCode = "Invalid IFSC code format";
     }
     if (!formData.accountHolderName) {
-      newErrors.accountHolderName = 'Account holder name is required';
+      newErrors.accountHolderName = "Account holder name is required";
     }
     if (!formData.cancelledCheque) {
-      newErrors.cancelledCheque = 'Please upload a cancelled cheque or passbook photo';
+      newErrors.cancelledCheque =
+        "Please upload a cancelled cheque or passbook photo";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -107,24 +110,29 @@ const KYCStepBank: React.FC<KYCStepBankProps> = ({
     setSkipBankDetails(true);
     // Clear all bank details
     updateFormData({
-      bankName: '',
-      accountNumber: '',
-      confirmAccountNumber: '',
-      ifscCode: '',
-      accountHolderName: '',
-      cancelledCheque: null
+      bankName: "",
+      accountNumber: "",
+      confirmAccountNumber: "",
+      ifscCode: "",
+      accountHolderName: "",
+      cancelledCheque: null,
     });
     // Clear all errors
     setErrors({});
     // Move to next step
     onNext();
   };
-  return <div className="bg-white shadow rounded-lg p-6 mb-6">
+  return (
+    <div className="bg-white shadow rounded-lg p-6 mb-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-medium text-gray-900">
           Bank Details (Optional)
         </h2>
-        <button type="button" onClick={handleSkip} className="text-sm font-medium text-blue-600 hover:text-blue-500">
+        <button
+          type="button"
+          onClick={handleSkip}
+          className="text-sm font-medium text-blue-600 hover:text-blue-500"
+        >
           Skip this step
         </button>
       </div>
@@ -141,55 +149,132 @@ const KYCStepBank: React.FC<KYCStepBankProps> = ({
           </div>
         </div>
       </div>
-      {errors.general && <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
+      {errors.general && (
+        <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
           <div className="flex items-center">
             <AlertCircleIcon className="h-5 w-5 text-red-500 mr-2" />
             <p className="text-red-700 text-sm">{errors.general}</p>
           </div>
-        </div>}
+        </div>
+      )}
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label htmlFor="bankName" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="bankName"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Bank Name
           </label>
-          <input id="bankName" name="bankName" type="text" value={formData.bankName} onChange={handleChange} className={`w-full px-3 py-2 border ${errors.bankName ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`} placeholder="e.g. HDFC Bank, SBI, ICICI Bank" />
-          {errors.bankName && <p className="mt-1 text-sm text-red-600">{errors.bankName}</p>}
+          <input
+            id="bankName"
+            name="bankName"
+            type="text"
+            value={formData.bankName}
+            onChange={handleChange}
+            className={`w-full px-3 py-2 border ${
+              errors.bankName ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+            placeholder="e.g. HDFC Bank, SBI, ICICI Bank"
+          />
+          {errors.bankName && (
+            <p className="mt-1 text-sm text-red-600">{errors.bankName}</p>
+          )}
         </div>
         <div>
-          <label htmlFor="accountNumber" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="accountNumber"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Account Number
           </label>
-          <input id="accountNumber" name="accountNumber" type="text" value={formData.accountNumber} onChange={handleChange} className={`w-full px-3 py-2 border ${errors.accountNumber ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`} placeholder="Enter your account number" />
-          {errors.accountNumber && <p className="mt-1 text-sm text-red-600">{errors.accountNumber}</p>}
+          <input
+            id="accountNumber"
+            name="accountNumber"
+            type="text"
+            value={formData.accountNumber}
+            onChange={handleChange}
+            className={`w-full px-3 py-2 border ${
+              errors.accountNumber ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+            placeholder="Enter your account number"
+          />
+          {errors.accountNumber && (
+            <p className="mt-1 text-sm text-red-600">{errors.accountNumber}</p>
+          )}
         </div>
         <div>
-          <label htmlFor="confirmAccountNumber" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="confirmAccountNumber"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Confirm Account Number
           </label>
-          <input id="confirmAccountNumber" name="confirmAccountNumber" type="text" value={formData.confirmAccountNumber} onChange={handleChange} className={`w-full px-3 py-2 border ${errors.confirmAccountNumber ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`} placeholder="Re-enter your account number" />
-          {errors.confirmAccountNumber && <p className="mt-1 text-sm text-red-600">
+          <input
+            id="confirmAccountNumber"
+            name="confirmAccountNumber"
+            type="text"
+            value={formData.confirmAccountNumber}
+            onChange={handleChange}
+            className={`w-full px-3 py-2 border ${
+              errors.confirmAccountNumber ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+            placeholder="Re-enter your account number"
+          />
+          {errors.confirmAccountNumber && (
+            <p className="mt-1 text-sm text-red-600">
               {errors.confirmAccountNumber}
-            </p>}
+            </p>
+          )}
         </div>
         <div>
-          <label htmlFor="ifscCode" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="ifscCode"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             IFSC Code
           </label>
-          <input id="ifscCode" name="ifscCode" type="text" value={formData.ifscCode} onChange={handleChange} className={`w-full px-3 py-2 border ${errors.ifscCode ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 uppercase`} placeholder="e.g. HDFC0000123" />
-          {errors.ifscCode && <p className="mt-1 text-sm text-red-600">{errors.ifscCode}</p>}
+          <input
+            id="ifscCode"
+            name="ifscCode"
+            type="text"
+            value={formData.ifscCode}
+            onChange={handleChange}
+            className={`w-full px-3 py-2 border ${
+              errors.ifscCode ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 uppercase`}
+            placeholder="e.g. HDFC0000123"
+          />
+          {errors.ifscCode && (
+            <p className="mt-1 text-sm text-red-600">{errors.ifscCode}</p>
+          )}
           <p className="mt-1 text-xs text-gray-500">
             Format: 4 letters, followed by 0, followed by 6 characters (e.g.,
             HDFC0001234)
           </p>
         </div>
         <div>
-          <label htmlFor="accountHolderName" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="accountHolderName"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Account Holder Name
           </label>
-          <input id="accountHolderName" name="accountHolderName" type="text" value={formData.accountHolderName} onChange={handleChange} className={`w-full px-3 py-2 border ${errors.accountHolderName ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`} placeholder="Enter account holder's name" />
-          {errors.accountHolderName && <p className="mt-1 text-sm text-red-600">
+          <input
+            id="accountHolderName"
+            name="accountHolderName"
+            type="text"
+            value={formData.accountHolderName}
+            onChange={handleChange}
+            className={`w-full px-3 py-2 border ${
+              errors.accountHolderName ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+            placeholder="Enter account holder's name"
+          />
+          {errors.accountHolderName && (
+            <p className="mt-1 text-sm text-red-600">
               {errors.accountHolderName}
-            </p>}
+            </p>
+          )}
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -200,32 +285,54 @@ const KYCStepBank: React.FC<KYCStepBankProps> = ({
               <div className="flex flex-col items-center">
                 <UploadIcon className="h-10 w-10 text-gray-400" />
                 <div className="flex text-sm text-gray-600">
-                  <label htmlFor="cancelledCheque" className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                  <label
+                    htmlFor="cancelledCheque"
+                    className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500"
+                  >
                     <span>Upload a file</span>
-                    <input id="cancelledCheque" name="cancelledCheque" type="file" className="sr-only" onChange={handleFileChange} accept=".jpg,.jpeg,.png,.pdf" />
+                    <input
+                      id="cancelledCheque"
+                      name="cancelledCheque"
+                      type="file"
+                      className="sr-only"
+                      onChange={handleFileChange}
+                      accept=".jpg,.jpeg,.png,.pdf"
+                    />
                   </label>
                   <p className="pl-1">or drag and drop</p>
                 </div>
                 <p className="text-xs text-gray-500">PNG, JPG, PDF up to 5MB</p>
               </div>
-              {chequeFile && <div className="mt-2 text-sm text-gray-900">
+              {chequeFile && (
+                <div className="mt-2 text-sm text-gray-900">
                   Selected: {chequeFile.name}
-                </div>}
+                </div>
+              )}
             </div>
           </div>
-          {errors.cancelledCheque && <p className="mt-1 text-sm text-red-600">
+          {errors.cancelledCheque && (
+            <p className="mt-1 text-sm text-red-600">
               {errors.cancelledCheque}
-            </p>}
+            </p>
+          )}
         </div>
         <div className="flex justify-between pt-4">
-          <button type="button" onClick={onPrevious} className="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          <button
+            type="button"
+            onClick={onPrevious}
+            className="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
             Previous
           </button>
-          <button type="submit" className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white text-[#2AB09C] hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          <button
+            type="submit"
+            className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white text-[#2AB09C] hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
             Next
           </button>
         </div>
       </form>
-    </div>;
+    </div>
+  );
 };
 export default KYCStepBank;

@@ -1,13 +1,12 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { HomeIcon } from 'lucide-react';
+import React from "react";
+import { Link } from "react-router-dom";
+import { HomeIcon } from "lucide-react";
 interface OnboardingLayoutProps {
   children: React.ReactNode;
 }
-const OnboardingLayout: React.FC<OnboardingLayoutProps> = ({
-  children
-}) => {
-  return <div className="min-h-screen bg-gray-50 flex flex-col">
+const OnboardingLayout: React.FC<OnboardingLayoutProps> = ({ children }) => {
+  return (
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
@@ -33,6 +32,7 @@ const OnboardingLayout: React.FC<OnboardingLayoutProps> = ({
           </p>
         </div>
       </footer>
-    </div>;
+    </div>
+  );
 };
 export default OnboardingLayout;

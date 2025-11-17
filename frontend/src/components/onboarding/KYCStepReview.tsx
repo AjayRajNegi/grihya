@@ -1,5 +1,5 @@
-import React from 'react';
-import { CheckCircleIcon } from 'lucide-react';
+import React from "react";
+import { CheckCircleIcon } from "lucide-react";
 interface KYCStepReviewProps {
   formData: any;
   onSubmit: () => void;
@@ -8,18 +8,19 @@ interface KYCStepReviewProps {
 const KYCStepReview: React.FC<KYCStepReviewProps> = ({
   formData,
   onSubmit,
-  onPrevious
+  onPrevious,
 }) => {
   const formatDate = (dateString: string) => {
-    if (!dateString) return '';
+    if (!dateString) return "";
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-IN', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
+    return date.toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
     });
   };
-  return <div className="bg-white shadow rounded-lg p-6 mb-6">
+  return (
+    <div className="bg-white shadow rounded-lg p-6 mb-6">
       <h2 className="text-lg font-medium text-gray-900 mb-4">
         Review Your Details
       </h2>
@@ -54,7 +55,9 @@ const KYCStepReview: React.FC<KYCStepReviewProps> = ({
                 Aadhaar Number
               </dt>
               <dd className="mt-1 text-sm text-gray-900">
-                {formData.aadhaarNumber ? `XXXX XXXX ${formData.aadhaarNumber.slice(-4)}` : ''}
+                {formData.aadhaarNumber
+                  ? `XXXX XXXX ${formData.aadhaarNumber.slice(-4)}`
+                  : ""}
               </dd>
             </div>
           </dl>
@@ -69,16 +72,18 @@ const KYCStepReview: React.FC<KYCStepReviewProps> = ({
                 ID Proof Type
               </dt>
               <dd className="mt-1 text-sm text-gray-900 capitalize">
-                {formData.addressProofType?.replace('_', ' ')}
+                {formData.addressProofType?.replace("_", " ")}
               </dd>
             </div>
             <div>
               <dt className="text-sm font-medium text-gray-500">Address</dt>
               <dd className="mt-1 text-sm text-gray-900">
                 {formData.address?.line1}
-                {formData.address?.line2 && <span>, {formData.address.line2}</span>}
+                {formData.address?.line2 && (
+                  <span>, {formData.address.line2}</span>
+                )}
                 <br />
-                {formData.address?.city}, {formData.address?.state} -{' '}
+                {formData.address?.city}, {formData.address?.state} -{" "}
                 {formData.address?.pincode}
                 <br />
                 {formData.address?.country}
@@ -90,14 +95,18 @@ const KYCStepReview: React.FC<KYCStepReviewProps> = ({
               </dt>
               <dd className="mt-1 text-sm text-gray-900">
                 <ul className="list-disc list-inside space-y-1">
-                  {formData.addressProofDocument && <li className="flex items-center">
+                  {formData.addressProofDocument && (
+                    <li className="flex items-center">
                       <CheckCircleIcon className="h-4 w-4 text-green-500 mr-2" />
                       Address Proof Document
-                    </li>}
-                  {formData.selfieWithId && <li className="flex items-center">
+                    </li>
+                  )}
+                  {formData.selfieWithId && (
+                    <li className="flex items-center">
                       <CheckCircleIcon className="h-4 w-4 text-green-500 mr-2" />
                       Selfie with ID
-                    </li>}
+                    </li>
+                  )}
                 </ul>
               </dd>
             </div>
@@ -107,7 +116,8 @@ const KYCStepReview: React.FC<KYCStepReviewProps> = ({
           <h3 className="text-base font-medium text-gray-900 border-b border-gray-200 pb-2 mb-4">
             Bank Details
           </h3>
-          {formData.bankName ? <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
+          {formData.bankName ? (
+            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
               <div>
                 <dt className="text-sm font-medium text-gray-500">Bank Name</dt>
                 <dd className="mt-1 text-sm text-gray-900">
@@ -119,7 +129,9 @@ const KYCStepReview: React.FC<KYCStepReviewProps> = ({
                   Account Number
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900">
-                  {formData.accountNumber ? `XXXX XXXX ${formData.accountNumber.slice(-4)}` : ''}
+                  {formData.accountNumber
+                    ? `XXXX XXXX ${formData.accountNumber.slice(-4)}`
+                    : ""}
                 </dd>
               </div>
               <div>
@@ -141,15 +153,20 @@ const KYCStepReview: React.FC<KYCStepReviewProps> = ({
                   Documents Uploaded
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900">
-                  {formData.cancelledCheque && <div className="flex items-center">
+                  {formData.cancelledCheque && (
+                    <div className="flex items-center">
                       <CheckCircleIcon className="h-4 w-4 text-green-500 mr-2" />
                       Cancelled Cheque/Passbook Photo
-                    </div>}
+                    </div>
+                  )}
                 </dd>
               </div>
-            </dl> : <p className="text-sm text-gray-500 italic">
+            </dl>
+          ) : (
+            <p className="text-sm text-gray-500 italic">
               No bank details provided (optional)
-            </p>}
+            </p>
+          )}
         </div>
         <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
           <div className="flex">
@@ -163,14 +180,23 @@ const KYCStepReview: React.FC<KYCStepReviewProps> = ({
           </div>
         </div>
         <div className="flex justify-between pt-4">
-          <button type="button" onClick={onPrevious} className="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          <button
+            type="button"
+            onClick={onPrevious}
+            className="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
             Previous
           </button>
-          <button type="button" onClick={onSubmit} className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white text-[#2AB09C] hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          <button
+            type="button"
+            onClick={onSubmit}
+            className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white text-[#2AB09C] hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
             Submit for Verification
           </button>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
 export default KYCStepReview;
