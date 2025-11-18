@@ -875,6 +875,14 @@ const PropertyDetail: React.FC = () => {
               ownerPhone={property.owner.phone}
               ownerEmail={property.owner.email}
             />
+
+            <div
+              onClick={() => {
+                navigate("/chat-with-us");
+              }}
+            >
+              Get personlized properties
+            </div>
           </div>
         </div>
       </div>
