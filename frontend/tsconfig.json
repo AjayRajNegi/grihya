@@ -2,15 +2,8 @@
   "compilerOptions": {
     "target": "ES2020",
     "useDefineForClassFields": true,
-    "lib": [
-      "ES2020",
-      "DOM",
-      "DOM.Iterable"
-    ],
-    "types": [
-      "google.maps",
-      "vite/client"
-    ],
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "types": ["google.maps", "vite/client"],
     "module": "ESNext",
     "skipLibCheck": true,
     /* Bundler mode */
@@ -28,14 +21,10 @@
     // "types": ["vite/client"]
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
+      "@/*": ["src/*"]
     }
   },
-  "include": [
-    "src"
-  ],
+  "include": ["src"],
   "references": [
     {
       "path": "./tsconfig.node.json"
