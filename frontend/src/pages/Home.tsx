@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import HeroSection from "../components/home/HeroSection";
 import FeaturedListings from "../components/home/FeaturedListings";
 import FAQSection from "../components/home/FAQSection";
 import Blog from "../components/blog/Blog";
@@ -13,7 +12,7 @@ import ValueSection from "@/components/home/ValueSection";
 const Home = () => {
   const [role, setRole] = useState<"tenant" | "owner">("tenant");
 
-  const [heroCoords, setHeroCoords] = useState<{
+  const [heroCoords] = useState<{
     lat: number;
     lng: number;
   } | null>(null);
@@ -113,11 +112,9 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Get coords from HeroSection */}
       <Navbar />
       <Hero />
       <ValueSection />
-      {/* <HeroSection onLocationReady={setHeroCoords} /> */}
 
       {/* Only show nearby (10 km) once we have coords */}
       <FeaturedListings coords={heroCoords} radiusMeters={20000} />
