@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { MapPin, CheckCircle2, Menu } from "lucide-react";
 import SearchBar from "./SearchBar";
-import SubHeader from "../layout/Subheader";
 import { normalizeName } from "../../utils/location";
 import { Loader } from "@googlemaps/js-api-loader";
 import { Navbar } from "../layout/Navbar";
@@ -12,19 +11,19 @@ type HeroSectionProps = {
   onLocationReady?: (coords: { lat: number; lng: number } | null) => void;
 };
 
-function collapseParts(...raw: (string | undefined)[]) {
-  const out: string[] = [];
-  const seen = new Set<string>();
-  for (const part of raw) {
-    const t = (part || "").trim();
-    if (!t) continue;
-    const key = t.toLowerCase();
-    if (seen.has(key)) continue;
-    seen.add(key);
-    out.push(t);
-  }
-  return out.join(", ");
-}
+// function collapseParts(...raw: (string | undefined)[]) {
+//   const out: string[] = [];
+//   const seen = new Set<string>();
+//   for (const part of raw) {
+//     const t = (part || "").trim();
+//     if (!t) continue;
+//     const key = t.toLowerCase();
+//     if (seen.has(key)) continue;
+//     seen.add(key);
+//     out.push(t);
+//   }
+//   return out.join(", ");
+// }
 
 // Reflow-proof word cycler (unchanged)
 function WordCycler({
@@ -239,16 +238,16 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
     );
 
   // Extract the area (sublocality/neighborhood) for guard checks
-  const extractAreaFromGoogle = (comps: any[]) => {
-    const get = (t: string) =>
-      comps.find((c: any) => (c.types || []).includes(t))?.long_name || "";
-    const area =
-      get("sublocality") ||
-      get("sublocality_level_1") ||
-      get("neighborhood") ||
-      "";
-    return normalizeName(area);
-  };
+  // const extractAreaFromGoogle = (comps: any[]) => {
+  //   const get = (t: string) =>
+  //     comps.find((c: any) => (c.types || []).includes(t))?.long_name || "";
+  //   const area =
+  //     get("sublocality") ||
+  //     get("sublocality_level_1") ||
+  //     get("neighborhood") ||
+  //     "";
+  //   return normalizeName(area);
+  // };
 
   // Collect all sublocality/neighborhood names from all Google results
   const collectAreasFromResults = (results: any[]) => {
@@ -285,57 +284,57 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
     return sanitizeCity(city);
   };
 
-  const extractMajorCityFromGoogleAnyComponent = (results: any[]) => {
-    const prefer = (type: string) => {
-      for (const r of results) {
-        const comp = (r.address_components || []).find((c: any) =>
-          (c.types || []).includes(type)
-        );
-        if (comp?.long_name) return sanitizeCity(comp.long_name);
-      }
-      return "";
-    };
-    return (
-      prefer("locality") ||
-      prefer("administrative_area_level_2") ||
-      prefer("administrative_area_level_1")
-    );
-  };
+  // const extractMajorCityFromGoogleAnyComponent = (results: any[]) => {
+  //   const prefer = (type: string) => {
+  //     for (const r of results) {
+  //       const comp = (r.address_components || []).find((c: any) =>
+  //         (c.types || []).includes(type)
+  //       );
+  //       if (comp?.long_name) return sanitizeCity(comp.long_name);
+  //     }
+  //     return "";
+  //   };
+  //   return (
+  //     prefer("locality") ||
+  //     prefer("administrative_area_level_2") ||
+  //     prefer("administrative_area_level_1")
+  //   );
+  // };
 
   // Prefer district over locality for Indian addresses (more stable city proxy), then fallback
-  const extractCityPreferAdmin2 = (results: any[]) => {
-    const fromAny = (type: string) => {
-      for (const r of results) {
-        for (const c of r.address_components || []) {
-          if ((c.types || []).includes(type) && c.long_name) {
-            return sanitizeCity(c.long_name);
-          }
-        }
-      }
-      return "";
-    };
+  // const extractCityPreferAdmin2 = (results: any[]) => {
+  //   const fromAny = (type: string) => {
+  //     for (const r of results) {
+  //       for (const c of r.address_components || []) {
+  //         if ((c.types || []).includes(type) && c.long_name) {
+  //           return sanitizeCity(c.long_name);
+  //         }
+  //       }
+  //     }
+  //     return "";
+  //   };
 
-    // Order: District -> City -> State
-    return (
-      fromAny("administrative_area_level_2") ||
-      fromAny("locality") ||
-      fromAny("administrative_area_level_1")
-    );
-  };
+  //   // Order: District -> City -> State
+  //   return (
+  //     fromAny("administrative_area_level_2") ||
+  //     fromAny("locality") ||
+  //     fromAny("administrative_area_level_1")
+  //   );
+  // };
 
-  const extractMajorCityFromGoogleResults = (results: any[]) => {
-    // Prefer the result whose types include 'locality', then district, then state
-    const pick = (type: string) =>
-      results.find((r: any) => (r.types || []).includes(type));
-    const candidate =
-      pick("locality") ||
-      pick("administrative_area_level_2") ||
-      pick("administrative_area_level_1");
+  // const extractMajorCityFromGoogleResults = (results: any[]) => {
+  //   // Prefer the result whose types include 'locality', then district, then state
+  //   const pick = (type: string) =>
+  //     results.find((r: any) => (r.types || []).includes(type));
+  //   const candidate =
+  //     pick("locality") ||
+  //     pick("administrative_area_level_2") ||
+  //     pick("administrative_area_level_1");
 
-    return candidate
-      ? extractMajorCityFromGoogle(candidate.address_components || [])
-      : "";
-  };
+  //   return candidate
+  //     ? extractMajorCityFromGoogle(candidate.address_components || [])
+  //     : "";
+  // };
 
   const extractMajorCityFromNominatim = (addr: any) => {
     // Prefer city/town; fallback to state_district/county/state
@@ -613,8 +612,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
 
   return (
     <div className="bg-gray-50">
-      {/* Navbar */}
-      <Navbar />
       {/* Section */}
       <section className="pt-12 pb-12 sm:pb-16 lg:pt-8">
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -623,7 +620,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
             <div className="lg:col-span-7 relative z-10 max-w-2xl mx-auto lg:mx-0">
               <div className="text-center lg:text-left">
                 <h1 className="text-4xl font-bold leading-tight text-gray-900 sm:text-5xl lg:text-6xl">
-                  <span className="block">Find Your Perfect</span>
+                  ~<span className="block">Find Your Perfect</span>
                   <span className="block mt-1 text-[#2AB09C] lg:block lg:mt-1 lg:ml-0">
                     <WordCycler
                       words={["Home", "Flat", "PG"]}

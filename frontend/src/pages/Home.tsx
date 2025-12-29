@@ -6,6 +6,8 @@ import FAQSection from "../components/home/FAQSection";
 import Blog from "../components/blog/Blog";
 import { ArrowRightIcon, HomeIcon, BuildingIcon, UserIcon } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Navbar } from "@/components/layout/Navbar";
+import Hero from "@/components/home/Hero";
 
 const Home = () => {
   const [role, setRole] = useState<"tenant" | "owner">("tenant");
@@ -111,7 +113,9 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Get coords from HeroSection */}
-      <HeroSection onLocationReady={setHeroCoords} />
+      <Navbar />
+      <Hero />
+      {/* <HeroSection onLocationReady={setHeroCoords} /> */}
 
       {/* Only show nearby (10 km) once we have coords */}
       <FeaturedListings coords={heroCoords} radiusMeters={20000} />
