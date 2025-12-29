@@ -4,10 +4,10 @@ export default function Hero() {
   const navigate = useNavigate();
 
   return (
-    <div className="max-w-[1200px] mx-auto relative mt-[40px] px-4 md:px-0">
+    <div className="bg-[#ffffff] max-w-8xl mx-auto relative pt-[20px] md:pt-[40px] px-4 md:px-0">
       {/* MASKED SECTION */}
       <section
-        className="relative min-h-[70vh] md:min-h-[80vh] w-full text-white flex items-center invertedRadius overflow-hidden"
+        className="relative min-h-[70vh] md:min-h-[85vh] w-[95%] md:w-[90%] text-white flex mx-auto items-center invertedRadius overflow-hidden"
         style={{
           backgroundImage:
             "url(https://images.unsplash.com/photo-1600585154340-be6161a56a0c)",
@@ -60,7 +60,7 @@ export default function Hero() {
       </section>
 
       {/* REVIEWS */}
-      <div className="absolute bottom-0 sm:bottom-3 right-6 text-[#0a1e3c] flex flex-col sm:flex-row items-center gap-1 sm:gap-4 ">
+      <div className="absolute bottom-0 sm:bottom-3 right-[8%] sm:right-[3%] md:right-[6%] text-[#0a1e3c] flex flex-col sm:flex-row items-center gap-1 sm:gap-4 ">
         <div className="flex -space-x-2">
           {[1, 2, 3, 4].map((i) => (
             <img
