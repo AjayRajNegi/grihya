@@ -6,6 +6,7 @@ import SearchBar from "./SearchBar";
 import SubHeader from "../layout/Subheader";
 import { normalizeName } from "../../utils/location";
 import { Loader } from "@googlemaps/js-api-loader";
+import { Navbar } from "../layout/Navbar";
 
 type HeroSectionProps = {
   onLocationReady?: (coords: { lat: number; lng: number } | null) => void;
@@ -612,60 +613,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
 
   return (
     <div className="bg-gray-50">
-      {/* Header: logo + location + mobile menu icon */}
-      <header className="py-4 md:py-6">
-        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8 pb-3">
-          <div className="flex items-center justify-between">
-            <a
-              href="/"
-              className="flex rounded outline-none focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
-            >
-              <img
-                className="h-8 w-auto"
-                src="/Easy_Lease_Logo.svg"
-                alt="EasyLease"
-              />
-            </a>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={fetchLocation}
-                title="Use my location"
-                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-1 focus:ring-slate-900"
-              >
-                <MapPin className="w-4 h-4 text-[#2AB09C]" />
-                <span className="text-sm">
-                  {locLoading
-                    ? "Locating…"
-                    : locError
-                    ? "Enable location"
-                    : locText}
-                </span>
-              </button>
-
-              {/* Mobile-only hamburger to control SubHeader */}
-              <button
-                type="button"
-                aria-label="Open menu"
-                aria-expanded={subheaderMobileOpen}
-                aria-controls="mobile-accordion"
-                onClick={() => setSubheaderMobileOpen((v) => !v)}
-                className="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
-              >
-                <Menu className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* SubHeader below header; mobile accordion is controlled by the button above */}
-        <SubHeader
-          currentCity={currentCity}
-          mobileMenuOpen={subheaderMobileOpen}
-          setMobileMenuOpen={setSubheaderMobileOpen}
-        />
-      </header>
-
+      {/* Navbar */}
+      <Navbar />
       {/* Section */}
       <section className="pt-12 pb-12 sm:pb-16 lg:pt-8">
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">

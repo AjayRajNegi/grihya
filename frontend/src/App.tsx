@@ -1,7 +1,7 @@
 // import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
-import Header from "./components/layout/Header";
+// import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import Home from "./pages/Home";
 import PropertyListing from "./pages/PropertyListing";
@@ -46,8 +46,8 @@ export function App() {
           <div className="flex flex-col min-h-screen bg-gray-50">
             <Routes>
               {/* Auth routes without header/footer */}
-              <Route path="/auth/login" element={<Login />} />
-              <Route path="/auth/signup" element={<Signup />} />
+              {/* <Route path="/auth/login" element={<Login />} />
+              <Route path="/auth/signup" element={<Signup />} /> */}
               <Route
                 path="/auth/forgot-password"
                 element={<ForgotPassword />}
@@ -87,7 +87,7 @@ export function App() {
                 path="*"
                 element={
                   <>
-                    <Header />
+                    {/* <Header /> */}
                     <main className="flex-grow">
                       <Routes>
                         <Route path="/" element={<Home />} />

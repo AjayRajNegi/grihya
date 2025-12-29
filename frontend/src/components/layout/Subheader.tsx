@@ -437,7 +437,7 @@ const SubHeader: React.FC<SubHeaderProps> = ({
   };
 
   return (
-    <div ref={wrapRef} className="relative bg-[#DADADAFF]">
+    <div ref={wrapRef} className="relative max-h-0 hidden bg-[#DADADAFF]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Desktop tabs */}
         <nav
