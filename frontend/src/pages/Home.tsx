@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { Navbar } from "@/components/layout/Navbar";
 import Hero from "@/components/home/Hero";
 import ValueSection from "@/components/home/ValueSection";
+import FeatureSection from "@/components/home/FeatureSection";
 
 const Home = () => {
   const [role, setRole] = useState<"tenant" | "owner">("tenant");
@@ -115,9 +116,10 @@ const Home = () => {
       <Navbar />
       <Hero />
       <ValueSection />
+      <FeatureSection />
 
       {/* Only show nearby (10 km) once we have coords */}
-      <FeaturedListings coords={heroCoords} radiusMeters={20000} />
+      {/* <FeaturedListings coords={heroCoords} radiusMeters={20000} /> */}
 
       {/* Browse by Property Type */}
       <section className="py-16 bg-white">
