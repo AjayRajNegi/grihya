@@ -70,7 +70,6 @@ function getErrorMessage(e: unknown): string {
   }
 }
 
-// Helpers
 function isNew(iso?: string | null, days = 10): boolean {
   if (!iso) return false;
   const pub = new Date(iso).getTime();
@@ -95,7 +94,6 @@ function clampWords(s?: string | null, maxWords = 30): string {
   return parts.slice(0, maxWords).join(" ") + "…";
 }
 
-// Skeleton
 const SkeletonCard: React.FC = () => (
   <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
     <div className="relative h-48 w-full bg-gray-200 animate-pulse" />
@@ -117,7 +115,6 @@ const SkeletonCard: React.FC = () => (
   </div>
 );
 
-// Card
 const PostCard: React.FC<{ post: Post }> = ({ post }) => {
   const imgSrc = post.cover_image_url || "/placeholder.jpg";
   const newBadge = isNew(post.published_at, 10);

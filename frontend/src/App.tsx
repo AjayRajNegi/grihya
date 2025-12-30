@@ -1,14 +1,10 @@
-// import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
-// import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import Home from "./pages/Home";
 import PropertyListing from "./pages/PropertyListing";
 import PropertyDetail from "./pages/PropertyDetail";
 import ListProperty from "./pages/ListProperty";
-import Login from "./pages/auth/Login";
-import Signup from "./pages/auth/Signup";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import Account from "./pages/Account";
 import TermsAndConditions from "./pages/TermsAndConditions";
@@ -21,20 +17,6 @@ import ChatWithUs from "./pages/ChatWithUs";
 import ResetPasswordPage from "./pages/auth/ResetPassword";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
-// import BuyerOnboarding from "./pages/onboarding/BuyerOnboarding";
-// import OwnerOnboarding from "./pages/onboarding/OwnerOnboarding";
-// import KYCFlow from "./pages/onboarding/KYCFlow";
-// import KYCStatus from "./pages/onboarding/KYCStatus";
-// import VerifyEmailPage from "./pages/VerifyEmailPage";
-// import RatesTrends from "./pages/RatesTrends";
-// import BuyVsRent from "./pages/BuyVsRent";
-// import ApplyHomeLoan from "./pages/homeLoans/ApplyHomeLoan";
-// import EMICalculator from "./pages/homeLoans/EmiCalculator";
-// import EligibilityCalculator from "./pages/homeLoans/EligibilityCalculator";
-// import PartnerDetail from "./pages/homeLoans/PartnerDetail";
-// import AreaConverter from "./pages/AreaConverter";
-// import HelpCenter from "./pages/HelpCenter";
-// import InteriorServices from "./pages/InteriorServices";
 
 export function App() {
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
