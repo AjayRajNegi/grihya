@@ -71,7 +71,7 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
   const category = getRandomCategory();
 
   return (
-    <article className="group flex flex-col gap-5">
+    <article className="group flex flex-col gap-3 md:gap-5">
       {/* Image */}
       <Link
         to={blogHref}
@@ -159,7 +159,7 @@ export default function BlogSection() {
   };
 
   return (
-    <div className="mx-4 my-8 max-w-7xl rounded-3xl px-2 md:mx-auto lg:px-12">
+    <div className="mx-4 my-8 max-w-7xl rounded-3xl px-2 md:mx-auto md:px-6 lg:px-12">
       {/* Header Section */}
       <motion.div
         variants={itemVariants}

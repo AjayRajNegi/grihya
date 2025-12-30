@@ -16,19 +16,19 @@ export const Navbar = () => {
   ];
   // shadow-md shadow-[#2DB8D1]/30
   return (
-    <nav className="w-full bg-[#FFFFFF]  ">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+    <nav className="w-full bg-[#FFFFFF]">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-20 items-center justify-between">
           {/* Logo */}
           <div
-            className="flex items-center gap-2 object-contain max-w-32 cursor-pointer"
+            className="flex max-w-32 cursor-pointer items-center gap-2 object-contain"
             onClick={() => navigate("/")}
           >
             <img src="/logo/GrihyaLogoWithName.png" />
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden items-center gap-8 md:flex">
             {navLinks.map((link) => (
               <div
                 key={link.name}
@@ -44,16 +44,16 @@ export const Navbar = () => {
                 {link.name === "Properties" ? (
                   <button
                     type="button"
-                    className="text-gray-900 text-base hover:text-[#2DB8D1] transition-colors flex items-center gap-1"
+                    className="flex items-center gap-1 text-base text-gray-900 transition-colors hover:text-[#2DB8D1]"
                     onClick={() => navigate(link.link)}
                   >
                     Properties
-                    <ChevronDown className="w-4 h-4" />
+                    <ChevronDown className="h-4 w-4" />
                   </button>
                 ) : (
                   <button
                     onClick={() => navigate(link.link)}
-                    className="text-gray-900 text-base hover:text-[#2DB8D1] transition-colors"
+                    className="text-base text-gray-900 transition-colors hover:text-[#2DB8D1]"
                   >
                     {link.name}
                   </button>
@@ -68,18 +68,18 @@ export const Navbar = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-32 bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 z-50 p-1 text-base"
+                        className="absolute left-1/2 top-full z-50 mt-2 w-32 -translate-x-1/2 overflow-hidden rounded-2xl border border-gray-100 bg-white p-1 text-base shadow-lg"
                       >
                         <button
-                          onClick={() => navigate("/")}
-                          className="block text-left w-full px-2 py-3 rounded-2xl  hover:bg-[#2DB8D1] text-black hover:text-white  transition-colors"
+                          onClick={() => navigate("/properties?for=sale")}
+                          className="block w-full rounded-2xl px-2 py-3 text-left text-black transition-colors hover:bg-[#2DB8D1] hover:text-white"
                         >
                           For Sale
                         </button>
 
                         <button
-                          onClick={() => navigate("/")}
-                          className="block text-left w-full px-2 py-3 rounded-2xl  hover:bg-[#2DB8D1] text-black hover:text-white  transition-colors"
+                          onClick={() => navigate("/properties?for=rent")}
+                          className="block w-full rounded-2xl px-2 py-3 text-left text-black transition-colors hover:bg-[#2DB8D1] hover:text-white"
                         >
                           For Rent
                         </button>
@@ -92,38 +92,38 @@ export const Navbar = () => {
           </div>
 
           {/* Desktop Buttons */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden items-center gap-4 md:flex">
             <button
               onClick={() => navigate("/account")}
-              className="px-6 py-3 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-colors"
+              className="rounded-full bg-gray-900 px-6 py-3 text-white transition-colors hover:bg-gray-800"
             >
               Sign In
             </button>
             <button
               onClick={() => navigate("/contact")}
-              className="px-6 py-3 bg-[#2DB8D1] text-white rounded-full hover:bg-[#26a5bb] transition-colors"
+              className="rounded-full bg-[#2DB8D1] px-6 py-3 text-white transition-colors hover:bg-[#26a5bb]"
             >
               Contact Us
             </button>
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex bg-[#ffffff] md:hidden items-center gap-3">
+          <div className="flex items-center gap-3 bg-[#ffffff] md:hidden">
             <button
               onClick={() => navigate("/account")}
-              className="px-6 py-3 bg-gray-900 text-white rounded-full text-sm hover:bg-gray-800 transition-colors"
+              className="rounded-full bg-gray-900 px-6 py-3 text-sm text-white transition-colors hover:bg-gray-800"
             >
               Sign In
             </button>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-full text-white hover:bg-gray-100 transition-colors bg-[#2DB8D1] hover:text-black"
+              className="rounded-full bg-[#2DB8D1] p-2 text-white transition-colors hover:bg-gray-100 hover:text-black"
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? (
-                <X className="w-6 h-6 " />
+                <X className="h-6 w-6" />
               ) : (
-                <Menu className="w-6 h-6 " />
+                <Menu className="h-6 w-6" />
               )}
             </button>
           </div>
@@ -149,9 +149,9 @@ export const Navbar = () => {
             transition={{
               duration: 0.3,
             }}
-            className="md:hidden overflow-hidden"
+            className="overflow-hidden md:hidden"
           >
-            <div className="px-4 py-4 space-y-2">
+            <div className="space-y-2 px-4 py-4">
               {navLinks.map((link, index) => (
                 <motion.button
                   key={link.name}
@@ -167,7 +167,7 @@ export const Navbar = () => {
                     delay: index * 0.1,
                   }}
                   onClick={() => navigate(link.link)}
-                  className="block w-full text-center py-3 text-gray-900 text-lg hover:text-[#2DB8D1] transition-colors"
+                  className="block w-full py-3 text-center text-lg text-gray-900 transition-colors hover:text-[#2DB8D1]"
                 >
                   {link.name}
                 </motion.button>
@@ -188,7 +188,7 @@ export const Navbar = () => {
                   navigate("/contact");
                   setIsMobileMenuOpen(false);
                 }}
-                className="w-full py-3 bg-[#2DB8D1] text-white rounded-full hover:bg-[#26a5bb] transition-colors"
+                className="w-full rounded-full bg-[#2DB8D1] py-3 text-white transition-colors hover:bg-[#26a5bb]"
               >
                 Contact Us
               </motion.button>
