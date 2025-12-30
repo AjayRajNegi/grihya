@@ -1,6 +1,5 @@
 import { motion, Variants } from "framer-motion";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 
 interface Step {
   id: number;
@@ -10,7 +9,6 @@ interface Step {
 }
 
 const AdvantagesSection: React.FC = () => {
-  const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
 
   const steps: Step[] = [
@@ -48,6 +46,14 @@ const AdvantagesSection: React.FC = () => {
       },
     },
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveStep((prev) => (prev + 1) % steps.length);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [steps.length]);
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto mt-8 lg:mt-12">
