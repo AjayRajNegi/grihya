@@ -25,7 +25,7 @@ export function App() {
     <GoogleOAuthProvider clientId={clientId}>
       <AuthProvider>
         <BrowserRouter>
-          <div className="flex flex-col min-h-screen bg-gray-50">
+          <div className="flex min-h-screen flex-col bg-gray-50">
             <Routes>
               {/* Auth routes without header/footer */}
               {/* <Route path="/auth/login" element={<Login />} />
@@ -87,7 +87,7 @@ export function App() {
                         />
                       </Routes>
                     </main>
-                    {/* <Footer /> */}
+                    <Footer />
                   </>
                 }
               />

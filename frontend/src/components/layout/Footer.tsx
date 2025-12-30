@@ -1,148 +1,150 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import {
-  HomeIcon,
-  PhoneIcon,
-  MailIcon,
-  FacebookIcon,
-  InstagramIcon,
-  YoutubeIcon,
-} from "lucide-react";
-const Footer = () => {
-  return (
-    <footer className="bg-gray-900 text-white pt-12 pb-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div>
-            <div className="flex items-center mb-4">
-              <HomeIcon className="h-8 w-8 text-blue-400" />
-              {/* <span className="ml-2 text-xl font-bold">
-                RealEstate<span className="text-blue-400">Hub</span>
-              </span> */}
-              <img src="/Easy_Lease_Logo.png" alt="Footer Logo" />
-            </div>
-            <p className="text-gray-400 mb-4">
-              Find your perfect home or list your property with our easy-to-use
-              real estate marketplace.
-            </p>
-            <div className="flex space-x-4">
-              <a
-                href="https://www.facebook.com/share/1EmnN1wQQX/"
-                className="text-gray-400 hover:text-white"
-              >
-                <FacebookIcon className="h-6 w-6" />
-              </a>
-              <a
-                href="https://www.instagram.com/easylease.services?igsh=N2Q1NW1qMDZrbXd6"
-                className="text-gray-400 hover:text-white"
-              >
-                <InstagramIcon className="h-6 w-6" />
-              </a>
-              {/* <a href="#" className="text-gray-400 hover:text-white">
-              <YoutubeIcon className="h-6 w-6" />
-            </a> */}
-            </div>
-          </div>
+import { motion, Variants } from "framer-motion";
+import { Facebook, Linkedin, Twitter } from "lucide-react";
 
-          <div>
-            {/* <h3 className="text-lg font-semibold mb-4">Property Types</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/properties?type=pg" className="text-gray-400 hover:text-white">
-                  PG Accommodations
-                </Link>
-              </li>
-              <li>
-                <Link to="/properties?type=flat" className="text-gray-400 hover:text-white">
-                  Apartments & Flats
-                </Link>
-              </li>
-              <li>
-                <Link to="/properties?type=house" className="text-gray-400 hover:text-white">
-                  Independent Houses
-                </Link>
-              </li>
-              <li>
-                <Link to="/properties?type=commercial" className="text-gray-400 hover:text-white">
-                  Commercial Properties
-                </Link>
-              </li>
-              <li>
-                <Link to="/properties?type=land" className="text-gray-400 hover:text-white">
-                  Plots & Land
-                </Link>
-              </li>
-            </ul> */}
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/" className="text-gray-400 hover:text-white">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/properties"
-                  className="text-gray-400 hover:text-white"
+const Footer: React.FC = () => {
+  const containerVariants: Variants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5 },
+    },
+  };
+
+  const socialVariants: Variants = {
+    hover: {
+      scale: 1.1,
+      transition: { type: "spring", stiffness: 400, damping: 10 },
+    },
+    tap: { scale: 0.95 },
+  };
+
+  const quickLinks = ["Home", "About Us", "Our Agents", "Contact Us", "FAQ"];
+  const mainPages = ["Properties", "Blogs"];
+  return (
+    <footer className="bg-white">
+      <motion.div
+        className="mx-auto max-w-6xl px-6 pb-6 pt-16"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-5">
+          {/* Brand Section */}
+          <motion.div variants={itemVariants} className="lg:col-span-3">
+            <h2 className="mb-6 text-4xl font-medium leading-tight text-gray-900">
+              Discover Real state from <br /> your own Ease!
+            </h2>
+            <div className="flex gap-3">
+              <motion.a
+                href="#"
+                className="flex h-10 w-10 items-center justify-center rounded bg-blue-100 text-[#3D81FF] transition-colors hover:bg-[#3D81FF] hover:text-white"
+                variants={socialVariants}
+                whileHover="hover"
+                whileTap="tap"
+                aria-label="Facebook"
+              >
+                <Facebook size={18} />
+              </motion.a>
+              <motion.a
+                href="#"
+                className="flex h-10 w-10 items-center justify-center rounded bg-blue-100 text-[#3D81FF] transition-colors hover:bg-[#3D81FF] hover:text-white"
+                variants={socialVariants}
+                whileHover="hover"
+                whileTap="tap"
+                aria-label="LinkedIn"
+              >
+                <Linkedin size={18} />
+              </motion.a>
+              <motion.a
+                href="#"
+                className="flex h-10 w-10 items-center justify-center rounded bg-blue-100 text-[#3D81FF] transition-colors hover:bg-[#3D81FF] hover:text-white"
+                variants={socialVariants}
+                whileHover="hover"
+                whileTap="tap"
+                aria-label="Twitter"
+              >
+                <Twitter size={18} />
+              </motion.a>
+            </div>
+          </motion.div>
+
+          {/* Quick Links */}
+          <motion.div variants={itemVariants}>
+            <h3 className="mb-6 text-xl font-normal text-gray-900">
+              Quick Links
+            </h3>
+            <ul className="space-y-3">
+              {quickLinks.map((link, index) => (
+                <motion.li
+                  key={index}
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
                 >
-                  Properties
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/list-property"
-                  className="text-gray-400 hover:text-white"
-                >
-                  List Your Property
-                </Link>
-              </li>
-              <li>
-                <Link to="/privacy" className="text-gray-400 hover:text-white">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link to="/terms" className="text-gray-400 hover:text-white">
-                  Terms & Conditions
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
-            <ul className="space-y-4">
-              <li className="flex items-start">
-                <PhoneIcon className="h-6 w-6 text-[#2AB09C] mr-2 flex-shrink-0" />
-                <span className="text-gray-400">
-                  <a href="tel:+918448163874">+91 8448163874</a>
-                </span>
-              </li>
-              <li className="flex items-start">
-                <MailIcon className="h-6 w-6 text-[#2AB09C] mr-2 flex-shrink-0" />
-                <span className="text-gray-400">
-                  <a href="mailto:support@easylease.services">
-                    support@easylease.services
+                  <a
+                    href="#"
+                    className="text-base text-gray-600 transition-colors hover:text-gray-900"
+                  >
+                    {link}
                   </a>
-                </span>
-              </li>
-              <li>
-                <address className="text-gray-400 not-italic">
-                  11th Mile Stone, Chakrata Road, East Hope Town Dehradun,
-                  Uttarakhand - 248007 India
-                </address>
-              </li>
+                </motion.li>
+              ))}
             </ul>
+          </motion.div>
+
+          {/* Main Pages */}
+          <motion.div variants={itemVariants}>
+            <h3 className="mb-6 text-xl font-normal text-gray-900">
+              Main Pages
+            </h3>
+            <ul className="space-y-3">
+              {mainPages.map((link, index) => (
+                <motion.li
+                  key={index}
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <a
+                    href="#"
+                    className="text-base text-gray-600 transition-colors hover:text-gray-900"
+                  >
+                    {link}
+                  </a>
+                </motion.li>
+              ))}
+            </ul>
+          </motion.div>
+        </div>
+
+        {/* Bottom Bar */}
+        <motion.div
+          className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-gray-200 pt-8 md:flex-row"
+          variants={itemVariants}
+        >
+          <p className="text-sm text-gray-600">Copyright @2024 Grihya</p>
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <span>Developed by Redsan</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 0L0 8h8v8l8-8H8V0z" />
+            </svg>
           </div>
-        </div>
-        <div className="border-t border-gray-800 mt-8 pt-6">
-          <p className="text-gray-400 text-center text-sm">
-            &copy; {new Date().getFullYear()} EasyLease. All rights reserved.
-          </p>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </footer>
   );
 };
+
 export default Footer;
