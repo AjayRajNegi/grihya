@@ -9,6 +9,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import Hero from "@/components/home/Hero";
 import ValueSection from "@/components/home/ValueSection";
 import FeatureSection from "@/components/home/FeatureSection";
+import AdvantagesSection from "@/components/home/AdvantagesSection";
 
 const Home = () => {
   const [role, setRole] = useState<"tenant" | "owner">("tenant");
@@ -117,6 +118,7 @@ const Home = () => {
       <Hero />
       <ValueSection />
       <FeatureSection />
+      <AdvantagesSection />
 
       {/* Only show nearby (10 km) once we have coords */}
       {/* <FeaturedListings coords={heroCoords} radiusMeters={20000} /> */}
