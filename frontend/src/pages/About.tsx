@@ -1,3 +1,4 @@
+import AmenitiesSection from "@/components/about/AmenitiesSections";
 import StatsComponent from "@/components/about/StatsComponent";
 import CTASection from "@/components/home/CTASection";
 import {
@@ -123,6 +124,9 @@ export default function About() {
           <StatsComponent />
         </article>
       </section>
+
+      {/* Amenities */}
+      <AmenitiesSection />
 
       {/* CTA */}
       <CTASection />
