@@ -1,4 +1,3 @@
-import { Navbar } from "@/components/layout/Navbar";
 import Hero from "@/components/home/Hero";
 import ValueSection from "@/components/home/ValueSection";
 import FeatureSection from "@/components/home/FeatureSection";
@@ -9,7 +8,6 @@ import CTASection from "@/components/home/CTASection";
 const Home = () => {
   return (
     <div className="min-h-screen bg-white">
-      <Navbar />
       <Hero />
       <ValueSection />
       <FeatureSection />

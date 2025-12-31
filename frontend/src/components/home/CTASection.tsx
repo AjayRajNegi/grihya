@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform, Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import Blog from "../blog/Blog";
 import { useNavigate } from "react-router-dom";
+import BlogSection from "../blog/Blog";
 
 const containerVariants: Variants = {
   hidden: {},
@@ -44,7 +44,7 @@ const CTASection: React.FC = () => {
 
   return (
     <div className="mx-auto max-w-7xl overflow-hidden rounded-xl bg-white px-4 lg:px-0">
-      <Blog />
+      <BlogSection header="Blogs" />
 
       {/* Hero Section */}
       <div

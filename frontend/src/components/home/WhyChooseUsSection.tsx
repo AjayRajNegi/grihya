@@ -7,6 +7,54 @@ interface Feature {
   description: string;
 }
 
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 1.2,
+      ease: [0.4, 0, 0.2, 1],
+    },
+  },
+};
+
+const imageVariants: Variants = {
+  hidden: { opacity: 0, scale: 1.05 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 1,
+      ease: [0.4, 0, 0.2, 1],
+    },
+  },
+};
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 1.4,
+      ease: [0.4, 0, 0.2, 1],
+      staggerChildren: 0.2,
+    },
+  },
+};
+
+const featureVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.4, 0, 0.2, 1],
+    },
+  },
+};
+
 const WhyChooseUsSection: React.FC = () => {
   const features: Feature[] = [
     {
@@ -23,56 +71,9 @@ const WhyChooseUsSection: React.FC = () => {
       description: "Something not to vauge but precise.",
     },
   ];
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 1.2,
-        ease: [0.4, 0, 0.2, 1],
-      },
-    },
-  };
-
-  const imageVariants: Variants = {
-    hidden: { opacity: 0, scale: 1.05 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 1,
-        ease: [0.4, 0, 0.2, 1],
-      },
-    },
-  };
-
-  const cardVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: 1.4,
-        ease: [0.4, 0, 0.2, 1],
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const featureVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.4, 0, 0.2, 1],
-      },
-    },
-  };
 
   return (
-    <div className="mx-auto my-8 max-w-7xl overflow-hidden">
+    <div className="mx-auto my-8 mb-0 max-w-7xl overflow-hidden">
       {/* Header Section */}
       <motion.div
         variants={itemVariants}
