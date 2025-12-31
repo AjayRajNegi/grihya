@@ -1,6 +1,5 @@
-import React, { useEffect, useMemo, useState, ReactNode } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Header from "../components/layout/Header";
 import LoginForm from "../components/auth/LoginModal";
 import SignupForm from "../components/auth/SignupModal";
 import { useAuth } from "../context/AuthContext";
@@ -16,18 +15,12 @@ import {
   LogOut as LogOutIcon,
   Trash2 as TrashIcon,
   MoreVertical as MoreIcon,
-  CheckCircle2 as CheckIcon,
-  ShieldCheck as ShieldIcon,
-  Zap as ZapIcon,
-  PhoneCall as PhoneCallIcon,
-  Megaphone as MegaphoneIcon,
-  Star as StarIcon,
-  Users as UsersIcon,
-  Home as HomeIcon,
-  ChevronDown as ChevronDownIcon,
 } from "lucide-react";
 import { Listbox } from "@headlessui/react";
 import ReactCountryFlag from "react-country-flag";
+import { Navbar } from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import { motion, Variants } from "framer-motion";
 
 type CountryOpt = { code: string; label: string; dial: string; flag: string };
 
@@ -68,139 +61,25 @@ type ApiPaginated<T> = {
   last_page: number;
 };
 
-// ===== Benefits panel helpers =====
-type Benefit = { text: string; icon?: ReactNode };
-
 type Role = "tenant" | "owner" | "broker" | "builder";
 
-const ROLE_LABEL: Record<Role, string> = {
-  tenant: "Tenant",
-  owner: "Owner",
-  broker: "Broker",
-  builder: "Builder",
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 1.2,
+      ease: [0.4, 0, 0.2, 1],
+    },
+  },
 };
-
-const TENANT_BENEFITS: Benefit[] = [
-  {
-    text: "Browse thousands of verified properties",
-    icon: <HomeIcon className="h-4 w-4" />,
-  },
-  {
-    text: "Contact owners and brokers directly at no charge",
-    icon: <PhoneCallIcon className="h-4 w-4" />,
-  },
-  {
-    text: "Save searches and get instant alerts for new listings",
-    icon: <ZapIcon className="h-4 w-4" />,
-  },
-  {
-    text: "Shortlist favorites and compare easily",
-    icon: <StarIcon className="h-4 w-4" />,
-  },
-  {
-    text: "Zero brokerage charged by EasyLease",
-    icon: <ShieldIcon className="h-4 w-4" />,
-  },
-  {
-    text: "Schedule visits, get directions and chat on WhatsApp",
-    icon: <UsersIcon className="h-4 w-4" />,
-  },
-];
-
-const LISTER_BENEFITS: Benefit[] = [
-  {
-    text: "List unlimited properties for free",
-    icon: <BuildingIcon className="h-4 w-4" />,
-  },
-  {
-    text: "Get discovered by thousands of tenants  -  no platform fee",
-    icon: <MegaphoneIcon className="h-4 w-4" />,
-  },
-  {
-    text: "Leads in real time via call, email and WhatsApp",
-    icon: <PhoneCallIcon className="h-4 w-4" />,
-  },
-  {
-    text: "Add rich details: photos, amenities, availability and more",
-    icon: <StarIcon className="h-4 w-4" />,
-  },
-  { text: "Performance dashboard", icon: <ZapIcon className="h-4 w-4" /> },
-  // { text: 'Toggle listing status (Active/Inactive) anytime', icon: <ShieldIcon className="h-4 w-4" /> },
-];
-
-function RoleBenefitsPanel({ role }: { role: Role }) {
-  const isLister = role === "owner" || role === "broker" || role === "builder";
-  const points = isLister ? LISTER_BENEFITS : TENANT_BENEFITS;
-  const subtitle = isLister
-    ? "Everything you need to rent out faster."
-    : "Everything you need to find your next home.";
-
-  return (
-    <aside className="relative overflow-hidden rounded-3xl border border-emerald-100 bg-gradient-to-br from-[#0f766e] via-[#147d73] to-[#2AB09C] text-white">
-      <div className="absolute inset-0 opacity-[0.08] pointer-events-none">
-        <div className="h-full w-full bg-[radial-gradient(circle_at_20%_20%,white_1px,transparent_1px)] bg-[length:18px_18px]" />
-      </div>
-      <div className="relative p-8">
-        <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold tracking-wide backdrop-blur">
-          <CheckIcon className="h-4 w-4" />
-          {ROLE_LABEL[role]} benefits
-        </span>
-
-        <h3 className="mt-4 text-2xl font-bold">
-          Things you can do with your EasyLease account
-        </h3>
-        <p className="mt-1 text-sm text-emerald-50">{subtitle}</p>
-
-        <ul className="mt-6 space-y-3.5">
-          {points.map((b, i) => (
-            <li key={i} className="flex items-start gap-2.5">
-              <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-white/20 text-white">
-                {b.icon ?? <CheckIcon className="h-4 w-4" />}
-              </span>
-              <span className="text-sm leading-5">{b.text}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </aside>
-  );
-}
-
-function MobileBenefits({ role }: { role: Role }) {
-  const isLister = role === "owner" || role === "broker" || role === "builder";
-  const points = isLister ? LISTER_BENEFITS : TENANT_BENEFITS;
-
-  return (
-    <details className="xl:hidden rounded-2xl border border-gray-200 bg-white/70 shadow-sm">
-      <summary className="list-none cursor-pointer select-none flex items-center justify-between p-4">
-        <div className="text-sm font-medium text-gray-800">
-          What you get as{" "}
-          <span className="text-[#2AB09C]">{ROLE_LABEL[role]}</span>
-        </div>
-        <ChevronDownIcon className="h-4 w-4 text-gray-500" />
-      </summary>
-      <div className="px-4 pb-4">
-        <ul className="space-y-2.5">
-          {points.map((b, i) => (
-            <li key={i} className="flex items-start gap-2">
-              <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
-                {b.icon ?? <CheckIcon className="h-3.5 w-3.5" />}
-              </span>
-              <span className="text-sm text-gray-700">{b.text}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </details>
-  );
-}
 
 const Account: React.FC = () => {
   const navigate = useNavigate();
   const auth = useAuth() as any;
   const { isAuthenticated, user, logout } = auth;
   const setUser = auth?.setUser as ((u: any) => void) | undefined;
-  const [previewRole, setPreviewRole] = useState<Role>("tenant");
 
   const [mode, setMode] = useState<"login" | "signup">("login");
 
@@ -282,7 +161,7 @@ const Account: React.FC = () => {
 
   const fullPhone = useMemo(
     () => `${country.dial}${digits(profile.phoneLocal)}`,
-    [country, profile.phoneLocal]
+    [country, profile.phoneLocal],
   );
 
   const needsCity = !user?.city || !String(user.city).trim();
@@ -333,9 +212,9 @@ const Account: React.FC = () => {
         setEmailChecking(true);
         const res = await fetch(
           `${API_URL}/auth/available?email=${encodeURIComponent(
-            emailTrim
+            emailTrim,
           )}&exclude=${encodeURIComponent(String(user.id))}`,
-          { signal: controller.signal }
+          { signal: controller.signal },
         );
         const json = await res.json().catch(() => null);
         if (json && json.available === false) {
@@ -388,9 +267,9 @@ const Account: React.FC = () => {
         setPhoneChecking(true);
         const res = await fetch(
           `${API_URL}/auth/available?phone=${encodeURIComponent(
-            fullPhone
+            fullPhone,
           )}&exclude=${encodeURIComponent(String(user.id))}`,
-          { signal: controller.signal }
+          { signal: controller.signal },
         );
         const json = await res.json().catch(() => null);
         if (json && json.available === false) {
@@ -464,7 +343,7 @@ const Account: React.FC = () => {
           }
           if (res.status === 429)
             throw new Error(
-              "You’ve tried too many times. Please wait a moment and try again."
+              "You’ve tried too many times. Please wait a moment and try again.",
             );
           throw new Error("Unable to load your properties.");
         }
@@ -474,19 +353,19 @@ const Account: React.FC = () => {
           | ApiProperty[];
         const items: ApiProperty[] = Array.isArray(json)
           ? json
-          : json.data ?? [];
+          : (json.data ?? []);
 
         if (!cancelled) {
           setMyProps(items);
-          setLastPage(Array.isArray(json) ? 1 : json.last_page ?? 1);
+          setLastPage(Array.isArray(json) ? 1 : (json.last_page ?? 1));
           setTotalListings(
-            Array.isArray(json) ? items.length : json.total ?? items.length
+            Array.isArray(json) ? items.length : (json.total ?? items.length),
           );
         }
       } catch (e: any) {
         if (!cancelled)
           setPropsError(
-            e.message || "Unable to load your properties. Please try again."
+            e.message || "Unable to load your properties. Please try again.",
           );
       } finally {
         if (!cancelled) setLoadingProps(false);
@@ -590,7 +469,7 @@ const Account: React.FC = () => {
       if (!res.ok) {
         if (res.status === 429)
           throw new Error(
-            "You’ve tried too many times. Please wait a moment and try again."
+            "You’ve tried too many times. Please wait a moment and try again.",
           );
         throw new Error(data?.message || "Unable to save your changes.");
       }
@@ -631,7 +510,7 @@ const Account: React.FC = () => {
       });
     } catch (e: any) {
       setProfileError(
-        e.message || "Unable to save your changes. Please try again."
+        e.message || "Unable to save your changes. Please try again.",
       );
     } finally {
       setSavingProfile(false);
@@ -640,7 +519,7 @@ const Account: React.FC = () => {
 
   const handleSetStatus = async (
     propId: string | number,
-    next: "active" | "pending"
+    next: "active" | "pending",
   ) => {
     setPropsError(null);
     setListMessage(null);
@@ -669,7 +548,7 @@ const Account: React.FC = () => {
       if (!res.ok) {
         if (res.status === 429)
           throw new Error(
-            "You’ve tried too many times. Please wait a moment and try again."
+            "You’ve tried too many times. Please wait a moment and try again.",
           );
         throw new Error(data?.message || "Unable to update the status.");
       }
@@ -679,8 +558,8 @@ const Account: React.FC = () => {
 
       setMyProps((prev) =>
         prev.map((p) =>
-          String(p.id) === idStr ? { ...p, status: updatedStatus } : p
-        )
+          String(p.id) === idStr ? { ...p, status: updatedStatus } : p,
+        ),
       );
       const message = `Status updated to ${
         updatedStatus === "active" ? "Active" : "Inactive"
@@ -692,7 +571,7 @@ const Account: React.FC = () => {
       }, 5000);
     } catch (e: any) {
       setPropsError(
-        e.message || "Unable to update the status. Please try again."
+        e.message || "Unable to update the status. Please try again.",
       );
     } finally {
       setStatusSavingId(null);
@@ -717,7 +596,7 @@ const Account: React.FC = () => {
       if (!res.ok) {
         if (res.status === 429)
           throw new Error(
-            "You’ve tried too many times. Please wait a moment and try again."
+            "You’ve tried too many times. Please wait a moment and try again.",
           );
         const data = await res.json().catch(() => null);
         throw new Error(data?.message || "Unable to delete the property.");
@@ -729,7 +608,7 @@ const Account: React.FC = () => {
       if (myProps.length === 1 && page > 1) setPage(page - 1);
     } catch (e: any) {
       setPropsError(
-        e.message || "Unable to delete the property. Please try again."
+        e.message || "Unable to delete the property. Please try again.",
       );
     } finally {
       setDeletingId(null);
@@ -755,38 +634,37 @@ const Account: React.FC = () => {
       role === "owner"
         ? "Owner"
         : role === "broker"
-        ? "Broker"
-        : role === "builder"
-        ? "Builder"
-        : "Tenant";
+          ? "Broker"
+          : role === "builder"
+            ? "Builder"
+            : "Tenant";
 
     return (
       <>
-        <Header />
         <main className="min-h-screen bg-gray-50 pb-24 md:pb-40">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
             {/* Back + title */}
             <div className="mb-6 flex items-center gap-3">
               <button
                 type="button"
                 aria-label="Go back"
                 onClick={() => navigate(-1)}
-                className="inline-flex h-9 w-9 -ml-1 items-center justify-center bg-transparent text-gray-800 hover:text-gray-900 active:scale-95 cursor-pointer"
+                className="-ml-1 inline-flex h-9 w-9 cursor-pointer items-center justify-center bg-transparent text-gray-800 hover:text-gray-900 active:scale-95"
                 title="Back"
               >
-                <span className="text-2xl md:text-3xl font-extrabold leading-none">
+                <span className="text-2xl font-extrabold leading-none md:text-3xl">
                   <img src="less_than_icon.png" alt="Back-Icon" />
                 </span>
               </button>
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+              <h1 className="text-2xl font-bold text-gray-900 md:text-3xl">
                 Profile
               </h1>
             </div>
 
-            <div className="bg-white rounded-lg shadow p-6 md:p-8">
-              <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+            <div className="rounded-lg bg-white p-6 shadow md:p-8">
+              <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
                 <div className="flex items-start gap-4">
-                  <div className="h-16 w-16 rounded-full bg-[#E6F7F3] text-[#2AB09C] flex items-center justify-center text-2xl font-bold">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#E6F7F3] text-2xl font-bold text-[#2DB8D1]">
                     {initialLetter}
                   </div>
 
@@ -795,28 +673,28 @@ const Account: React.FC = () => {
                       <h1 className="text-2xl font-bold text-gray-900">
                         {user.name || "User"}
                       </h1>
-                      <span className="inline-flex items-center rounded-full bg-[#CCF0E1FF] text-[#2AB09C] px-2 py-0.5 text-xs font-semibold">
-                        <BuildingIcon className="h-3.5 w-3.5 mr-1" />
+                      <span className="inline-flex items-center rounded-full bg-[#CCF0E1FF] px-2 py-0.5 text-xs font-semibold text-[#2DB8D1]">
+                        <BuildingIcon className="mr-1 h-3.5 w-3.5" />
                         {roleLabel}
                       </span>
                     </div>
 
                     {!editingProfile ? (
-                      <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-gray-700 text-sm">
+                      <div className="mt-3 grid grid-cols-1 gap-3 text-sm text-gray-700 sm:grid-cols-2">
                         <div className="flex items-center">
-                          <MailIcon className="h-4 w-4 mr-2 text-gray-500" />
+                          <MailIcon className="mr-2 h-4 w-4 text-gray-500" />
                           <span>{user.email || " - "}</span>
                         </div>
                         <div className="flex items-center">
-                          <PhoneIcon className="h-4 w-4 mr-2 text-gray-500" />
+                          <PhoneIcon className="mr-2 h-4 w-4 text-gray-500" />
                           <span>{user.phone || " - "}</span>
                         </div>
                         <div className="flex items-center">
-                          <MapPinIcon className="h-4 w-4 mr-2 text-gray-500" />
+                          <MapPinIcon className="mr-2 h-4 w-4 text-gray-500" />
                           <span>{user.city ? user.city : " - "}</span>
                         </div>
                         {needsCity && (
-                          <div className="flex items-center text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1">
+                          <div className="flex items-center rounded border border-amber-200 bg-amber-50 px-2 py-1 text-xs text-amber-700">
                             Please enter your city to complete your profile.
                             <button
                               type="button"
@@ -833,13 +711,13 @@ const Account: React.FC = () => {
                         )}
                       </div>
                     ) : (
-                      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div>
-                          <label className="block text-sm text-gray-600 mb-1">
+                          <label className="mb-1 block text-sm text-gray-600">
                             Name
                           </label>
                           <input
-                            className={`w-full border rounded px-3 py-2 focus:ring-[#2AB09C] focus:border-[#2AB09C] ${
+                            className={`w-full rounded border px-3 py-2 focus:border-[#2DB8D1] focus:ring-[#2DB8D1] ${
                               fieldErrors.name
                                 ? "border-red-500"
                                 : "border-gray-300"
@@ -862,12 +740,12 @@ const Account: React.FC = () => {
                         </div>
 
                         <div>
-                          <label className="block text-sm text-gray-600 mb-1">
+                          <label className="mb-1 block text-sm text-gray-600">
                             Email
                           </label>
                           <input
                             type="email"
-                            className={`w-full border rounded px-3 py-2 focus:ring-[#2AB09C] focus:border-[#2AB09C] ${
+                            className={`w-full rounded border px-3 py-2 focus:border-[#2DB8D1] focus:ring-[#2DB8D1] ${
                               fieldErrors.email
                                 ? "border-red-500"
                                 : "border-gray-300"
@@ -895,11 +773,11 @@ const Account: React.FC = () => {
                         </div>
 
                         <div>
-                          <label className="block text-sm text-gray-600 mb-1">
+                          <label className="mb-1 block text-sm text-gray-600">
                             City
                           </label>
                           <input
-                            className={`w-full border rounded px-3 py-2 focus:ring-[#2AB09C] focus:border-[#2AB09C] ${
+                            className={`w-full rounded border px-3 py-2 focus:border-[#2DB8D1] focus:ring-[#2DB8D1] ${
                               fieldErrors.city
                                 ? "border-red-500"
                                 : "border-gray-300"
@@ -923,7 +801,7 @@ const Account: React.FC = () => {
                         </div>
 
                         <div className="sm:col-span-2">
-                          <label className="block text-sm text-gray-600 mb-1">
+                          <label className="mb-1 block text-sm text-gray-600">
                             Mobile number
                           </label>
                           <div className="grid grid-cols-[auto,1fr] gap-2">
@@ -940,7 +818,7 @@ const Account: React.FC = () => {
                                 }}
                               >
                                 <div className="relative w-28">
-                                  <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-1.5 pl-8 pr-7 text-left text-sm focus:outline-none focus:ring-2 focus:ring-[#2AB09C]">
+                                  <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-1.5 pl-8 pr-7 text-left text-sm focus:outline-none focus:ring-2 focus:ring-[#2DB8D1]">
                                     <span className="absolute inset-y-0 left-2 flex items-center">
                                       <ReactCountryFlag
                                         svg
@@ -1005,7 +883,7 @@ const Account: React.FC = () => {
                               </Listbox>
                             </div>
                             <div className="flex">
-                              <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-700">
+                              <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-700">
                                 {country.dial}
                               </span>
                               <input
@@ -1030,7 +908,7 @@ const Account: React.FC = () => {
                                       phone: undefined,
                                     }));
                                 }}
-                                className={`w-full px-3 py-2 border rounded-r-md focus:ring-2 focus:ring-[#2AB09C] outline-none ${
+                                className={`w-full rounded-r-md border px-3 py-2 outline-none focus:ring-2 focus:ring-[#2DB8D1] ${
                                   fieldErrors.phone
                                     ? "border-red-500"
                                     : "border-gray-300"
@@ -1054,12 +932,12 @@ const Account: React.FC = () => {
                     )}
 
                     {profileMessage && !editingProfile && (
-                      <div className="mt-3 text-sm text-green-700 bg-green-50 border border-green-200 rounded px-3 py-2">
+                      <div className="mt-3 rounded border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-700">
                         {profileMessage}
                       </div>
                     )}
                     {profileError && (
-                      <div className="mt-3 text-sm text-red-700 bg-red-50 border border-red-200 rounded px-3 py-2">
+                      <div className="mt-3 rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
                         {profileError}
                       </div>
                     )}
@@ -1076,13 +954,13 @@ const Account: React.FC = () => {
                           setProfileError(null);
                           setFieldErrors({});
                         }}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-md border text-[#2AB09C] hover:bg-[#E6F7F3]"
+                        className="inline-flex items-center gap-2 rounded-md border px-4 py-2 text-[#2DB8D1] hover:bg-[#E6F7F3]"
                       >
                         <EditIcon className="h-4 w-4" /> Edit Profile
                       </button>
                       <button
                         onClick={logout}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600"
+                        className="inline-flex items-center gap-2 rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-600"
                       >
                         <LogOutIcon className="h-4 w-4" /> Sign out
                       </button>
@@ -1101,9 +979,9 @@ const Account: React.FC = () => {
                           !!fieldErrors.name ||
                           !!fieldErrors.city
                         }
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-[#2AB09C] text-white hover:bg-[#229882] disabled:opacity-60"
+                        className="inline-flex items-center gap-2 rounded-md bg-[#2DB8D1] px-4 py-2 text-white hover:bg-[#229882] disabled:opacity-60"
                       >
-                        <SaveIcon className="h-4 w-4" />{" "}
+                        <SaveIcon className="h-4 w-4" />
                         {savingProfile ? "Saving…" : "Save"}
                       </button>
                       <button
@@ -1112,7 +990,7 @@ const Account: React.FC = () => {
                           setProfileError(null);
                           setFieldErrors({});
                           const { c, local } = splitE164ToCountryAndLocal(
-                            user?.phone || ""
+                            user?.phone || "",
                           );
                           setCountry(c);
 
@@ -1123,7 +1001,7 @@ const Account: React.FC = () => {
                             city: user?.city || "",
                           });
                         }}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-md border hover:bg-gray-50"
+                        className="inline-flex items-center gap-2 rounded-md border px-4 py-2 hover:bg-gray-50"
                       >
                         <XIcon className="h-4 w-4" /> Cancel
                       </button>
@@ -1133,7 +1011,7 @@ const Account: React.FC = () => {
               </div>
 
               {isLister && (
-                <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
                   <div className="rounded-lg border bg-white p-4">
                     <div className="text-sm text-gray-500">
                       Total Properties Listed
@@ -1144,7 +1022,7 @@ const Account: React.FC = () => {
                   </div>
                   <div className="rounded-lg border bg-white p-4">
                     <div className="text-sm text-gray-500">Role</div>
-                    <div className="text-xl font-semibold text-[#2AB09C] capitalize">
+                    <div className="text-xl font-semibold capitalize text-[#2DB8D1]">
                       {roleLabel}
                     </div>
                   </div>
@@ -1152,7 +1030,7 @@ const Account: React.FC = () => {
                     <div className="text-sm text-gray-500">Quick Action</div>
                     <Link
                       to="/list-property"
-                      className="inline-block mt-1 px-3 py-2 rounded-md bg-[#2AB09C] text-white hover:bg-[#229882]"
+                      className="mt-1 inline-block rounded-md bg-[#2DB8D1] px-3 py-2 text-white hover:bg-[#229882]"
                     >
                       + Add New Property
                     </Link>
@@ -1163,56 +1041,52 @@ const Account: React.FC = () => {
 
             {isLister && (
               <section className="mt-8">
-                <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between mb-2">
-                  {" "}
-                  <h2 className="text-xl md:text-2xl font-bold text-gray-900">
+                <div className="mb-2 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                  <h2 className="text-xl font-bold text-gray-900 md:text-2xl">
                     My Listings
                   </h2>
-                  <div className="inline-flex rounded-md border bg-white overflow-hidden">
+                  <div className="inline-flex overflow-hidden rounded-md border bg-white">
                     <button
                       type="button"
                       onClick={() => setStatusFilter("all")}
                       className={`px-3 py-1.5 text-sm ${
                         statusFilter === "all"
-                          ? "bg-[#2AB09C] text-white"
+                          ? "bg-[#2DB8D1] text-white"
                           : "text-gray-700 hover:bg-gray-50"
                       }`}
                       aria-pressed={statusFilter === "all"}
                     >
-                      {" "}
-                      All{" "}
+                      All
                     </button>
                     <button
                       type="button"
                       onClick={() => setStatusFilter("active")}
-                      className={`px-3 py-1.5 text-sm border-l ${
+                      className={`border-l px-3 py-1.5 text-sm ${
                         statusFilter === "active"
-                          ? "bg-[#2AB09C] text-white"
+                          ? "bg-[#2DB8D1] text-white"
                           : "text-gray-700 hover:bg-gray-50"
                       }`}
                       aria-pressed={statusFilter === "active"}
                     >
-                      {" "}
-                      Active{" "}
+                      Active
                     </button>
                     <button
                       type="button"
                       onClick={() => setStatusFilter("inactive")}
-                      className={`px-3 py-1.5 text-sm border-l ${
+                      className={`border-l px-3 py-1.5 text-sm ${
                         statusFilter === "inactive"
-                          ? "bg-[#2AB09C] text-white"
+                          ? "bg-[#2DB8D1] text-white"
                           : "text-gray-700 hover:bg-gray-50"
                       }`}
                       aria-pressed={statusFilter === "inactive"}
                     >
-                      {" "}
-                      Inactive{" "}
+                      Inactive
                     </button>
                   </div>
                 </div>
 
                 <p className="mb-4 text-xs text-gray-600">
-                  <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full border border-blue-400 bg-blue-100 text-blue-700 font-semibold">
+                  <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full border border-blue-400 bg-blue-100 font-semibold text-blue-700">
                     !
                   </span>
                   <span>
@@ -1221,7 +1095,7 @@ const Account: React.FC = () => {
                   </span>
                 </p>
 
-                <div className="bg-white rounded-lg shadow p-4 md:p-6">
+                <div className="rounded-lg bg-white p-4 shadow md:p-6">
                   {listMessage && (
                     <div className="mb-4 rounded border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-700">
                       {listMessage}
@@ -1234,11 +1108,11 @@ const Account: React.FC = () => {
                   )}
 
                   {loadingProps ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       {Array.from({ length: 4 }).map((_, i) => (
                         <div
                           key={i}
-                          className="h-40 bg-gray-100 rounded animate-pulse"
+                          className="h-40 animate-pulse rounded bg-gray-100"
                         />
                       ))}
                     </div>
@@ -1249,7 +1123,7 @@ const Account: React.FC = () => {
                         : "No properties found for the selected filter."}
                     </div>
                   ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       {myProps.map((p) => {
                         const img =
                           absolutize(p.images?.[0] || "") ||
@@ -1259,14 +1133,13 @@ const Account: React.FC = () => {
                         return (
                           <div
                             key={String(p.id)}
-                            className="relative flex bg-gray-50 rounded-md overflow-hidden border"
+                            className="relative flex overflow-hidden rounded-md border bg-gray-50"
                           >
-                            <div className="relative w-28 h-28 flex-shrink-0">
-                              {" "}
+                            <div className="relative h-28 w-28 flex-shrink-0">
                               {typeof p.status !== "undefined" &&
                                 p.status !== null && (
                                   <span
-                                    className={`absolute top-2 left-1 z-10 inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold shadow-sm ${
+                                    className={`absolute left-1 top-2 z-10 inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold shadow-sm ${
                                       p.status === "active"
                                         ? "bg-green-600 text-white"
                                         : "bg-gray-600 text-white"
@@ -1285,7 +1158,7 @@ const Account: React.FC = () => {
                               <img
                                 src={img}
                                 alt={p.title}
-                                className="w-full h-full object-cover"
+                                className="h-full w-full object-cover"
                                 onError={(e) => {
                                   (e.target as HTMLImageElement).src =
                                     "https://via.placeholder.com/600x400?text=No+Image";
@@ -1293,9 +1166,9 @@ const Account: React.FC = () => {
                               />
                             </div>
 
-                            <div className="p-3 flex-1 flex flex-col">
+                            <div className="flex flex-1 flex-col p-3">
                               <div className="flex items-start justify-between gap-2">
-                                <h3 className="font-semibold text-gray-900 line-clamp-1">
+                                <h3 className="line-clamp-1 font-semibold text-gray-900">
                                   {p.title}
                                 </h3>
 
@@ -1308,10 +1181,10 @@ const Account: React.FC = () => {
                                       setMenuOpenId((cur) =>
                                         cur === String(p.id)
                                           ? null
-                                          : String(p.id)
+                                          : String(p.id),
                                       );
                                     }}
-                                    className="p-1.5 rounded hover:bg-white"
+                                    className="rounded p-1.5 hover:bg-white"
                                     aria-label="More actions"
                                     title="More actions"
                                   >
@@ -1320,7 +1193,7 @@ const Account: React.FC = () => {
 
                                   {menuOpenId === String(p.id) && (
                                     <div
-                                      className="absolute right-0 mt-1 w-36 rounded-md border bg-white shadow-lg z-20"
+                                      className="absolute right-0 z-20 mt-1 w-36 rounded-md border bg-white shadow-lg"
                                       onClick={(e) => e.stopPropagation()}
                                       onMouseDown={(e) => e.stopPropagation()}
                                     >
@@ -1333,13 +1206,13 @@ const Account: React.FC = () => {
                                         onClick={() =>
                                           handleSetStatus(p.id, "active")
                                         }
-                                        className={`block w-full text-left px-3 py-2 text-sm hover:bg-gray-50 ${
+                                        className={`block w-full px-3 py-2 text-left text-sm hover:bg-gray-50 ${
                                           p.status === "active"
-                                            ? "text-green-600 font-medium"
+                                            ? "font-medium text-green-600"
                                             : "text-gray-700"
                                         } ${
                                           statusSavingId === String(p.id)
-                                            ? "opacity-60 cursor-not-allowed"
+                                            ? "cursor-not-allowed opacity-60"
                                             : ""
                                         }`}
                                       >
@@ -1357,14 +1230,14 @@ const Account: React.FC = () => {
                                         onClick={() =>
                                           handleSetStatus(p.id, "pending")
                                         }
-                                        className={`block w-full text-left px-3 py-2 text-sm hover:bg-gray-50 ${
+                                        className={`block w-full px-3 py-2 text-left text-sm hover:bg-gray-50 ${
                                           p.status === "pending" ||
                                           p.status == null
-                                            ? "text-gray-500 font-medium"
+                                            ? "font-medium text-gray-500"
                                             : "text-gray-700"
                                         } ${
                                           statusSavingId === String(p.id)
-                                            ? "opacity-60 cursor-not-allowed"
+                                            ? "cursor-not-allowed opacity-60"
                                             : ""
                                         }`}
                                       >
@@ -1378,34 +1251,34 @@ const Account: React.FC = () => {
                               </div>
 
                               <div className="mt-0.5 flex items-center gap-2">
-                                <div className="text-[#2AB09C] font-bold">
+                                <div className="font-bold text-[#2DB8D1]">
                                   ₹{Number(p.price).toLocaleString()}
                                   {p.for === "rent" ? "/month" : ""}
                                 </div>
                               </div>
 
-                              <div className="mt-0.5 text-xs text-gray-600 flex items-center">
-                                <MapPinIcon className="h-3.5 w-3.5 mr-1" />
+                              <div className="mt-0.5 flex items-center text-xs text-gray-600">
+                                <MapPinIcon className="mr-1 h-3.5 w-3.5" />
                                 {p.location}
                               </div>
 
-                              <div className="mt-auto pt-2 flex items-center gap-2 flex-wrap">
+                              <div className="mt-auto flex flex-wrap items-center gap-2 pt-2">
                                 <Link
                                   to={`/properties/${p.id}`}
-                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded border text-sm hover:bg-white"
+                                  className="inline-flex items-center gap-1 rounded border px-2.5 py-1.5 text-sm hover:bg-white"
                                 >
                                   <EyeIcon className="h-4 w-4" /> View
                                 </Link>
                                 <Link
                                   to={`/properties/${p.id}/edit`}
-                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded border text-sm text-[#2AB09C] border-[#2AB09C] hover:bg-[#E6F7F3]"
+                                  className="inline-flex items-center gap-1 rounded border border-[#2DB8D1] px-2.5 py-1.5 text-sm text-[#2DB8D1] hover:bg-[#E6F7F3]"
                                 >
                                   <EditIcon className="h-4 w-4" /> Edit
                                 </Link>
                                 <button
                                   onClick={() => openDeleteConfirm(p)}
                                   disabled={deletingId === String(p.id)}
-                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded border text-sm text-red-600 border-red-500 hover:bg-red-50 disabled:opacity-60"
+                                  className="inline-flex items-center gap-1 rounded border border-red-500 px-2.5 py-1.5 text-sm text-red-600 hover:bg-red-50 disabled:opacity-60"
                                 >
                                   <TrashIcon className="h-4 w-4" />
                                   {isDeleting ? "Deleting…" : "Delete"}
@@ -1423,11 +1296,11 @@ const Account: React.FC = () => {
                   )}
 
                   {!loadingProps && lastPage > 1 && (
-                    <div className="flex justify-center items-center gap-3 mt-6">
+                    <div className="mt-6 flex items-center justify-center gap-3">
                       <button
                         disabled={page <= 1}
                         onClick={() => setPage((p) => p - 1)}
-                        className="px-3 py-1 border rounded disabled:opacity-50"
+                        className="rounded border px-3 py-1 disabled:opacity-50"
                       >
                         Prev
                       </button>
@@ -1437,7 +1310,7 @@ const Account: React.FC = () => {
                       <button
                         disabled={page >= lastPage}
                         onClick={() => setPage((p) => p + 1)}
-                        className="px-3 py-1 border rounded disabled:opacity-50"
+                        className="rounded border px-3 py-1 disabled:opacity-50"
                       >
                         Next
                       </button>
@@ -1473,7 +1346,7 @@ const Account: React.FC = () => {
                   </h3>
                   <button
                     onClick={closeDeleteConfirm}
-                    className="p-1 rounded hover:bg-gray-100"
+                    className="rounded p-1 hover:bg-gray-100"
                     aria-label="Close"
                   >
                     <XIcon className="h-5 w-5 text-gray-600" />
@@ -1483,7 +1356,6 @@ const Account: React.FC = () => {
                   Are you sure you want to delete
                   {confirmDialog.title ? (
                     <>
-                      {" "}
                       “
                       <span className="font-semibold">
                         {confirmDialog.title}
@@ -1498,14 +1370,14 @@ const Account: React.FC = () => {
                 <div className="flex justify-end gap-2 border-t px-4 py-3">
                   <button
                     onClick={closeDeleteConfirm}
-                    className="px-4 py-2 rounded-md border text-gray-700 hover:bg-gray-50"
+                    className="rounded-md border px-4 py-2 text-gray-700 hover:bg-gray-50"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={confirmDelete}
                     disabled={deletingId === String(confirmDialog.id)}
-                    className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 disabled:opacity-60"
+                    className="rounded-md bg-red-600 px-4 py-2 text-white hover:bg-red-700 disabled:opacity-60"
                   >
                     {deletingId === String(confirmDialog.id)
                       ? "Deleting…"
@@ -1522,82 +1394,81 @@ const Account: React.FC = () => {
 
   return (
     <>
-      <Header />
-      <main className="min-h-screen bg-gray-50 pb-24 md:pb-40">
-        <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8 py-10">
+      <Navbar />
+      <main className="bg-white">
+        <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+          {/* Header Section */}
+          <motion.div
+            variants={itemVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="mx-auto mb-8"
+          >
+            <h1 className="text-center text-4xl font-medium tracking-tighter text-gray-900 md:text-5xl">
+              Sign Up and Explore <br /> properties from
+              <span className="text-[#2DB8D1]"> Grihya</span>
+            </h1>
+          </motion.div>
           {/* Tabs */}
-          <div className="flex items-center justify-center gap-3 mb-6">
-            {" "}
+          <div className="mb-6 flex items-center justify-center gap-3">
             <button
               onClick={() => setMode("login")}
-              className={`px-4 py-2 rounded-md ${
+              className={`rounded-md px-4 py-2 ${
                 mode === "login"
-                  ? "bg-[#2AB09C] text-white"
+                  ? "bg-[#2DB8D1] text-white"
                   : "bg-gray-100 text-gray-700"
               }`}
             >
-              {" "}
-              Login{" "}
-            </button>{" "}
+              Login
+            </button>
             <button
               onClick={() => setMode("signup")}
-              className={`px-4 py-2 rounded-md ${
+              className={`rounded-md px-4 py-2 ${
                 mode === "signup"
-                  ? "bg-[#2AB09C] text-white"
+                  ? "bg-[#2DB8D1] text-white"
                   : "bg-gray-100 text-gray-700"
               }`}
             >
-              {" "}
-              Sign up{" "}
-            </button>{" "}
+              Sign up
+            </button>
           </div>
 
           {mode === "login" ? (
             <>
-              {/* Role preview switch (info panel only) */}
-              <div className="mb-6 flex flex-wrap items-center gap-2 justify-center">
-                <span className="text-sm text-gray-600 mr-2">Benefit as:</span>
-                {(["tenant", "owner", "broker", "builder"] as Role[]).map(
-                  (r) => (
-                    <button
-                      key={r}
-                      onClick={() => setPreviewRole(r)}
-                      className={`px-3 py-1.5 rounded-full text-sm border ${
-                        previewRole === r
-                          ? "bg-[#2AB09C] text-white border-[#2AB09C]"
-                          : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-                      }`}
-                      type="button"
-                    >
-                      {r === "broker" ? "Broker/Agent" : ROLE_LABEL[r]}
-                    </button>
-                  )
-                )}
-              </div>
-
-              <div className="grid items-start gap-8 xl:grid-cols-12">
+              <div>
                 {/* Benefits (left) */}
-                <div className="hidden xl:block xl:col-span-5">
-                  <RoleBenefitsPanel role={previewRole} />
-                </div>
+                {/* <div
+                  className="col-span-1 flex h-full flex-col justify-between rounded-3xl p-4 shadow-md"
+                  style={{
+                    backgroundImage: `url('/images/about/Hero1.png')`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover",
+                  }}
+                >
+                  <p className="glow text-4xl font-medium text-white">
+                    Discover Real Estate from <br /> your own Ease!
+                  </p>
+                  <div>
+                    <p className="glow text-right text-4xl font-medium text-white">
+                      Grihya Estate <br /> Your real estate partner !
+                    </p>
+                  </div>
+                </div> */}
 
                 {/* Login form (right) */}
-                <div className="xl:col-span-7">
-                  <div className="xl:hidden mb-4">
-                    <MobileBenefits role={previewRole} />
-                  </div>
-                  <div className="rounded-3xl border bg-white p-6 sm:p-8 shadow-md">
-                    <LoginForm onSwitch={() => setMode("signup")} />
-                  </div>
+
+                <div className="mx-auto max-w-[500px] rounded-3xl border bg-white p-6 shadow-md sm:p-8">
+                  <LoginForm onSwitch={() => setMode("signup")} />
                 </div>
               </div>
             </>
           ) : (
-            // Signup form already includes a wide, responsive benefits panel
             <SignupForm onSwitch={() => setMode("login")} />
           )}
         </div>
       </main>
+      <Footer />
     </>
   );
 };

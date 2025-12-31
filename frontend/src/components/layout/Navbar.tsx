@@ -2,19 +2,22 @@ import { useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-
+import { useAuth } from "@/context/AuthContext";
+const navLinks = [
+  { name: "Home", link: "/" },
+  { name: "About", link: "/about" },
+  { name: "Properties", link: "/properties" },
+  { name: "Blogs", link: "/blog" },
+];
 export const Navbar = () => {
+  const navigate = useNavigate();
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isPropertiesHovered, setIsPropertiesHovered] = useState(false);
 
-  const navigate = useNavigate();
-  const navLinks = [
-    { name: "Home", link: "/" },
-    { name: "About", link: "/about" },
-    { name: "Properties", link: "/properties" },
-    { name: "Blogs", link: "/blog" },
-  ];
-  // shadow-md shadow-[#2DB8D1]/30
+  const auth = useAuth();
+  const { isAuthenticated } = auth;
+
   return (
     <nav className="w-full bg-[#FFFFFF]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -93,12 +96,22 @@ export const Navbar = () => {
 
           {/* Desktop Buttons */}
           <div className="hidden items-center gap-4 md:flex">
-            <button
+            {/* <button
               onClick={() => navigate("/account")}
               className="rounded-full bg-gray-900 px-6 py-3 text-white transition-colors hover:bg-gray-800"
             >
               Sign In
-            </button>
+            </button> */}
+            {isAuthenticated ? (
+              <>Profile</>
+            ) : (
+              <button
+                onClick={() => navigate("/account")}
+                className="rounded-full bg-gray-900 px-6 py-3 text-sm text-white transition-colors hover:bg-gray-800"
+              >
+                Sign In
+              </button>
+            )}
             <button
               onClick={() => navigate("/contact")}
               className="rounded-full bg-[#2DB8D1] px-6 py-3 text-white transition-colors hover:bg-[#26a5bb]"
@@ -109,12 +122,16 @@ export const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <div className="flex items-center gap-3 bg-[#ffffff] md:hidden">
-            <button
-              onClick={() => navigate("/account")}
-              className="rounded-full bg-gray-900 px-6 py-3 text-sm text-white transition-colors hover:bg-gray-800"
-            >
-              Sign In
-            </button>
+            {isAuthenticated ? (
+              <>Profile</>
+            ) : (
+              <button
+                onClick={() => navigate("/account")}
+                className="rounded-full bg-gray-900 px-6 py-3 text-sm text-white transition-colors hover:bg-gray-800"
+              >
+                Sign In
+              </button>
+            )}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="rounded-full bg-[#2DB8D1] p-2 text-white transition-colors hover:bg-gray-100 hover:text-black"
