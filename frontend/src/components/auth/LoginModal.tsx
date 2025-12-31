@@ -54,7 +54,7 @@ function ForgotPasswordCard({
       <div className="space-y-4">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900">Check your email</h2>
-          <p className="text-gray-600 mt-1">
+          <p className="mt-1 text-gray-600">
             We’ve sent a password reset link to {email || "your email"}. Follow
             the link to set a new password.
           </p>
@@ -63,7 +63,7 @@ function ForgotPasswordCard({
         <button
           type="button"
           onClick={onClose}
-          className="w-full bg-[#2AB09C] text-white py-2 rounded-md hover:bg-[#229882]"
+          className="w-full rounded-md bg-[#2DB8D1] py-2 text-white hover:bg-[#278b9d]"
         >
           Back to login
         </button>
@@ -75,19 +75,19 @@ function ForgotPasswordCard({
     <form onSubmit={onSubmit} className="space-y-4">
       <div className="text-center">
         <h2 className="text-2xl font-bold text-gray-900">Forgot password</h2>
-        <p className="text-gray-600 mt-1">
+        <p className="mt-1 text-gray-600">
           To reset your password, enter the email linked to your account.
         </p>
       </div>
 
       {err && (
-        <div className="bg-red-50 border-l-4 border-red-500 p-3 text-red-700 rounded">
+        <div className="rounded border-l-4 border-red-500 bg-red-50 p-3 text-red-700">
           {err}
         </div>
       )}
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="mb-1 block text-sm font-medium text-gray-700">
           Email
         </label>
         <input
@@ -95,7 +95,7 @@ function ForgotPasswordCard({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           autoComplete="email"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2AB09C] outline-none"
+          className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-[#2DB8D1]"
           placeholder="you@example.com"
         />
       </div>
@@ -104,14 +104,14 @@ function ForgotPasswordCard({
         <button
           type="submit"
           disabled={sending}
-          className="flex-1 bg-[#2AB09C] text-white py-2 rounded-md hover:bg-[#229882] disabled:opacity-70"
+          className="flex-1 rounded-md bg-[#2DB8D1] py-2 text-white hover:bg-[#278b9d] disabled:opacity-70"
         >
           {sending ? "Sending…" : "Continue"}
         </button>
         <button
           type="button"
           onClick={onClose}
-          className="px-4 py-2 rounded-md border hover:bg-gray-50"
+          className="rounded-md border px-4 py-2 hover:bg-gray-50"
         >
           Cancel
         </button>
@@ -190,11 +190,11 @@ function LoginForm({ onSwitch }: LoginProps): JSX.Element {
     <form onSubmit={submit} className="space-y-4">
       <div className="text-center">
         <h2 className="text-2xl font-bold text-gray-900">Welcome back</h2>
-        <p className="text-gray-600 mt-1">Sign in to continue</p>
+        <p className="mt-1 text-gray-600">Sign in to continue</p>
       </div>
 
       {err && (
-        <div className="bg-red-50 border-l-4 border-red-500 p-3 text-red-700 rounded">
+        <div className="rounded border-l-4 border-red-500 bg-red-50 p-3 text-red-700">
           {err}
         </div>
       )}
@@ -203,7 +203,7 @@ function LoginForm({ onSwitch }: LoginProps): JSX.Element {
         type="button"
         onClick={() => googleLogin()}
         disabled={loading}
-        className="w-full border border-gray-300 rounded-md py-2 px-3 flex items-center justify-center gap-2 hover:bg-gray-50"
+        className="flex w-full items-center justify-center gap-2 rounded-md border border-gray-300 px-3 py-2 hover:bg-gray-50"
       >
         <img
           src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
@@ -214,13 +214,13 @@ function LoginForm({ onSwitch }: LoginProps): JSX.Element {
       </button>
 
       <div className="flex items-center gap-3">
-        <div className="h-px bg-gray-200 flex-1" />
+        <div className="h-px flex-1 bg-gray-200" />
         <span className="text-xs text-gray-400">or</span>
-        <div className="h-px bg-gray-200 flex-1" />
+        <div className="h-px flex-1 bg-gray-200" />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="mb-1 block text-sm font-medium text-gray-700">
           Email
         </label>
         <input
@@ -231,20 +231,20 @@ function LoginForm({ onSwitch }: LoginProps): JSX.Element {
             if (err) setErr("");
           }}
           autoComplete="email"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2AB09C] outline-none"
+          className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-[#2DB8D1]"
           placeholder="you@example.com"
         />
       </div>
 
       <div>
-        <div className="flex items-center justify-between mb-1">
+        <div className="mb-1 flex items-center justify-between">
           <label className="block text-sm font-medium text-gray-700">
             Password
           </label>
           <button
             type="button"
             onClick={() => setFpOpen(true)}
-            className="text-sm text-[#2AB09C] hover:text-[#1f8a78]"
+            className="text-sm text-[#2DB8D1] hover:text-[#1f8a78]"
           >
             Forgot password?
           </button>
@@ -257,7 +257,7 @@ function LoginForm({ onSwitch }: LoginProps): JSX.Element {
             if (err) setErr("");
           }}
           autoComplete="current-password"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2AB09C] outline-none"
+          className="w-full rounded-md border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-[#2DB8D1]"
           placeholder="••••••••"
         />
       </div>
@@ -265,17 +265,17 @@ function LoginForm({ onSwitch }: LoginProps): JSX.Element {
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-[#2AB09C] text-white py-2 rounded-md hover:bg-[#229882] disabled:opacity-70"
+        className="w-full rounded-md bg-[#278b9d] py-2 text-white hover:bg-[#278b9d] disabled:opacity-70"
       >
         {loading ? "Logging in…" : "Login"}
       </button>
 
-      <p className="text-sm text-gray-600 mt-2 text-center">
+      <p className="mt-2 text-center text-sm text-gray-600">
         Not signed up?{" "}
         <button
           type="button"
           onClick={() => goToSignup()}
-          className="text-[#2AB09C] font-medium"
+          className="font-medium text-[#2DB8D1]"
         >
           Create an account
         </button>

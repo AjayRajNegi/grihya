@@ -1,21 +1,9 @@
-import React, { useEffect, useMemo, useState, ReactNode } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { Listbox } from "@headlessui/react";
 import ReactCountryFlag from "react-country-flag";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
-import {
-  CheckCircle2,
-  ShieldCheck,
-  Zap,
-  PhoneCall,
-  Megaphone,
-  Star,
-  Users,
-  Home,
-  Building2,
-  ChevronDown,
-} from "lucide-react";
 
 type Role = "tenant" | "owner" | "broker" | "builder";
 type CountryOpt = { code: string; label: string; dial: string; flag: string };
@@ -38,140 +26,11 @@ function genStrongPassword(len = 16) {
   return arr.map((x) => chars[x % chars.length]).join("");
 }
 
-const ROLE_LABEL: Record<Role, string> = {
-  tenant: "Tenant",
-  owner: "Owner",
-  broker: "Broker",
-  builder: "Builder",
-};
-
-type Benefit = { text: string; icon?: ReactNode };
-
-const TENANT_BENEFITS: Benefit[] = [
-  {
-    text: "Browse thousands of verified properties",
-    icon: <Home className="h-4 w-4" />,
-  },
-  {
-    text: "Contact owners and brokers directly at no charge",
-    icon: <PhoneCall className="h-4 w-4" />,
-  },
-  {
-    text: "Save searches and get instant alerts for new listings",
-    icon: <Zap className="h-4 w-4" />,
-  },
-  {
-    text: "Shortlist favorites and compare easily",
-    icon: <Star className="h-4 w-4" />,
-  },
-  {
-    text: "Zero brokerage charged by Grihya",
-    icon: <ShieldCheck className="h-4 w-4" />,
-  },
-  {
-    text: "Schedule visits, get directions and chat on WhatsApp",
-    icon: <Users className="h-4 w-4" />,
-  },
-];
-
-const LISTER_BENEFITS: Benefit[] = [
-  {
-    text: "List unlimited properties for free",
-    icon: <Building2 className="h-4 w-4" />,
-  },
-  {
-    text: "Get discovered by thousands of tenants  -  no platform fee",
-    icon: <Megaphone className="h-4 w-4" />,
-  },
-  {
-    text: "Leads in real time via call, email and WhatsApp",
-    icon: <PhoneCall className="h-4 w-4" />,
-  },
-  {
-    text: "Add rich details: photos, amenities, availability and more",
-    icon: <Star className="h-4 w-4" />,
-  },
-  { text: "Performance dashboard", icon: <Zap className="h-4 w-4" /> },
-  // { text: 'Toggle listing status (Active/Inactive) anytime', icon: <ShieldCheck className="h-4 w-4" /> },
-];
-
-function RoleBenefitsPanel({ role }: { role: Role }) {
-  const isLister = role === "owner" || role === "broker" || role === "builder";
-  const points = isLister ? LISTER_BENEFITS : TENANT_BENEFITS;
-  const subtitle = isLister
-    ? "Everything you need to rent out faster."
-    : "Everything you need to find your next home.";
-
-  return (
-    <aside className="relative overflow-hidden rounded-3xl border border-emerald-100 bg-gradient-to-br from-[#0f766e] via-[#147d73] to-[#2AB09C] text-white">
-      <div className="absolute inset-0 opacity-[0.08] pointer-events-none">
-        <div className="h-full w-full bg-[radial-gradient(circle_at_20%_20%,white_1px,transparent_1px)] bg-[length:18px_18px]" />
-      </div>
-      <div className="relative p-8">
-        <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold tracking-wide backdrop-blur">
-          <CheckCircle2 className="h-4 w-4" />
-          {ROLE_LABEL[role]} benefits
-        </span>
-
-        <h3 className="mt-4 text-2xl font-bold">
-          Things you can do with your Grihya account
-        </h3>
-        <p className="mt-1 text-sm text-emerald-50">{subtitle}</p>
-
-        <ul className="mt-6 space-y-3.5">
-          {points.map((b, i) => (
-            <li key={i} className="flex items-start gap-2.5">
-              <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-white/20 text-white">
-                {b.icon ?? <CheckCircle2 className="h-4 w-4" />}
-              </span>
-              <span className="text-sm leading-5">{b.text}</span>
-            </li>
-          ))}
-        </ul>
-
-        {/* <div className="mt-6 rounded-lg border border-white/20 bg-white/10 p-3 text-xs text-emerald-50"> */}
-        {/* Tip: You can always change your role later from your profile. */}
-        {/* </div> */}
-      </div>
-    </aside>
-  );
-}
-
-function MobileBenefits({ role }: { role: Role }) {
-  const isLister = role === "owner" || role === "broker" || role === "builder";
-  const points = isLister ? LISTER_BENEFITS : TENANT_BENEFITS;
-
-  return (
-    <details className="xl:hidden rounded-2xl border border-gray-200 bg-white/70 shadow-sm">
-      <summary className="list-none cursor-pointer select-none flex items-center justify-between p-4">
-        <div className="text-sm font-medium text-gray-800">
-          What you get as{" "}
-          <span className="text-[#2AB09C]">{ROLE_LABEL[role]}</span>
-        </div>
-        <ChevronDown className="h-4 w-4 text-gray-500" />
-      </summary>
-      <div className="px-4 pb-4">
-        <ul className="space-y-2.5">
-          {points.map((b, i) => (
-            <li key={i} className="flex items-start gap-2">
-              <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
-                {b.icon ?? <CheckCircle2 className="h-3.5 w-3.5" />}
-              </span>
-              <span className="text-sm text-gray-700">{b.text}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </details>
-  );
-}
-
 function SignupForm({ onSwitch }: SignupProps): JSX.Element {
   const navigate = useNavigate();
   const { signup } = useAuth();
 
   const [role, setRole] = useState<Role>("tenant");
-  const [benefitRole, setBenefitRole] = useState<Role>("tenant");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [country, setCountry] = useState<CountryOpt>(COUNTRY_OPTIONS[0]);
@@ -194,11 +53,11 @@ function SignupForm({ onSwitch }: SignupProps): JSX.Element {
 
   const emailBlocked = useMemo(
     () => /\bemail\b.\b(banned|blocked)\b/i.test(err),
-    [err]
+    [err],
   );
   const phoneBlocked = useMemo(
     () => /\b(phone|mobile)\b.\b(banned|blocked)\b/i.test(err),
-    [err]
+    [err],
   );
 
   const phoneDigits = useMemo(() => phone.replace(/\D/g, ""), [phone]);
@@ -206,15 +65,15 @@ function SignupForm({ onSwitch }: SignupProps): JSX.Element {
   const validPhone = useMemo(
     () =>
       isIN ? /^[6-9]\d{9}$/.test(phoneDigits) : /^\d{10,15}$/.test(phoneDigits),
-    [isIN, phoneDigits]
+    [isIN, phoneDigits],
   );
   const emailValid = useMemo(
     () => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(email.trim()),
-    [email]
+    [email],
   );
   const fullPhone = useMemo(
     () => `${country.dial}${phoneDigits}`,
-    [country, phoneDigits]
+    [country, phoneDigits],
   );
 
   // Email availability
@@ -228,7 +87,7 @@ function SignupForm({ onSwitch }: SignupProps): JSX.Element {
         setEmailChecking(true);
         const res = await fetch(
           `${API_URL}/auth/available?email=${encodeURIComponent(e)}`,
-          { signal: controller.signal }
+          { signal: controller.signal },
         );
         const json = await res.json().catch(() => null);
         const taken = json?.available === false;
@@ -254,7 +113,7 @@ function SignupForm({ onSwitch }: SignupProps): JSX.Element {
         setPhoneChecking(true);
         const res = await fetch(
           `${API_URL}/auth/available?phone=${encodeURIComponent(fullPhone)}`,
-          { signal: controller.signal }
+          { signal: controller.signal },
         );
         const json = await res.json().catch(() => null);
         setPhoneTaken(json?.available === false);
@@ -281,7 +140,7 @@ function SignupForm({ onSwitch }: SignupProps): JSX.Element {
           "https://www.googleapis.com/oauth2/v3/userinfo",
           {
             headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
-          }
+          },
         );
         const profile = await res.json();
         if (profile?.email) setEmail(String(profile.email).toLowerCase());
@@ -292,7 +151,7 @@ function SignupForm({ onSwitch }: SignupProps): JSX.Element {
         setConfirm(autoPwd);
         setEmailLocked(true);
         setInfo(
-          "Google connected. Please select your role and add your mobile number to complete signup."
+          "Google connected. Please select your role and add your mobile number to complete signup.",
         );
       } catch (e: any) {
         setErr(e?.message || "Google sign-in failed. Please try again.");
@@ -382,43 +241,18 @@ function SignupForm({ onSwitch }: SignupProps): JSX.Element {
   const isLister = role === "owner" || role === "broker" || role === "builder";
 
   return (
-    <div className="w-full">
-      <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-6 flex flex-wrap items-center gap-2 justify-center">
-          <span className="text-sm text-gray-600 mr-1">Benefit as:</span>
-          {(["tenant", "owner", "broker", "builder"] as Role[]).map((r) => (
-            <button
-              key={r}
-              type="button"
-              onClick={() => setBenefitRole(r)}
-              className={`px-3 py-1.5 rounded-full text-sm border ${
-                benefitRole === r
-                  ? "bg-[#2AB09C] text-white border-[#2AB09C]"
-                  : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-              }`}
-            >
-              {r === "broker" ? "Broker/Agent" : ROLE_LABEL[r]}
-            </button>
-          ))}
-        </div>
-        <div className="grid items-start gap-8 xl:grid-cols-12">
-          {/* Left: benefits (only on wide screens) */}
-          <div className="hidden xl:block xl:col-span-5">
-            <RoleBenefitsPanel role={benefitRole} />
-          </div>
-
-          {/* Mobile/Tablet benefits */}
-          <MobileBenefits role={benefitRole} />
-          {/* Right: form */}
+    <div className="mx-auto max-w-[500px] md:max-w-[800px]">
+      <div className="mx-auto w-full md:px-6 lg:px-8">
+        <div>
           <form
             onSubmit={handleSubmit}
-            className="xl:col-span-7 space-y-6 rounded-3xl border border-gray-200 bg-white/80 p-6 sm:p-8 shadow-md backdrop-blur"
+            className="space-y-6 rounded-3xl border border-gray-200 bg-white/80 p-6 shadow-md backdrop-blur sm:p-8 xl:col-span-7"
           >
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 text-center">
+              <h2 className="text-center text-2xl font-bold text-gray-900">
                 Sign Up
               </h2>
-              <p className="text-gray-600 mt-1 text-center">
+              <p className="mt-1 text-center text-gray-600">
                 {isLister
                   ? "Reach more tenants with every listing."
                   : "Find great homes with zero brokerage."}
@@ -430,7 +264,7 @@ function SignupForm({ onSwitch }: SignupProps): JSX.Element {
               <button
                 type="button"
                 onClick={() => googleLogin()}
-                className="w-full border border-gray-300 rounded-md py-2.5 px-3 flex items-center justify-center gap-2 hover:bg-gray-50"
+                className="flex w-full items-center justify-center gap-2 rounded-md border border-gray-300 px-3 py-2.5 hover:bg-gray-50"
                 disabled={loading}
               >
                 <img
@@ -443,25 +277,25 @@ function SignupForm({ onSwitch }: SignupProps): JSX.Element {
             </div>
 
             {err && (
-              <div className="bg-red-50 border-l-4 border-red-500 p-3 text-red-700 rounded">
+              <div className="rounded border-l-4 border-red-500 bg-red-50 p-3 text-red-700">
                 {err}
               </div>
             )}
             {info && (
-              <div className="bg-emerald-50 border-l-4 border-emerald-500 p-3 text-emerald-700 rounded">
+              <div className="rounded border-l-4 border-emerald-500 bg-emerald-50 p-3 text-emerald-700">
                 {info}
               </div>
             )}
 
             {/* Role */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="mb-1 block text-sm font-medium text-gray-700">
                 I am a
               </label>
               <select
                 value={role}
                 onChange={(e) => setRole(e.target.value as Role)}
-                className="w-full px-3 py-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2AB09C] outline-none text-gray-700"
+                className="w-full rounded-md border border-gray-300 px-3 py-2.5 text-gray-700 outline-none focus:ring-2 focus:ring-[#2DB8D1]"
               >
                 <option value="tenant">Tenant (looking to rent)</option>
                 <option value="owner">Owner</option>
@@ -473,18 +307,18 @@ function SignupForm({ onSwitch }: SignupProps): JSX.Element {
             {/* Name + Email */}
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="mb-1 block text-sm font-medium text-gray-700">
                   Full Name
                 </label>
                 <input
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-3 py-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2AB09C] outline-none"
+                  className="w-full rounded-md border border-gray-300 px-3 py-2.5 outline-none focus:ring-2 focus:ring-[#2DB8D1]"
                   placeholder="Your name"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="mb-1 block text-sm font-medium text-gray-700">
                   Email{" "}
                 </label>
                 <input
@@ -492,11 +326,11 @@ function SignupForm({ onSwitch }: SignupProps): JSX.Element {
                   value={email}
                   readOnly={googleMode && emailLocked}
                   onChange={(e) => setEmail(e.target.value)}
-                  className={`w-full px-3 py-2.5 border ${
+                  className={`w-full border px-3 py-2.5 ${
                     emailTaken || (!emailValid && email)
                       ? "border-red-500"
                       : "border-gray-300"
-                  } rounded-md focus:ring-2 focus:ring-[#2AB09C] outline-none ${
+                  } rounded-md outline-none focus:ring-2 focus:ring-[#2DB8D1] ${
                     googleMode && emailLocked ? "bg-gray-100 text-gray-600" : ""
                   }`}
                   placeholder="you@example.com"
@@ -533,12 +367,12 @@ function SignupForm({ onSwitch }: SignupProps): JSX.Element {
             {/* Country + Phone */}
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="mb-1 block text-sm font-medium text-gray-700">
                   Country
                 </label>
                 <Listbox value={country} onChange={setCountry}>
                   <div className="relative w-full">
-                    <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-8 pr-7 text-left text-sm focus:outline-none focus:ring-2 focus:ring-[#2AB09C]">
+                    <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-8 pr-7 text-left text-sm focus:outline-none focus:ring-2 focus:ring-[#2DB8D1]">
                       <span className="absolute inset-y-0 left-2 flex items-center">
                         <ReactCountryFlag
                           svg
@@ -602,11 +436,11 @@ function SignupForm({ onSwitch }: SignupProps): JSX.Element {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="mb-1 block text-sm font-medium text-gray-700">
                   Mobile number{" "}
                 </label>
                 <div className="flex">
-                  <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-700">
+                  <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-700">
                     {country.dial}
                   </span>
                   <input
@@ -619,7 +453,7 @@ function SignupForm({ onSwitch }: SignupProps): JSX.Element {
                       if (country.code === "IN") digits = digits.slice(0, 10);
                       setPhone(digits);
                     }}
-                    className={`w-full px-3 py-2.5 border rounded-r-md focus:ring-2 focus:ring-[#2AB09C] outline-none ${
+                    className={`w-full rounded-r-md border px-3 py-2.5 outline-none focus:ring-2 focus:ring-[#2DB8D1] ${
                       phoneTaken || (!validPhone && phoneDigits.length > 0)
                         ? "border-red-500"
                         : "border-gray-300"
@@ -652,13 +486,13 @@ function SignupForm({ onSwitch }: SignupProps): JSX.Element {
 
             {/* City */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="mb-1 block text-sm font-medium text-gray-700">
                 City
               </label>
               <input
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                className="w-full px-3 py-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2AB09C] outline-none"
+                className="w-full rounded-md border border-gray-300 px-3 py-2.5 outline-none focus:ring-2 focus:ring-[#2DB8D1]"
                 placeholder="e.g., Dehradun"
               />
             </div>
@@ -667,26 +501,26 @@ function SignupForm({ onSwitch }: SignupProps): JSX.Element {
             {!googleMode && (
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="mb-1 block text-sm font-medium text-gray-700">
                     Password
                   </label>
                   <input
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-3 py-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2AB09C] outline-none"
+                    className="w-full rounded-md border border-gray-300 px-3 py-2.5 outline-none focus:ring-2 focus:ring-[#2DB8D1]"
                     placeholder="Min. 6 characters"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="mb-1 block text-sm font-medium text-gray-700">
                     Confirm Password
                   </label>
                   <input
                     type="password"
                     value={confirm}
                     onChange={(e) => setConfirm(e.target.value)}
-                    className="w-full px-3 py-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#2AB09C] outline-none"
+                    className="w-full rounded-md border border-gray-300 px-3 py-2.5 outline-none focus:ring-2 focus:ring-[#2DB8D1]"
                     placeholder="Re-enter password"
                   />
                 </div>
@@ -696,17 +530,17 @@ function SignupForm({ onSwitch }: SignupProps): JSX.Element {
             <button
               type="submit"
               disabled={submitDisabled}
-              className="w-full bg-[#2AB09C] text-white py-2.5 rounded-md hover:bg-[#229882] disabled:opacity-70"
+              className="w-full rounded-md bg-[#2DB8D1] py-2.5 text-white hover:bg-[#278b9d] disabled:opacity-70"
             >
               {loading ? "Creating account…" : "Sign Up"}
             </button>
 
-            <p className="text-sm text-gray-600 text-center">
+            <p className="text-center text-sm text-gray-600">
               Already have an account?{" "}
               <button
                 type="button"
                 onClick={onSwitch}
-                className="text-[#2AB09C] font-medium"
+                className="font-medium text-[#2DB8D1]"
               >
                 Login
               </button>
