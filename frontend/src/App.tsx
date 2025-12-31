@@ -19,6 +19,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
 import { Navbar } from "./components/layout/Navbar";
 import ScrollToTop from "./components/layout/ScrollToTop";
+import About from "./pages/About";
 
 export function App() {
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
@@ -76,6 +77,7 @@ export function App() {
                     <main className="flex-grow bg-white">
                       <Routes>
                         <Route path="/" element={<Home />} />
+                        <Route path="/about" element={<About />} />
                         <Route
                           path="/properties"
                           element={<PropertyListing />}

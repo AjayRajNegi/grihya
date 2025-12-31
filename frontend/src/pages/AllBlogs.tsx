@@ -1,4 +1,4 @@
-import { motion, scale, Variants } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { Calendar } from "lucide-react";
 import BlogSection from "../components/blog/Blog";
 import { useNavigate } from "react-router-dom";

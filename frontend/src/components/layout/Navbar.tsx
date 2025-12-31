@@ -12,7 +12,7 @@ export const Navbar = () => {
     { name: "Home", link: "/" },
     { name: "About", link: "/about" },
     { name: "Properties", link: "/properties" },
-    { name: "Blogs", link: "/blogs" },
+    { name: "Blogs", link: "/blog" },
   ];
   // shadow-md shadow-[#2DB8D1]/30
   return (
