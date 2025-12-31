@@ -1,8 +1,35 @@
 import React, { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Blog from "../blog/Blog";
 import { useNavigate } from "react-router-dom";
+
+const containerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
+
+const fadeIn: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
 
 const CTASection: React.FC = () => {
   const navigate = useNavigate();
@@ -16,13 +43,13 @@ const CTASection: React.FC = () => {
   const scale = useTransform(scrollYProgress, [0, 1], [1.3, 1]);
 
   return (
-    <div className="mx-auto max-w-7xl overflow-hidden rounded-xl bg-white px-4 md:px-0">
+    <div className="mx-auto max-w-7xl overflow-hidden rounded-xl bg-white px-4 lg:px-0">
       <Blog />
 
       {/* Hero Section */}
       <div
         ref={heroRef}
-        className="relative mt-20 h-[90vh] overflow-hidden rounded-xl md:h-[80vh]"
+        className="relative mt-20 h-[70vh] overflow-hidden rounded-xl md:h-[80vh]"
       >
         {/* Background Image */}
         <motion.div
@@ -38,48 +65,71 @@ const CTASection: React.FC = () => {
         </motion.div>
 
         {/* Content Overlay */}
-        <div className="relative z-10 flex h-full items-center overflow-hidden rounded-3xl">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-12">
-            <div className="grid items-center gap-5 md:gap-10 lg:grid-cols-6">
+        <motion.div
+          className="relative z-10 flex h-full items-center overflow-hidden rounded-3xl"
+          initial="hidden"
+          whileInView="visible"
+          variants={containerVariants}
+        >
+          <div className="container mx-auto h-full px-4 sm:px-6 lg:px-12">
+            <div className="grid h-full items-center justify-between md:gap-10 lg:grid-cols-6">
               {/* Left Column */}
               <div className="col-span-4 max-w-full text-white">
-                <h1 className="mb-4 break-words text-3xl font-normal leading-tight tracking-tight sm:text-4xl lg:text-5xl">
+                <motion.h1
+                  variants={fadeUp}
+                  className="mb-4 break-words text-3xl font-normal leading-tight tracking-tight sm:text-4xl lg:text-5xl"
+                >
                   Find your dream place
                   <br />
                   <span className="font-light">with Grihya</span>
-                </h1>
+                </motion.h1>
 
-                <p className="mb-2 max-w-2xl break-words text-base font-light text-gray-200 sm:text-lg md:text-xl">
+                <motion.p
+                  variants={fadeUp}
+                  className="mb-2 max-w-2xl break-words text-base font-light text-gray-200 sm:text-lg md:text-xl"
+                >
                   Luxury, comfort, and convenience — all in one place.
-                </p>
+                </motion.p>
 
-                <p className="mb-5 max-w-2xl break-words text-base font-light text-gray-300 sm:text-lg">
+                <motion.p
+                  variants={fadeUp}
+                  className="mb-5 max-w-2xl break-words text-base font-light text-gray-300 sm:text-lg"
+                >
                   Find the perfect place to call home — effortlessly.
-                </p>
+                </motion.p>
 
-                <button
+                <motion.button
+                  variants={fadeUp}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.97 }}
                   className="group mb-6 inline-flex items-center gap-2 rounded-[10px] bg-white px-4 py-3 text-lg font-light text-[#0E7873] transition hover:bg-gray-100"
                   onClick={() => navigate("/properties")}
                 >
                   Explore Properties
                   <ArrowRight className="h-5 w-5 -rotate-45 transition-transform duration-500 group-hover:rotate-0" />
-                </button>
+                </motion.button>
 
                 {/* Action Buttons */}
-                <div className="flex flex-wrap gap-2 md:gap-3">
+                <motion.div
+                  variants={fadeUp}
+                  className="flex flex-wrap gap-2 md:gap-3"
+                >
                   {["Explore", "Inquire", "List", "Book"].map((item) => (
-                    <button
+                    <motion.button
                       key={item}
                       className="rounded-xl bg-[#E7F2F1] px-4 py-1 text-sm font-medium text-[#052A28] transition hover:bg-[#d9eceb]"
                     >
                       {item}
-                    </button>
+                    </motion.button>
                   ))}
-                </div>
+                </motion.div>
               </div>
 
               {/* Right Column */}
-              <div className="col-span-2 w-full max-w-sm rounded-2xl bg-white/10 p-5 text-white backdrop-blur-md lg:ml-14">
+              <motion.div
+                variants={fadeIn}
+                className="col-span-2 w-full max-w-sm rounded-2xl bg-white/10 p-5 text-white backdrop-blur-md"
+              >
                 <h2 className="mb-4 break-words text-lg font-light italic leading-snug sm:text-xl md:text-2xl">
                   Discover your dream
                   <br />
@@ -91,10 +141,10 @@ const CTASection: React.FC = () => {
                   explore exclusive properties today. Inquire now and make
                   paradise your address.
                 </p>
-              </div>
+              </motion.div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
