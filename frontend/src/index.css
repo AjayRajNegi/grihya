@@ -10,10 +10,15 @@
   background-color: #fff;
   /* Grihya green */
 }
+@font-face {
+  font-family: "Satoshi";
+  src: url("../public/font/Satoshi/Satoshi-Variable.ttf") format("truetype");
+  font-weight: 300 900;
+  font-style: normal;
+}
 
 body {
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial;
+  font-family: "Satoshi";
   background-color: #fff;
 }
 
@@ -53,8 +58,8 @@ input[type="checkbox"]:focus-visible {
 
   border-radius: var(--r);
 
-  --_m: /calc(2 * var(--r)) calc(2 * var(--r)) radial-gradient(#000 70%, #0000
-        72%);
+  --_m: /calc(2 * var(--r)) calc(2 * var(--r))
+    radial-gradient(#000 70%, #0000 72%);
 
   --_g: conic-gradient(
     from 90deg at calc(100% - var(--r)) calc(100% - var(--r)),
@@ -64,7 +69,8 @@ input[type="checkbox"]:focus-visible {
 
   --_d: (var(--s) + var(--r));
 
-  mask: calc(100% - var(--_d) - var(--x)) 100% var(--_m),
+  mask:
+    calc(100% - var(--_d) - var(--x)) 100% var(--_m),
     100% calc(100% - var(--_d) - var(--y)) var(--_m),
     radial-gradient(var(--s) at 100% 100%, #0000 99%, #000 calc(100% + 1px))
       calc(-1 * var(--r) - var(--x)) calc(-1 * var(--r) - var(--y)),
