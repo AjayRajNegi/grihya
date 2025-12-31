@@ -1,14 +1,7 @@
 import AmenitiesSection from "@/components/about/AmenitiesSections";
 import StatsComponent from "@/components/about/StatsComponent";
 import CTASection from "@/components/home/CTASection";
-import {
-  animate,
-  motion,
-  useMotionValue,
-  useTransform,
-  Variants,
-} from "framer-motion";
-import { useState, useEffect } from "react";
+import { motion, Variants } from "framer-motion";
 
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -52,7 +45,7 @@ const imageVariants: Variants = {
 export default function About() {
   return (
     <div className="mx-auto max-w-7xl">
-      {/* Hero Section */}
+      {/* Hero  */}
       <div className="mx-auto my-8 max-w-7xl overflow-hidden bg-white">
         {/* Header Section */}
         <motion.div
