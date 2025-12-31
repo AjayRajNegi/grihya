@@ -17,6 +17,8 @@ import ChatWithUs from "./pages/ChatWithUs";
 import ResetPasswordPage from "./pages/auth/ResetPassword";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
+import { Navbar } from "./components/layout/Navbar";
+import ScrollToTop from "./components/layout/ScrollToTop";
 
 export function App() {
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
@@ -25,6 +27,7 @@ export function App() {
     <GoogleOAuthProvider clientId={clientId}>
       <AuthProvider>
         <BrowserRouter>
+          <ScrollToTop />
           <div className="flex min-h-screen flex-col bg-gray-50">
             <Routes>
               {/* Auth routes without header/footer */}
@@ -47,8 +50,7 @@ export function App() {
               <Route path="/properties/:id/edit" element={<ListProperty />} />
               <Route path="/terms" element={<TermsAndConditions />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
-              <Route path="/blog" element={<AllBlogs />} />
-              <Route path="/blog/:slug" element={<BlogDetail />} />
+
               <Route path="/agents" element={<Agents />} />
               <Route
                 path="/agents/:id/properties"
@@ -70,7 +72,8 @@ export function App() {
                 element={
                   <>
                     {/* <Header /> */}
-                    <main className="flex-grow">
+                    <Navbar />
+                    <main className="flex-grow bg-white">
                       <Routes>
                         <Route path="/" element={<Home />} />
                         <Route
@@ -85,6 +88,8 @@ export function App() {
                           path="/list-property"
                           element={<ListProperty />}
                         />
+                        <Route path="/blog" element={<AllBlogs />} />
+                        <Route path="/blog/:slug" element={<BlogDetail />} />
                       </Routes>
                     </main>
                     <Footer />

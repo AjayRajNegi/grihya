@@ -102,7 +102,7 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
   );
 };
 
-export default function BlogSection() {
+export default function BlogSection({ header }: { header: string }) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -159,7 +159,7 @@ export default function BlogSection() {
   };
 
   return (
-    <div className="mx-4 mt-8 max-w-7xl rounded-3xl bg-white px-2 md:mx-auto md:px-6 lg:px-12">
+    <div className="mx-4 max-w-7xl rounded-3xl bg-white px-2 md:mx-auto md:px-6 lg:px-12">
       {/* Header Section */}
       <motion.div
         variants={itemVariants}
@@ -170,7 +170,7 @@ export default function BlogSection() {
       >
         <div className="mb-6 flex items-center gap-2">
           <div className="h-2 w-2 rounded-sm bg-cyan-500"></div>
-          <span className="text-base font-medium text-gray-700">Blogs</span>
+          <span className="text-base font-medium text-gray-700">{header}</span>
         </div>
 
         <h1 className="mb-8 max-w-4xl text-4xl tracking-tighter text-gray-900 md:text-5xl">
