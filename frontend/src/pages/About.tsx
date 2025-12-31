@@ -1,5 +1,13 @@
+import StatsComponent from "@/components/about/StatsComponent";
 import CTASection from "@/components/home/CTASection";
-import { motion, Variants } from "framer-motion";
+import {
+  animate,
+  motion,
+  useMotionValue,
+  useTransform,
+  Variants,
+} from "framer-motion";
+import { useState, useEffect } from "react";
 
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -42,7 +50,7 @@ const imageVariants: Variants = {
 
 export default function About() {
   return (
-    <>
+    <div className="mx-auto max-w-7xl">
       {/* Hero Section */}
       <div className="mx-auto my-8 max-w-7xl overflow-hidden bg-white">
         {/* Header Section */}
@@ -67,7 +75,7 @@ export default function About() {
         </motion.div>
 
         <motion.div
-          className="relative mx-auto mt-[46px] grid h-[100vh] max-w-7xl grid-cols-1 grid-rows-7 gap-4 overflow-hidden px-6 md:h-[80vh] md:grid-cols-2 md:grid-rows-4 md:px-16"
+          className="relative mx-auto mt-[46px] grid h-[100vh] max-w-7xl grid-cols-1 grid-rows-7 gap-4 overflow-hidden px-5 md:h-[80vh] md:grid-cols-2 md:grid-rows-4 md:px-16"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -92,8 +100,32 @@ export default function About() {
         </motion.div>
       </div>
 
+      {/* Statistics */}
+      <section className="mb-12 px-5 md:px-12">
+        <article className="my-16 grid grid-cols-2">
+          <h1 className="col-span-2 text-4xl font-medium md:col-span-1 md:text-5xl">
+            Your trusted real estate experts:
+          </h1>
+          <div className="col-span-2 mt-6 md:col-span-1 md:mt-0">
+            <p className="text-base md:text-xl">
+              Lorem Ipsum, dore idor ieuneva. Avene fa so ulima gopgh hermino
+              afata
+            </p>
+            <p className="mt-6 w-fit rounded-full bg-[#2DB8D1] px-5 py-3 font-medium text-white md:mt-4">
+              View Properties
+            </p>
+          </div>
+        </article>
+        <article>
+          <h1 className="text-4xl font-medium tracking-tight md:text-5xl">
+            Check out our Statistics:
+          </h1>
+          <StatsComponent />
+        </article>
+      </section>
+
       {/* CTA */}
       <CTASection />
-    </>
+    </div>
   );
 }
