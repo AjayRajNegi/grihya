@@ -5,7 +5,7 @@ import Footer from "../components/layout/Footer";
 import { Card } from "@/components/ui/card";
 import { apiGet } from "../lib/api";
 import { formatDate } from "../utils/format";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Calendar } from "lucide-react";
 
 type Variant = "info" | "success" | "warning" | "danger";
 type HeadingBlock = { type: "heading"; data: { text: string; level?: number } };
@@ -347,29 +347,26 @@ export default function BlogDetail() {
     post.cover_image_url;
   const heroImage = normalizeAssetUrl(heroImageRaw);
 
+  function getRandomCategory() {
+    const categories = ["Articles", "Resources", "Blog"];
+    const randomIndex = Math.floor(Math.random() * categories.length);
+    return categories[randomIndex];
+  }
+  const category = getRandomCategory();
+
   return (
-    <div className="min-h-screen bg-white">
-      <div className="relative z-20 mx-auto flex h-full w-full items-center px-8">
-        <motion.div
-          initial={{ y: 50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="max-w-4xl"
-        >
-          <h1 className="mb-6 text-4xl font-bold leading-tight text-white md:text-6xl">
-            {heroBlock?.data?.title || post.title}
-          </h1>
-          <div className="mb-2 flex items-center gap-3 text-white/90">
-            <span className="text-lg">
-              {formatDate(post.published_at || "")}
-            </span>
-          </div>
-          <div className="flex items-center gap-3 text-white/90">
-            <span className="text-lg font-medium">
-              {post.author || "Grihya Team"}
-            </span>
-          </div>
-        </motion.div>
+    <div className="min-h-screen bg-white pt-12">
+      {/* Header Section */}
+      <div className="flex w-full flex-col items-start justify-center px-5 sm:max-w-5xl sm:px-4 md:mx-auto">
+        <div className="mb-6 flex w-fit items-center gap-2 rounded-full bg-[#0059FF] px-4 py-2">
+          <span className="text-base font-medium text-white">{category}</span>
+        </div>
+        <h1 className="w-full text-4xl font-medium tracking-tighter sm:w-[70%] sm:text-5xl">
+          {heroBlock?.data?.title || post.title}
+        </h1>
+        <p className="my-8 flex gap-3 text-black">
+          <Calendar size={20} /> {formatDate(post.published_at || "")}
+        </p>
       </div>
       <Hero imageUrl={heroImage} />
 
@@ -449,139 +446,3 @@ export default function BlogDetail() {
     </div>
   );
 }
-
-//////////////////////////////////////////////////////////////////////////////////////////
-//Handle Share
-{
-  /* <motion.aside
-  initial={{ x: 50, opacity: 0 }}
-  animate={{ x: 0, opacity: 1 }}
-  transition={{ delay: 0.25 }}
-  className="lg:col-span-1"
->
-  <div className="sticky top-8 space-y-6">
-    <Card className="p-6 text-center shadow-lg">
-      <motion.button
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 0.97 }}
-        onClick={handleLike}
-        className={`w-full ${
-          liked ? "bg-[#259688]" : "bg-[#2DB8D1]"
-        } rounded-full px-6 py-3 font-semibold text-white hover:bg-[#259688]`}
-        aria-pressed={liked}
-      >
-        {liked ? "Unlike" : "Like"} ({formatCount(likeCount)})
-      </motion.button>
-    </Card>
-
-    <Card className="p-6 shadow-lg">
-      <div className="grid grid-cols-1 gap-3">
-        <motion.button
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
-          onClick={handleShare}
-          disabled={sharing}
-          className="flex items-center justify-center rounded-xl bg-green-600 p-3 text-white hover:bg-green-700 disabled:opacity-60"
-        >
-          <Share2 className="h-5 w-5" />
-          &nbsp; {sharing ? "Sharing…" : `Share (${formatCount(sharesCount)})`}
-        </motion.button>
-        {shareNotice && (
-          <p className="text-center text-xs text-slate-600">{shareNotice}</p>
-        )}
-      </div>
-    </Card>
-
-    <Card className="p-6 shadow-lg">
-      <div className="text-center">
-        <h3 className="mb-2 font-semibold text-slate-900">Author</h3>
-        <Avatar className="mx-auto mb-4 h-16 w-16">
-          <AvatarImage src="/Easy_Lease_logo.svg" />
-          <AvatarFallback>{(post.author || "ET").slice(0, 2)}</AvatarFallback>
-        </Avatar>
-        <h4 className="mb-2 font-semibold text-slate-900">
-          {post.author || "Grihya Team"}
-        </h4>
-        <p className="mb-4 text-sm text-slate-600">
-          Connecting people with properties, seamlessly and securely.
-        </p>
-        <div className="flex justify-center">
-          <span className="rounded-full bg-slate-100 px-3 py-1 text-sm text-slate-600">
-            Property Expert
-          </span>
-        </div>
-      </div>
-    </Card>
-  </div>
-</motion.aside>; */
-}
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// Share Function
-// Robust share
-// const handleShare = async () => {
-//   if (!post) return;
-//   const url = window.location.href;
-//   const title = post.title;
-//   const text = `Check this blog on Grihya: ${post.title}`;
-
-//   try {
-//     const minimal: ShareData = { url };
-//     if (canUseNativeShare(minimal)) {
-//       setSharing(true);
-//       await navigator.share(minimal);
-//       setSharing(false);
-//       const res = await apiPost<{ shares_count: number }>(
-//         `/posts/${post.slug}/share`,
-//       );
-//       if (typeof res.shares_count === "number")
-//         setSharesCount(res.shares_count);
-//       return;
-//     }
-//   } catch {
-//     setSharing(false);
-//   }
-
-//   try {
-//     const full: ShareData = { title, text, url };
-//     if (canUseNativeShare(full)) {
-//       setSharing(true);
-//       await navigator.share(full);
-//       setSharing(false);
-//       const res = await apiPost<{ shares_count: number }>(
-//         `/posts/${post.slug}/share`,
-//       );
-//       if (typeof res.shares_count === "number")
-//         setSharesCount(res.shares_count);
-//       return;
-//     }
-//   } catch {
-//     setSharing(false);
-//   }
-
-//   try {
-//     const wa = `https://wa.me/?text=${encodeURIComponent(`${text}\n${url}`)}`;
-//     window.open(wa, "_blank", "noopener,noreferrer");
-//     const res = await apiPost<{ shares_count: number }>(
-//       `/posts/${post.slug}/share`,
-//     );
-//     if (typeof res.shares_count === "number")
-//       setSharesCount(res.shares_count);
-//     return;
-//   } catch {}
-
-//   const ok = await copyToClipboard(url);
-//   setShareNotice(
-//     ok
-//       ? "Link copied to clipboard"
-//       : "Unable to share. Copy the link manually.",
-//   );
-//   window.setTimeout(() => setShareNotice(null), ok ? 2000 : 2500);
-//   try {
-//     const res = await apiPost<{ shares_count: number }>(
-//       `/posts/${post.slug}/share`,
-//     );
-//     if (typeof res.shares_count === "number")
-//       setSharesCount(res.shares_count);
-//     else setSharesCount((c) => c + 1);
-//   } catch {}
-// };

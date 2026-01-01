@@ -20,7 +20,7 @@ export const Navbar = () => {
 
   return (
     <nav className="w-full bg-[#FFFFFF]">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-12">
         <div className="flex h-20 items-center justify-between">
           {/* Logo */}
           <div
@@ -35,7 +35,7 @@ export const Navbar = () => {
             {navLinks.map((link) => (
               <div
                 key={link.name}
-                className="relative text-base font-medium"
+                className="relative text-lg font-medium"
                 onMouseEnter={() =>
                   link.name === "Properties" && setIsPropertiesHovered(true)
                 }
@@ -47,7 +47,7 @@ export const Navbar = () => {
                 {link.name === "Properties" ? (
                   <button
                     type="button"
-                    className="flex items-center gap-1 text-base text-gray-900 transition-colors hover:text-[#2DB8D1]"
+                    className="flex items-center gap-1 text-lg text-gray-900 transition-colors hover:text-[#2DB8D1]"
                     onClick={() => navigate(link.link)}
                   >
                     Properties
@@ -56,7 +56,7 @@ export const Navbar = () => {
                 ) : (
                   <button
                     onClick={() => navigate(link.link)}
-                    className="text-base text-gray-900 transition-colors hover:text-[#2DB8D1]"
+                    className="text-lg text-gray-900 transition-colors hover:text-[#2DB8D1]"
                   >
                     {link.name}
                   </button>
@@ -107,14 +107,14 @@ export const Navbar = () => {
             ) : (
               <button
                 onClick={() => navigate("/account")}
-                className="rounded-full bg-gray-900 px-6 py-3 text-sm text-white transition-colors hover:bg-gray-800"
+                className="rounded-full bg-gray-900 px-7 py-3 text-base font-medium text-white transition-colors hover:bg-gray-800"
               >
                 Sign In
               </button>
             )}
             <button
               onClick={() => navigate("/contact")}
-              className="rounded-full bg-[#2DB8D1] px-6 py-3 text-white transition-colors hover:bg-[#26a5bb]"
+              className="rounded-full bg-[#2DB8D1] px-6 py-3 font-medium text-white transition-colors hover:bg-[#26a5bb]"
             >
               Contact Us
             </button>
