@@ -1,5 +1,5 @@
 export function formatCount(n: number = 0): string {
-  if (!Number.isFinite(n)) return '0';
+  if (!Number.isFinite(n)) return "0";
   const abs = Math.abs(n);
 
   if (abs < 1000) return String(n);
@@ -15,16 +15,16 @@ export function formatCount(n: number = 0): string {
 
 export function formatDate(
   input?: string | number | Date,
-  locale: string = 'en-IN'
+  locale: string = "en-IN",
 ): string {
-  if (!input) return '';
+  if (!input) return "";
   try {
     const d = input instanceof Date ? input : new Date(input);
     if (isNaN(d.getTime())) return String(input);
     return d.toLocaleDateString(locale, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   } catch {
     return String(input);

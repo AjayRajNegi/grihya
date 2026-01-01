@@ -1,9 +1,6 @@
-/* PLEASE NOTE: THESE TAILWIND IMPORTS SHOULD NEVER BE DELETED */
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-/* DO NOT DELETE THESE TAILWIND IMPORTS, OTHERWISE THE STYLING WILL NOT RENDER AT ALL */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 :root {
   --brand: #2ab09c;
@@ -12,7 +9,7 @@
 }
 @font-face {
   font-family: "Satoshi";
-  src: url("../public/font/Satoshi/Satoshi-Variable.ttf") format("truetype");
+  src: url("/font/Satoshi/Satoshi-Variable.ttf") format("truetype");
   font-weight: 300 900;
   font-style: normal;
 }
