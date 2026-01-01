@@ -18,24 +18,24 @@ const PropertyContactInfo: React.FC<PropertyContactInfoProps> = ({
 
   if (!isAuthenticated) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
-        <div className="flex items-center mb-4">
-          <ShieldIcon className="h-6 w-6 text-[#2AB09C] mr-2" />
+      <div className="rounded-xl border border-gray-100 bg-white p-6">
+        <div className="mb-4 flex items-center">
+          <ShieldIcon className="mr-2 h-6 w-6 text-[#2DB8D1]" />
           <h3 className="text-lg font-semibold">Contact Information</h3>
         </div>
-        <div className="bg-blue-50 p-4 rounded-md mb-4">
-          <p className="text-[#2AB09C]">
+        <div className="mb-4 rounded-md bg-blue-50 p-4">
+          <p className="text-[#2DB8D1]">
             Please log in or sign up to view the owner's contact details.
           </p>
         </div>
         <div className="flex space-x-4">
           <Link to="/account">
-            <button className="flex-1 bg-[#2AB09C] hover:bg-transparent hover:text-[#2AB09C] text-white py-2 px-4 rounded-md transition-colors">
+            <button className="flex-1 rounded-xl bg-[#2DB8D1] px-4 py-2 text-white transition-colors">
               Login
             </button>
           </Link>
           <Link to="/account">
-            <button className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-md transition-colors">
+            <button className="flex-1 rounded-xl bg-gray-200 px-4 py-2 text-gray-800 transition-colors">
               Sign Up
             </button>
           </Link>
@@ -45,49 +45,49 @@ const PropertyContactInfo: React.FC<PropertyContactInfoProps> = ({
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
-      <div className="flex items-center mb-4">
-        <UserIcon className="h-6 w-6 text-[#2AB09C] mr-2" />
+    <div className="rounded-xl border border-gray-100 bg-white p-6">
+      <div className="mb-4 flex items-center">
+        <UserIcon className="mr-2 h-6 w-6 text-[#2DB8D1]" />
         <h3 className="text-lg font-semibold">Owner Details</h3>
       </div>
       <div className="space-y-4">
         <div>
-          <p className="text-gray-600 text-sm">Name</p>
+          <p className="text-sm text-gray-600">Name</p>
           <p className="font-medium">{ownerName || "Not provided"}</p>
         </div>
 
         {ownerPhone ? (
           <div>
-            <p className="text-gray-600 text-sm">Phone</p>
+            <p className="text-sm text-gray-600">Phone</p>
             <a
               href={`tel:${ownerPhone}`}
-              className="flex items-center text-[#2AB09C] hover:text-[#2AB09C] font-medium"
+              className="flex items-center font-medium text-[#2DB8D1]"
             >
-              <PhoneIcon className="h-4 w-4 mr-2" />
+              <PhoneIcon className="mr-2 h-4 w-4" />
               {ownerPhone}
             </a>
           </div>
         ) : (
           <div>
-            <p className="text-gray-600 text-sm">Phone</p>
+            <p className="text-sm text-gray-600">Phone</p>
             <p className="font-medium">Not provided</p>
           </div>
         )}
 
         {ownerEmail ? (
           <div>
-            <p className="text-gray-600 text-sm">Email</p>
+            <p className="text-sm text-gray-600">Email</p>
             <a
               href={`mailto:${ownerEmail}`}
-              className="flex items-center text-[#2AB09C] hover:text-[#2AB09C] font-medium"
+              className="flex items-center font-medium text-[#2DB8D1]"
             >
-              <MailIcon className="h-4 w-4 mr-2" />
+              <MailIcon className="mr-2 h-4 w-4" />
               {ownerEmail}
             </a>
           </div>
         ) : (
           <div>
-            <p className="text-gray-600 text-sm">Email</p>
+            <p className="text-sm text-gray-600">Email</p>
             <p className="font-medium">Not provided</p>
           </div>
         )}
