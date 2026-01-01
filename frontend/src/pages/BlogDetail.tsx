@@ -1,40 +1,13 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { useNavigate, useParams } from "react-router-dom";
 import Footer from "../components/layout/Footer";
 import { Card } from "@/components/ui/card";
 import { apiGet } from "../lib/api";
 import { formatDate } from "../utils/format";
-
-const API_URL =
-  import.meta.env.VITE_API_URL ||
-  import.meta.env.VITE_API_BASE_URL ||
-  "http://backend.grihya.in/api";
-const API_ORIGIN = API_URL.replace(/\/api\/?$/, "");
-
-function absolutize(u?: string | null): string {
-  if (!u) return "";
-  if (/^(?:[a-z][a-z0-9+.+-]*:)?\/\//i.test(u) || u.startsWith("data:"))
-    return u;
-  return `${API_ORIGIN}/${u.replace(/^\/+/, "")}`;
-}
-
-function normalizeAssetUrl(u?: string | null): string {
-  if (!u) return "";
-  if (/^(?:[a-z][a-z0-9+.+-]*:)?\/\//i.test(u) || u.startsWith("data:"))
-    return u;
-  const trimmed = u.replace(/^\/+/, "");
-  if (trimmed.startsWith("storage/")) return absolutize(trimmed);
-  return absolutize(`storage/${trimmed}`);
-}
-
-function unwrap<T>(r: any): T {
-  if (r && typeof r === "object" && "data" in r) return r.data as T;
-  return r as T;
-}
+import { ArrowLeft } from "lucide-react";
 
 type Variant = "info" | "success" | "warning" | "danger";
-
 type HeadingBlock = { type: "heading"; data: { text: string; level?: number } };
 type ParagraphBlock = { type: "paragraph"; data: { html: string } };
 type ImageBlock = {
@@ -92,10 +65,34 @@ type Post = {
 
 type HeroProps = {
   imageUrl?: string | null;
-  title: string;
-  date?: string | Date | null;
-  author?: string | null;
 };
+
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  import.meta.env.VITE_API_BASE_URL ||
+  "http://backend.grihya.in/api";
+const API_ORIGIN = API_URL.replace(/\/api\/?$/, "");
+
+function absolutize(u?: string | null): string {
+  if (!u) return "";
+  if (/^(?:[a-z][a-z0-9+.+-]*:)?\/\//i.test(u) || u.startsWith("data:"))
+    return u;
+  return `${API_ORIGIN}/${u.replace(/^\/+/, "")}`;
+}
+
+function normalizeAssetUrl(u?: string | null): string {
+  if (!u) return "";
+  if (/^(?:[a-z][a-z0-9+.+-]*:)?\/\//i.test(u) || u.startsWith("data:"))
+    return u;
+  const trimmed = u.replace(/^\/+/, "");
+  if (trimmed.startsWith("storage/")) return absolutize(trimmed);
+  return absolutize(`storage/${trimmed}`);
+}
+
+function unwrap<T>(r: any): T {
+  if (r && typeof r === "object" && "data" in r) return r.data as T;
+  return r as T;
+}
 
 function getErrorMessage(e: unknown): string {
   if (e instanceof Error) return e.message;
@@ -107,9 +104,30 @@ function getErrorMessage(e: unknown): string {
   }
 }
 
+const containerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.15,
+    },
+  },
+};
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut",
+    },
+  },
+};
+
 export default function BlogDetail() {
-  const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const { slug } = useParams<{ slug: string }>();
 
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -134,62 +152,21 @@ export default function BlogDetail() {
     };
   }, [slug]);
 
-  const Hero: React.FC<HeroProps> = ({ imageUrl, title, date, author }) => (
+  const Hero: React.FC<HeroProps> = ({ imageUrl }) => (
     <motion.section
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      className="relative mx-4 mt-4 h-[70vh] overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"
+      className="h-[55vh] w-full overflow-hidden rounded-3xl px-5 sm:h-[80vh] md:px-12 lg:mx-auto lg:max-w-7xl"
     >
-      <div className="absolute inset-0 z-10 rounded-3xl bg-black/50" />
       <img
         src={normalizeAssetUrl(imageUrl) || "/placeholder-hero.jpg"}
-        alt={title}
-        className="absolute inset-0 h-full w-full rounded-3xl object-cover"
+        alt={normalizeAssetUrl(imageUrl) || "/placeholder-hero.jpg"}
+        className="h-full w-full rounded-3xl object-cover"
         onError={(e) => {
           (e.currentTarget as HTMLImageElement).src = "/placeholder-hero.jpg";
         }}
       />
-
-      <motion.div
-        initial={{ x: -50, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ delay: 0.3 }}
-        className="absolute left-8 top-8 z-20"
-      >
-        <button
-          type="button"
-          aria-label="Go back"
-          onClick={() => navigate(-1)}
-          className="-ml-1 inline-flex h-9 w-9 items-center justify-center bg-transparent text-gray-800 hover:text-gray-900 active:scale-95"
-          title="Back"
-        >
-          <span className="rounded-full bg-white/90 text-2xl font-extrabold leading-none text-slate-900 hover:bg-white">
-            <img src="/less_than_icon.png" alt="Back Button" />
-          </span>
-        </button>
-      </motion.div>
-
-      <div className="container relative z-20 mx-auto flex h-full items-center px-8">
-        <motion.div
-          initial={{ y: 50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="max-w-4xl"
-        >
-          <h1 className="mb-6 text-4xl font-bold leading-tight text-white md:text-6xl">
-            {title}
-          </h1>
-          <div className="mb-2 flex items-center gap-3 text-white/90">
-            <span className="text-lg">{formatDate(date || "")}</span>
-          </div>
-          <div className="flex items-center gap-3 text-white/90">
-            <span className="text-lg font-medium">
-              {author || "EasyLease Team"}
-            </span>
-          </div>
-        </motion.div>
-      </div>
     </motion.section>
   );
 
@@ -205,7 +182,7 @@ export default function BlogDetail() {
     };
     const cls = map[(variant || "info") as Variant];
     return (
-      <div className={`${cls} mb-8 rounded-r-lg border-l-4 p-6`}>
+      <div className={`${cls} mb-6 rounded-r-lg border-l-4 p-6 sm:mb-8`}>
         {children}
       </div>
     );
@@ -219,7 +196,7 @@ export default function BlogDetail() {
         const Tag = `h${lvl}` as keyof JSX.IntrinsicElements;
         return (
           <div key={i}>
-            <Tag className="mb-6 text-3xl font-bold text-slate-900">
+            <Tag className="mb-6 text-4xl font-bold text-black sm:text-5xl">
               {block.data?.text}
             </Tag>
           </div>
@@ -229,7 +206,7 @@ export default function BlogDetail() {
         return (
           <div
             key={i}
-            className="prose prose-lg mb-6 max-w-none"
+            className="mb-6 max-w-none text-balance text-lg"
             dangerouslySetInnerHTML={{
               __html: (block as ParagraphBlock).data?.html || "",
             }}
@@ -263,11 +240,11 @@ export default function BlogDetail() {
         return (
           <div
             key={i}
-            className="mb-8 rounded-r-lg border-l-4 border-[#2AB09C] bg-slate-50 py-4 pl-6"
+            className="mb-6 rounded-r-lg border-l-4 border-[#2DB8D1] bg-gray-100 p-4 sm:mb-8"
           >
             <p className="text-lg italic text-slate-700">“{data?.text}”</p>
             {data?.author && (
-              <p className="mt-2 text-right text-slate-500">- {data.author}</p>
+              <p className="mt-1 text-right text-slate-500">- {data.author}</p>
             )}
           </div>
         );
@@ -286,15 +263,9 @@ export default function BlogDetail() {
       case "problem_solution": {
         const data = (block as ProblemSolutionBlock).data;
         return (
-          <motion.div
-            key={i}
-            initial={{ x: -50, opacity: 0 }}
-            whileInView={{ x: 0, opacity: 1 }}
-            transition={{ delay: 0.15 }}
-            className="mb-12"
-          >
+          <div key={i} className="mb-12">
             <h2 className="mb-6 flex items-center text-3xl font-bold text-foreground">
-              <span className="mr-4 flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-[#2AB09C] to-[#125A4F] text-lg font-bold text-white">
+              <span className="mr-4 flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-[#249aaf] text-lg font-bold text-white">
                 {data?.number ?? i + 1}
               </span>
               {data?.title}
@@ -303,16 +274,15 @@ export default function BlogDetail() {
               <h3 className="mb-3 font-semibold text-red-800">The Problem:</h3>
               <p className="text-red-700">{data?.problem}</p>
             </div>
-            <div className="rounded-r-lg border-l-4 border-[#2AB09C] bg-green-50 p-6">
+            <div className="rounded-r-lg border-l-4 border-[#2DB8D1] bg-green-50 p-6">
               <h3 className="mb-3 font-semibold text-green-800">
-                The EasyLease Solution:
+                The Grihya Solution:
               </h3>
               <p className="text-green-700">{data?.solution}</p>
             </div>
-          </motion.div>
+          </div>
         );
       }
-
       case "list": {
         const data = (block as ListBlock).data || {};
         const items = Array.isArray(data.items)
@@ -323,7 +293,7 @@ export default function BlogDetail() {
 
         if ((data.style || "ul") === "ol") {
           return (
-            <ol key={i} className="mb-6 list-decimal space-y-2 pl-6">
+            <ol key={i} className="mb-6 list-decimal space-y-2 pl-6 text-lg">
               {items.map((t, idx) => (
                 <li key={idx} className="text-slate-800">
                   {t}
@@ -334,7 +304,7 @@ export default function BlogDetail() {
         }
 
         return (
-          <ul key={i} className="mb-6 list-disc space-y-2 pl-6">
+          <ul key={i} className="mb-6 list-disc space-y-2 pl-6 text-lg">
             {items.map((t, idx) => (
               <li key={idx} className="text-slate-800">
                 {t}
@@ -343,7 +313,6 @@ export default function BlogDetail() {
           </ul>
         );
       }
-
       case "hero":
         return null;
       default:
@@ -379,23 +348,46 @@ export default function BlogDetail() {
   const heroImage = normalizeAssetUrl(heroImageRaw);
 
   return (
-    <div className="min-h-screen bg-[#F5F3F0]">
-      <Hero
-        imageUrl={heroImage}
-        title={heroBlock?.data?.title || post.title}
-        date={post.published_at || ""}
-        author={post.author || "EasyLease Team"}
-      />
+    <div className="min-h-screen bg-white">
+      <div className="relative z-20 mx-auto flex h-full w-full items-center px-8">
+        <motion.div
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="max-w-4xl"
+        >
+          <h1 className="mb-6 text-4xl font-bold leading-tight text-white md:text-6xl">
+            {heroBlock?.data?.title || post.title}
+          </h1>
+          <div className="mb-2 flex items-center gap-3 text-white/90">
+            <span className="text-lg">
+              {formatDate(post.published_at || "")}
+            </span>
+          </div>
+          <div className="flex items-center gap-3 text-white/90">
+            <span className="text-lg font-medium">
+              {post.author || "Grihya Team"}
+            </span>
+          </div>
+        </motion.div>
+      </div>
+      <Hero imageUrl={heroImage} />
 
-      <div className="container mx-auto px-4 py-12">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 lg:grid-cols-3">
-          <motion.div
-            initial={{ y: 50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="lg:col-span-2"
-          >
-            <Card className="p-8 shadow-lg">
+      {/* Content container */}
+      <div className="mx-auto grid grid-cols-4 px-5 py-12 md:max-w-7xl md:px-12">
+        <div
+          className="col-span-4 mb-10 cursor-pointer text-xl font-medium sm:col-span-1 sm:mx-auto"
+          onClick={() => navigate(-1)}
+        >
+          <div className="justify flex items-center gap-2">
+            <ArrowLeft size={20} className="block sm:hidden" />
+            <ArrowLeft className="hidden sm:block" />
+            <p className="text-sm sm:text-base">Back to blogs</p>
+          </div>
+        </div>
+        <div className="col-span-4 sm:col-span-3">
+          <div className="w-full">
+            <Card>
               <article className="prose prose-lg max-w-none">
                 {post.content
                   ?.filter((b) => b.type !== "hero")
@@ -407,190 +399,56 @@ export default function BlogDetail() {
                 )}
               </article>
             </Card>
-          </motion.div>
+          </div>
+          <div className="col-span-4 h-[0.5px] w-full bg-gray-700" />
+          <div className="mt-6 flex items-center gap-4">
+            <img
+              src="/icon/AuthorImage.avif"
+              className="h-12 w-12 rounded-full object-cover"
+            />
+            <div className="">
+              <p className="fon-medium text-sm text-gray-600">written by:</p>
+              <p className="font-medium">{post.author || "Grihya Team"}</p>
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* CTA Section */}
+      <section className="mx-auto max-w-7xl px-5 sm:px-12">
+        <motion.div
+          variants={containerVariants}
+          whileInView="visible"
+          initial="hidden"
+          viewport={{ once: true, amount: 0.4 }}
+          className="flex flex-col items-center justify-center gap-8 rounded-[30px] bg-[#2DB8D1] py-[100px] text-white"
+        >
+          <motion.h3
+            variants={fadeUp}
+            className="text-xl font-medium tracking-tighter md:text-2xl"
+          >
+            Want to Book a Call?
+          </motion.h3>
+          <motion.h1
+            variants={fadeUp}
+            className="s mx-auto max-w-3xl text-center text-4xl font-medium tracking-tighter md:text-5xl"
+          >
+            Ready to make your step in real state? Book Now.
+          </motion.h1>
+          <motion.button
+            variants={fadeUp}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.95 }}
+            className="rounded-full bg-white px-5 py-3 text-sm tracking-tight text-black md:text-base"
+            onClick={() => navigate("/properties")}
+          >
+            View Properties
+          </motion.button>
+        </motion.div>
+      </section>
     </div>
   );
 }
-
-// function Comments({
-//   slug,
-//   initialCount = 0,
-// }: {
-//   slug: string;
-//   initialCount?: number;
-// }) {
-//   const [comments, setComments] = useState<CommentT[]>([]);
-//   const [count, setCount] = useState<number>(initialCount);
-//   const [body, setBody] = useState<string>("");
-//   const [name, setName] = useState<string>("");
-//   const [posting, setPosting] = useState<boolean>(false);
-//   const [err, setErr] = useState<string>("");
-
-//   useEffect(() => {
-//     let mounted = true;
-//     (async () => {
-//       try {
-//         const raw = await apiGet<any>(`/posts/${slug}/comments`);
-//         const list = Array.isArray(raw) ? raw : (raw?.data ?? []);
-//         if (mounted) {
-//           setComments(list);
-//           setCount(list.length);
-//         }
-//       } catch (e: unknown) {
-//         if (mounted) setErr(getErrorMessage(e) || "Failed to load comments");
-//       }
-//     })();
-//     return () => {
-//       mounted = false;
-//     };
-//   }, [slug, initialCount]);
-
-//   const submit = async () => {
-//     if (!body.trim()) return;
-//     setPosting(true);
-//     setErr("");
-//     try {
-//       const payload: Partial<CommentT> = { body, name: name || undefined };
-//       const c = await apiPost<CommentT, typeof payload>(
-//         `/posts/${slug}/comments`,
-//         payload,
-//       );
-//       setComments([c, ...comments]);
-//       setBody("");
-//       setCount((n) => n + 1);
-//     } catch (e: unknown) {
-//       setErr(getErrorMessage(e) || "Failed to post comment");
-//     } finally {
-//       setPosting(false);
-//     }
-//   };
-
-//   return (
-//     <motion.section
-//       initial={{ y: 50, opacity: 0 }}
-//       whileInView={{ y: 0, opacity: 1 }}
-//       transition={{ delay: 0.1 }}
-//       className="m-auto mt-16 max-w-4xl px-4"
-//     >
-//       <div className="mb-6 flex items-center gap-3">
-//         <MessageSquare className="h-6 w-6 text-[#2AB09C]" />
-//         <h2 className="text-2xl font-bold">Comments ({count})</h2>
-//       </div>
-
-//       {err && <p className="mb-4 text-red-600">{err}</p>}
-
-//       <div className="mb-8 space-y-6">
-//         {comments.map((comment) => (
-//           <motion.div
-//             key={comment.id}
-//             initial={{ x: -20, opacity: 0 }}
-//             whileInView={{ x: 0, opacity: 1 }}
-//             className="flex gap-4 rounded-xl bg-muted/30 p-4"
-//           >
-//             <Avatar>
-//               <AvatarFallback>
-//                 {(comment.name || "G")
-//                   .split(" ")
-//                   .map((n) => n[0])
-//                   .join("")
-//                   .slice(0, 2)
-//                   .toUpperCase()}
-//               </AvatarFallback>
-//             </Avatar>
-//             <div className="flex-1">
-//               <div className="mb-2 flex items-center gap-2">
-//                 <span className="text-sm font-semibold">
-//                   {comment.name || "Guest"}
-//                 </span>
-//                 <span className="text-xs text-muted-foreground">
-//                   {comment.created_at
-//                     ? new Date(comment.created_at).toLocaleString()
-//                     : ""}
-//                 </span>
-//               </div>
-//               <p className="text-sm">{comment.body}</p>
-//             </div>
-//           </motion.div>
-//         ))}
-//         {comments.length === 0 && (
-//           <p className="text-sm text-slate-500">No comments yet.</p>
-//         )}
-//       </div>
-
-//       <Card className="p-6">
-//         <h3 className="mb-4 font-semibold">Add a comment</h3>
-//         <div className="grid gap-3">
-//           <input
-//             value={name}
-//             onChange={(e) => setName(e.target.value)}
-//             placeholder="Your name (optional)"
-//             className="w-full rounded-xl border p-3 focus:outline-none focus:ring-2 focus:ring-[#2AB09C]"
-//           />
-//           <textarea
-//             value={body}
-//             onChange={(e) => setBody(e.target.value)}
-//             placeholder="Share your thoughts..."
-//             className="h-24 w-full resize-none rounded-xl border p-3 focus:outline-none focus:ring-2 focus:ring-[#2AB09C]"
-//           />
-//           <Button
-//             onClick={submit}
-//             disabled={posting}
-//             className="rounded-full bg-[#2AB09C] px-6 py-3 text-white hover:bg-[#259688]"
-//           >
-//             {posting ? "Posting…" : "Post Comment"}
-//           </Button>
-//         </div>
-//       </Card>
-//     </motion.section>
-//   );
-// }
-
-// {showScrollTop && (
-//         <button
-//           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-//           className="fixed bottom-6 right-6 rounded-full bg-[#2AB09C] p-3 text-white shadow-lg hover:bg-[#259688]"
-//           aria-label="Scroll to top"
-//         >
-//           ↑
-//         </button>
-//       )}
-
-// const likedKey = useMemo(() => (post ? `blog_liked_${post.id}` : ""), [post]);
-
-// Toggle like/unlike with rollback and server sync
-// const handleLike = async () => {
-//   if (!post) return;
-//   const prevLiked = liked;
-//   const prevCount = likeCount;
-
-//   try {
-//     if (liked) {
-//       setLiked(false);
-//       setLikeCount((c) => Math.max(0, c - 1));
-//       localStorage.removeItem(likedKey);
-//       const res = await apiPost<{ likes_count: number }>(
-//         `/posts/${post.slug}/unlike`,
-//       );
-//       if (typeof res.likes_count === "number") setLikeCount(res.likes_count);
-//     } else {
-//       setLiked(true);
-//       setLikeCount((c) => c + 1);
-//       localStorage.setItem(likedKey, "1");
-//       const res = await apiPost<{ likes_count: number }>(
-//         `/posts/${post.slug}/like`,
-//       );
-//       if (typeof res.likes_count === "number") setLikeCount(res.likes_count);
-//     }
-//   } catch {
-//     // rollback on error
-//     setLiked(prevLiked);
-//     setLikeCount(prevCount);
-//     if (prevLiked) localStorage.setItem(likedKey, "1");
-//     else localStorage.removeItem(likedKey);
-//   }
-// };
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //Handle Share
@@ -608,7 +466,7 @@ export default function BlogDetail() {
         whileTap={{ scale: 0.97 }}
         onClick={handleLike}
         className={`w-full ${
-          liked ? "bg-[#259688]" : "bg-[#2AB09C]"
+          liked ? "bg-[#259688]" : "bg-[#2DB8D1]"
         } rounded-full px-6 py-3 font-semibold text-white hover:bg-[#259688]`}
         aria-pressed={liked}
       >
@@ -642,7 +500,7 @@ export default function BlogDetail() {
           <AvatarFallback>{(post.author || "ET").slice(0, 2)}</AvatarFallback>
         </Avatar>
         <h4 className="mb-2 font-semibold text-slate-900">
-          {post.author || "EasyLease Team"}
+          {post.author || "Grihya Team"}
         </h4>
         <p className="mb-4 text-sm text-slate-600">
           Connecting people with properties, seamlessly and securely.
@@ -657,18 +515,6 @@ export default function BlogDetail() {
   </div>
 </motion.aside>; */
 }
-
-/////////////////////////////////////////////////////////////////////////////
-//Comment type
-// type CommentT = {
-//   id: number;
-//   name?: string | null;
-//   email?: string | null;
-//   body: string;
-//   created_at?: string;
-//   parent_id?: number | null;
-// };
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Share Function
 // Robust share
@@ -676,7 +522,7 @@ export default function BlogDetail() {
 //   if (!post) return;
 //   const url = window.location.href;
 //   const title = post.title;
-//   const text = `Check this blog on EasyLease: ${post.title}`;
+//   const text = `Check this blog on Grihya: ${post.title}`;
 
 //   try {
 //     const minimal: ShareData = { url };
@@ -739,56 +585,3 @@ export default function BlogDetail() {
 //     else setSharesCount((c) => c + 1);
 //   } catch {}
 // };
-
-////////////////////////////////////////////////////////////////////////////////////////////
-// Copy to clipboard
-// function isMobileUA() {
-//   if (typeof navigator === "undefined") return false;
-//   return /android|iphone|ipad|ipod/i.test(navigator.userAgent);
-// }
-// function canUseNativeShare(shareData?: ShareData) {
-//   if (typeof window === "undefined" || typeof navigator === "undefined")
-//     return false;
-//   const secure = window.isSecureContext;
-//   const hasShare = "share" in navigator;
-//   const canShare =
-//     typeof navigator.canShare === "function"
-//       ? navigator.canShare(shareData || {})
-//       : true;
-//   return secure && hasShare && isMobileUA() && canShare;
-// }
-// async function copyToClipboard(text: string) {
-//   try {
-//     if (navigator.clipboard?.writeText) {
-//       await navigator.clipboard.writeText(text);
-//       return true;
-//     }
-//   } catch {
-//     /* empty */
-//   }
-//   try {
-//     const ta = document.createElement("textarea");
-//     ta.value = text;
-//     ta.style.position = "fixed";
-//     ta.style.left = "-9999px";
-//     document.body.appendChild(ta);
-//     ta.focus();
-//     ta.select();
-//     document.execCommand("copy");
-//     document.body.removeChild(ta);
-//     return true;
-//   } catch {
-//     return false;
-//   }
-// }
-
-//////////////////////////////////////////////////////////////////////////////////////
-// State Variables
-// const [likeCount, setLikeCount] = useState<number>(0);
-// const [liked, setLiked] = useState<boolean>(false);
-
-// const [sharesCount, setSharesCount] = useState<number>(0);
-// const [sharing, setSharing] = useState(false);
-// const [shareNotice, setShareNotice] = useState<string | null>(null);
-
-// const [showScrollTop, setShowScrollTop] = useState<boolean>(false);
