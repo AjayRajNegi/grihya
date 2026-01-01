@@ -15,7 +15,6 @@ import {
   CalendarIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  Share2Icon,
   DumbbellIcon,
   ShieldIcon,
 } from "lucide-react";
@@ -175,10 +174,6 @@ const PropertyDetail: React.FC = () => {
     null,
   );
 
-  // Share feedback state
-  const [sharing, setSharing] = useState(false);
-  const [shareNotice, setShareNotice] = useState<string | null>(null);
-
   useEffect(() => {
     let cancelled = false;
     async function load() {
@@ -265,46 +260,6 @@ const PropertyDetail: React.FC = () => {
       );
     }
   };
-
-  function isMobileUA() {
-    if (typeof navigator === "undefined") return false;
-    return /android|iphone|ipad|ipod/i.test(navigator.userAgent);
-  }
-  function canUseNativeShare(shareData?: ShareData) {
-    if (typeof window === "undefined" || typeof navigator === "undefined")
-      return false;
-    const secure = window.isSecureContext;
-    const hasShare = "share" in navigator;
-
-    const canShare =
-      typeof navigator.canShare === "function"
-        ? navigator.canShare(shareData || {})
-        : true;
-    return secure && hasShare && isMobileUA() && canShare;
-  }
-
-  async function copyToClipboard(text: string) {
-    try {
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(text);
-        return true;
-      }
-    } catch {}
-    try {
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      ta.style.position = "fixed";
-      ta.style.left = "-9999px";
-      document.body.appendChild(ta);
-      ta.focus();
-      ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-      return true;
-    } catch {
-      return false;
-    }
-  }
 
   if (loading) {
     return (
@@ -699,31 +654,30 @@ const PropertyDetail: React.FC = () => {
               </div>
             </div>
             <div className="space-y-6 lg:sticky lg:top-24">
+              <button
+                onClick={() => navigate("/chat-with-us")}
+                className="w-full rounded-xl bg-[#2DB8D1] px-6 py-4 text-sm font-semibold text-white transition hover:opacity-90"
+              >
+                Chat with Us to get personlized properties.
+              </button>
               <PropertyContactInfo
                 ownerName={property.owner.name}
                 ownerPhone={property.owner.phone}
                 ownerEmail={property.owner.email}
               />
 
-              <button
-                onClick={() => navigate("/chat-with-us")}
-                className="w-full rounded-xl bg-[#2DB8D1] px-6 py-4 text-sm font-semibold text-white transition hover:opacity-90"
-              >
-                Get Personalized Properties
-              </button>
-
               {/* Similar Properties */}
               <div className="rounded-xl border border-gray-100 bg-white p-6 sm:p-8">
                 <h2 className="mb-6 text-2xl font-semibold text-gray-900">
-                  Similar Properties
+                  Similar Properties:
                 </h2>
 
-                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div className="">
                   {similar.map((sp) => (
                     <Link
                       key={sp.id}
                       to={`/properties/${sp.id}`}
-                      className="flex gap-4 rounded-lg border border-gray-100 p-3 transition hover:shadow-sm"
+                      className="flex w-full gap-4 rounded-xl border border-gray-100 p-3 transition hover:shadow-sm"
                     >
                       <img
                         src={

@@ -44,8 +44,8 @@ const PropertyGallery: React.FC<PropertyGalleryProps> = ({
     <div className="relative">
       {/* Main image */}
       <div
-        className="relative overflow-hidden rounded-3xl bg-gray-200 md:h-96"
-        style={{ height: "90%" }}
+        className="relative h-[400px] overflow-hidden rounded-3xl bg-gray-200 sm:h-[500px] md:h-[700px]"
+        // style={{ height: "90%" }}
       >
         <img
           src={images[currentIndex]}

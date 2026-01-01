@@ -18,7 +18,7 @@ const PropertyContactInfo: React.FC<PropertyContactInfoProps> = ({
 
   if (!isAuthenticated) {
     return (
-      <div className="ounded-xl rounded-lg border border-gray-100 bg-white p-6">
+      <div className="rounded-xl border border-gray-100 bg-white p-6">
         <div className="mb-4 flex items-center">
           <ShieldIcon className="mr-2 h-6 w-6 text-[#2DB8D1]" />
           <h3 className="text-lg font-semibold">Contact Information</h3>
@@ -30,12 +30,12 @@ const PropertyContactInfo: React.FC<PropertyContactInfoProps> = ({
         </div>
         <div className="flex space-x-4">
           <Link to="/account">
-            <button className="flex-1 rounded-md bg-[#2DB8D1] px-4 py-2 text-white transition-colors hover:bg-transparent hover:text-[#2DB8D1]">
+            <button className="flex-1 rounded-xl bg-[#2DB8D1] px-4 py-2 text-white transition-colors">
               Login
             </button>
           </Link>
           <Link to="/account">
-            <button className="flex-1 rounded-md bg-gray-200 px-4 py-2 text-gray-800 transition-colors hover:bg-gray-300">
+            <button className="flex-1 rounded-xl bg-gray-200 px-4 py-2 text-gray-800 transition-colors">
               Sign Up
             </button>
           </Link>
@@ -45,7 +45,7 @@ const PropertyContactInfo: React.FC<PropertyContactInfoProps> = ({
   }
 
   return (
-    <div className="ounded-xl rounded-lg border border-gray-100 bg-white p-6">
+    <div className="rounded-xl border border-gray-100 bg-white p-6">
       <div className="mb-4 flex items-center">
         <UserIcon className="mr-2 h-6 w-6 text-[#2DB8D1]" />
         <h3 className="text-lg font-semibold">Owner Details</h3>
@@ -61,7 +61,7 @@ const PropertyContactInfo: React.FC<PropertyContactInfoProps> = ({
             <p className="text-sm text-gray-600">Phone</p>
             <a
               href={`tel:${ownerPhone}`}
-              className="flex items-center font-medium text-[#2DB8D1] hover:text-[#2DB8D1]"
+              className="flex items-center font-medium text-[#2DB8D1]"
             >
               <PhoneIcon className="mr-2 h-4 w-4" />
               {ownerPhone}
@@ -79,7 +79,7 @@ const PropertyContactInfo: React.FC<PropertyContactInfoProps> = ({
             <p className="text-sm text-gray-600">Email</p>
             <a
               href={`mailto:${ownerEmail}`}
-              className="flex items-center font-medium text-[#2DB8D1] hover:text-[#2DB8D1]"
+              className="flex items-center font-medium text-[#2DB8D1]"
             >
               <MailIcon className="mr-2 h-4 w-4" />
               {ownerEmail}
