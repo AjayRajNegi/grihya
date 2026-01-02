@@ -10,6 +10,13 @@ import {
 import LocationAutocomplete, {
   PickedPlace,
 } from "../common/LocationAutocomplete";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 interface SearchBarProps {
   onSearch: (searchParams: Record<string, string>) => void;
@@ -27,7 +34,6 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const [dealType, setDealType] = useState("");
   const [priceRange, setPriceRange] = useState("");
 
-  // Prefill only once (so user can clear without it popping back)
   const didAutofillRef = useRef(false);
   useEffect(() => {
     if (!didAutofillRef.current && initialLocation) {
@@ -43,40 +49,33 @@ const SearchBar: React.FC<SearchBarProps> = ({
     }
   }, [initialLocation, initialCoords]);
 
-  // Control when the suggestions menu is allowed to open
   const [allowMenu, setAllowMenu] = useState(false);
 
-  // ADD: simple text -> coords geocoder (Nominatim fallback)
   async function geocodeText(
-    query: string
+    query: string,
   ): Promise<{ lat: number; lng: number } | null> {
     try {
       const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(
-        query
+        query,
       )}&limit=1&accept-language=en-IN`;
       const res = await fetch(url, {
         headers: {
-          // Browsers ignore User-Agent header; Nominatim still works for light usage
-          "User-Agent": "EasyLease/1.0 (web)",
+          "User-Agent": "Grihya/1.0 (web)",
         } as any,
       });
       const data = await res.json();
       if (Array.isArray(data) && data[0]?.lat && data[0]?.lon) {
         return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
       }
-    } catch (e) {
-      // swallow
-    }
+    } catch (e) {}
     return null;
   }
 
-  // REPLACE your existing handleSubmit with this version
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const params: Record<string, string> = {};
     const typed = location.trim();
 
-    // Try to get coordinates (picked place first, else geocode typed text)
     let coords: { lat: number; lng: number } | null = null;
 
     if (
@@ -92,24 +91,21 @@ const SearchBar: React.FC<SearchBarProps> = ({
     }
 
     if (coords) {
-      // Nearby search around searched/picked location (20 km)
       params.lat = String(coords.lat);
       params.lng = String(coords.lng);
-      params.radius = "20000"; // 20 km in meters
+      params.radius = "20000";
 
-      // Keep typed text for UI filters only; avoid text narrowing
       if (typed) params.location = typed;
     } else {
-      // Fallback: text-only search (no coords found or no text)
       if (typed) {
-        params.q = typed; // backend text search
-        params.location = typed; // UI hint
+        params.q = typed;
+        params.location = typed;
       }
     }
 
-    if (picked?.postalCode) params.pin = picked.postalCode; // optional
+    if (picked?.postalCode) params.pin = picked.postalCode;
     if (dealType) params.for = dealType;
-    if (priceRange) params.price = priceRange.replace(/[–—]/g, "-"); // normalize dashes
+    if (priceRange) params.price = priceRange.replace(/[–—]/g, "-");
 
     onSearch(params);
   };
@@ -117,120 +113,108 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const clearLocation = () => {
     setLocation("");
     setPicked(null);
-    // Keep menu closed after clearing until user interacts
     setAllowMenu(false);
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full"
       role="search"
       aria-label="Property search"
+      className="flex w-full flex-col gap-3 md:flex-row md:items-center md:gap-0"
     >
-      <div className="space-y-3 md:space-y-3">
-        {/* Location (full width) */}
-        <div className="relative z-40 overflow-visible">
-          <div className="group relative flex items-center rounded-lg border border-slate-300 bg-slate-50 px-3 md:px-3 py-2 md:py-2.5 focus-within:border-[#2AB09C] focus-within:ring-1 focus-within:ring-[#2AB09C]">
-            <MapPinIcon className="h-4 w-4 md:h-5 md:w-5 text-slate-400" />
-            <div className="ml-2 md:ml-2.5 flex-1 min-w-0">
-              <LocationAutocomplete
-                value={location}
-                onChange={(v) => {
-                  setLocation(v);
-                  setPicked(null); // clear selection when typing
-                  setAllowMenu(true); // user interaction => allow menu
-                }}
-                onPick={(place) => {
-                  setLocation(place.label || place.formatted || "");
-                  setPicked(place);
-                  setAllowMenu(false); // close menu after pick (optional)
-                }}
-                initialCoords={initialCoords}
-                country="IN"
-                placeholder="Search city, area or landmark"
-                className="w-full bg-transparent outline-none border-0 px-0 py-0 focus:ring-0 text-slate-700 placeholder:text-slate-400 text-sm md:text-[15px]"
-                // The following props are optional; wire them inside LocationAutocomplete to fully control menu:
-                {...({
-                  menuOpen: allowMenu, // use this boolean to control the menu’s visibility
-                  onMenuOpenChange: setAllowMenu,
-                  openOnMount: false, // don’t open when value is set programmatically
-                } as any)}
-                // Allow menu only after focus/typing
-                onFocus={() => setAllowMenu(true) as any}
-              />
-            </div>
-
-            {/* Clear button */}
-            {location && (
-              <button
-                type="button"
-                onClick={clearLocation}
-                className="absolute right-2 inline-flex h-6 w-6 items-center justify-center rounded hover:bg-slate-100 text-slate-500"
-                aria-label="Clear location"
-                title="Clear"
-              >
-                <XIcon className="h-4 w-4" />
-              </button>
-            )}
-          </div>
+      {/* Location */}
+      <div className="relative flex flex-1 items-center px-4 py-2 md:py-0">
+        <MapPinIcon className="h-5 w-5 text-slate-400" />
+        <div className="ml-3 w-full">
+          <LocationAutocomplete
+            value={location}
+            onChange={(v) => {
+              setLocation(v);
+              setPicked(null);
+              setAllowMenu(true);
+            }}
+            onPick={(place) => {
+              setLocation(place.label || place.formatted || "");
+              setPicked(place);
+              setAllowMenu(false);
+            }}
+            initialCoords={initialCoords}
+            country="IN"
+            placeholder="Search city, area or landmark"
+            className="w-full border-0 bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400 focus:ring-0"
+            {...({
+              menuOpen: allowMenu,
+              onMenuOpenChange: setAllowMenu,
+              openOnMount: false,
+            } as any)}
+            onFocus={() => setAllowMenu(true) as any}
+          />
         </div>
 
-        {/* Bottom row */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-          {/* Rent or Sale (native select, improved UI) */}
-          <div className="md:col-span-4">
-            <div className="relative">
-              <HomeIcon className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 md:h-5 md:w-5 text-slate-400" />
-              <select
-                value={dealType}
-                onChange={(e) => setDealType(e.target.value)}
-                aria-label="Deal type"
-                title="Deal type"
-                className="peer w-full appearance-none rounded-lg border border-slate-300 bg-slate-50 pl-9 pr-8 py-2 md:py-2.5 text-sm md:text-[15px] text-slate-700 hover:border-[#2AB09C] focus:border-[#2AB09C] focus:ring-1 focus:ring-[#2AB09C] transition-colors md:min-w-[200px]"
-              >
-                <option value="">Rent or Sale</option>
-                <option value="rent">Rent</option>
-                <option value="sale">Sale</option>
-              </select>
-              <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 transition-transform peer-focus:-rotate-180" />
-            </div>
-          </div>
-
-          {/* Price Range (native select, improved UI) */}
-          <div className="md:col-span-5">
-            <div className="relative">
-              <IndianRupeeIcon className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 md:h-5 md:w-5 text-slate-400" />
-              <select
-                value={priceRange}
-                onChange={(e) => setPriceRange(e.target.value)}
-                aria-label="Price range"
-                title="Price range"
-                className="peer w-full appearance-none rounded-lg border border-slate-300 bg-slate-50 pl-9 pr-8 py-2 md:py-2.5 text-sm md:text-[15px] text-slate-700 hover:border-[#2AB09C] focus:border-[#2AB09C] focus:ring-1 focus:ring-[#2AB09C] transition-colors md:min-w-[240px]"
-              >
-                <option value="">Price Range</option>
-                <option value="0-10000">Under ₹10,000</option>
-                <option value="10000-25000">₹10,000 - ₹25,000</option>
-                <option value="25000-50000">₹25,000 - ₹50,000</option>
-                <option value="50000-100000">₹50,000 - ₹1,00,000</option>
-                <option value="100000+">Above ₹1,00,000</option>
-              </select>
-              <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 transition-transform peer-focus:-rotate-180" />
-            </div>
-          </div>
-
-          {/* Submit */}
-          <div className="md:col-span-3">
-            <button
-              type="submit"
-              className="w-full h-[42px] md:h-[46px] rounded-lg bg-[#2AB09C] text-white text-sm md:text-[15px] font-medium hover:bg-transparent hover:text-[#2AB09C] border border-[#2AB09C] transition-colors flex items-center justify-center"
-            >
-              <SearchIcon className="h-4 w-4 md:h-5 md:w-5 mr-2" />
-              Search
-            </button>
-          </div>
-        </div>
+        {location && (
+          <button
+            type="button"
+            onClick={clearLocation}
+            className="absolute right-2 rounded p-1 text-slate-500 hover:bg-slate-100"
+          >
+            <XIcon className="h-4 w-4" />
+          </button>
+        )}
       </div>
+
+      {/* Divider */}
+      <div className="hidden h-10 w-px bg-gray-200 md:block" />
+
+      {/* Rent or Sale */}
+      <div className="flex items-center px-4 md:w-[180px]">
+        <HomeIcon className="mr-3 h-5 w-5 text-slate-400" />
+        <Select value={dealType} onValueChange={setDealType}>
+          <SelectTrigger className="h-auto w-full border-0 bg-red-100 bg-transparent p-0 text-sm text-slate-700 focus:ring-0 focus:ring-offset-0 [&>svg]:hidden">
+            <SelectValue placeholder="Rent or Sale" />
+          </SelectTrigger>
+
+          <SelectContent className="w-[--radix-select-trigger-width] rounded-xl bg-white">
+            <SelectItem value="rent">Rent</SelectItem>
+            <SelectItem value="sale">Sale</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <ChevronDownIcon className="ml-2 h-4 w-4 text-slate-500" />
+      </div>
+
+      {/* Divider */}
+      <div className="hidden h-10 w-px bg-gray-200 md:block" />
+
+      {/* Price Range */}
+      <div className="flex items-center px-4 md:w-[220px]">
+        <IndianRupeeIcon className="mr-3 h-5 w-5 text-slate-400" />
+
+        <Select value={priceRange} onValueChange={setPriceRange}>
+          <SelectTrigger className="h-auto w-full border-0 bg-transparent p-0 text-sm text-slate-700 focus:ring-0 focus:ring-offset-0 [&>svg]:hidden">
+            <SelectValue placeholder="Price Range" />
+          </SelectTrigger>
+
+          <SelectContent className="rounded-xl bg-white">
+            <SelectItem value="0-10000">Under ₹10,000</SelectItem>
+            <SelectItem value="10000-25000">₹10,000 – ₹25,000</SelectItem>
+            <SelectItem value="25000-50000">₹25,000 – ₹50,000</SelectItem>
+            <SelectItem value="50000-100000">₹50,000 – ₹1,00,000</SelectItem>
+            <SelectItem value="100000+">Above ₹1,00,000</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <ChevronDownIcon className="ml-2 h-4 w-4 text-slate-500" />
+      </div>
+
+      {/* Search Button */}
+      <button
+        type="submit"
+        className="ml-auto flex h-12 w-full items-center justify-center rounded-2xl bg-[#2DB8D1] px-6 text-sm font-medium text-white transition hover:bg-[#2aaec5] sm:rounded-full md:w-auto"
+      >
+        <SearchIcon className="mr-2 h-5 w-5" />
+        Search
+      </button>
     </form>
   );
 };

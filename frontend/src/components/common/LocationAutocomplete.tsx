@@ -97,7 +97,7 @@ const LocationAutocomplete: React.FC<Props> = ({
   const [preds, setPreds] = useState<any[]>([]);
   const loader = useMemo(
     () => (apiKey ? new Loader({ apiKey, libraries: ["places"] }) : null),
-    [apiKey]
+    [apiKey],
   );
   const acSvc = useRef<any>(null);
   const placesSvc = useRef<any>(null);
@@ -113,7 +113,7 @@ const LocationAutocomplete: React.FC<Props> = ({
         if (!mounted) return;
         acSvc.current = new google.maps.places.AutocompleteService();
         placesSvc.current = new google.maps.places.PlacesService(
-          document.createElement("div")
+          document.createElement("div"),
         );
         sessionRef.current = new google.maps.places.AutocompleteSessionToken();
         setReady(true);
@@ -158,7 +158,7 @@ const LocationAutocomplete: React.FC<Props> = ({
         req.locationBias = circle.getBounds();
         req.origin = new google.maps.LatLng(
           initialCoords.lat,
-          initialCoords.lng
+          initialCoords.lng,
         );
       }
       acSvc.current.getPlacePredictions(req, (res: any[]) => {
@@ -256,7 +256,7 @@ const LocationAutocomplete: React.FC<Props> = ({
           placeholder={placeholder}
           className={
             className ||
-            `w-full px-3 py-2 border ${
+            `w-full border px-3 py-2 ${
               error ? "border-red-500" : "border-gray-300"
             } rounded-md focus:outline-none`
           }
@@ -278,7 +278,7 @@ const LocationAutocomplete: React.FC<Props> = ({
         onChange={(e) => {
           setQuery(e.target.value);
           onChange(e.target.value);
-          setOpen(true); // user typed => open menu
+          setOpen(true);
         }}
         onFocus={() => {
           onFocus?.();
@@ -288,9 +288,9 @@ const LocationAutocomplete: React.FC<Props> = ({
         placeholder={placeholder}
         className={
           className ||
-          `w-full px-3 py-2 border ${
+          `w-full border px-3 py-3 ${
             error ? "border-red-500" : "border-gray-300"
-          } rounded-md focus:outline-none focus:ring-2 focus:ring-[#2AB09C]`
+          } rounded-md bg-red-200 focus:outline-none focus:ring-2 focus:ring-[#2AB09C]`
         }
         autoComplete="off"
         aria-autocomplete="list"
@@ -305,7 +305,7 @@ const LocationAutocomplete: React.FC<Props> = ({
         <ul
           id="locac-menu"
           role="listbox"
-          className="absolute z-50 mt-2 w-full bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto"
+          className="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-md border border-gray-200 bg-white shadow-lg"
         >
           {busy && (
             <li className="px-3 py-2 text-sm text-gray-500">Searching…</li>
@@ -319,13 +319,13 @@ const LocationAutocomplete: React.FC<Props> = ({
                     e.preventDefault();
                     pickPrediction(p);
                   }}
-                  className="w-full text-left px-3 py-2 hover:bg-gray-100"
+                  className="w-full px-3 py-2 text-left hover:bg-gray-100"
                   title={p.description || ""}
                 >
                   <div className="text-sm text-gray-900">
                     {p.structured_formatting?.main_text || p.description}
                   </div>
-                  <div className="text-xs text-gray-500 line-clamp-1">
+                  <div className="line-clamp-1 text-xs text-gray-500">
                     {p.structured_formatting?.secondary_text || ""}
                   </div>
                 </button>

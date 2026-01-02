@@ -5,6 +5,21 @@ import PropertyCard from "../components/properties/PropertyCard";
 import PropertyFilters from "../components/properties/PropertyFilters";
 import type { Property } from "../data/mockData"; // type-only import
 
+import PropertiesSearch from "@/components/properties/PropertiesSearch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  BathIcon,
+  BedIcon,
+  SquareIcon,
+} from "@/components/properties/AmenitiesIcon";
+import CTASection from "@/components/home/CTASection";
+
 const API_URL =
   import.meta.env.VITE_API_URL ||
   import.meta.env.VITE_API_BASE_URL ||
@@ -120,7 +135,7 @@ const PropertyListing: React.FC = () => {
         setSearchParams(params);
       },
       () => {},
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // run once
@@ -187,7 +202,7 @@ const PropertyListing: React.FC = () => {
         if (filters.available_immediately)
           qs.set(
             "available_immediately",
-            String(filters.available_immediately)
+            String(filters.available_immediately),
           );
 
         // Price
@@ -245,13 +260,13 @@ const PropertyListing: React.FC = () => {
           mapped.sort(
             (a, b) =>
               new Date(b.listedDate).getTime() -
-              new Date(a.listedDate).getTime()
+              new Date(a.listedDate).getTime(),
           );
         } else if (sortBy === "oldest") {
           mapped.sort(
             (a, b) =>
               new Date(a.listedDate).getTime() -
-              new Date(b.listedDate).getTime()
+              new Date(b.listedDate).getTime(),
           );
         } else if (sortBy === "priceLowToHigh") {
           mapped.sort((a, b) => a.price - b.price);
@@ -334,27 +349,28 @@ const PropertyListing: React.FC = () => {
   const nearbyMode = filters.lat != null && filters.lng != null;
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-6 flex items-center gap-2">
+    <div className="min-h-screen bg-white">
+      <PropertiesSearch />
+      <div className="mx-auto max-w-7xl px-4 py-8">
+        {/* <div className="mb-6 flex items-center gap-2">
           <button
             type="button"
             aria-label="Go back"
             onClick={() => navigate(-1)}
-            className="inline-flex h-9 w-9 -ml-1 items-center justify-center bg-transparent text-gray-800 hover:text-gray-900 active:scale-95 cursor-pointer"
+            className="-ml-1 inline-flex h-9 w-9 cursor-pointer items-center justify-center bg-transparent text-gray-800 hover:text-gray-900 active:scale-95"
             title="Back"
           >
-            <span className="text-2xl md:text-3xl font-extrabold leading-none">
-              <img src="less_than_icon.png" alt="Back-Icon" />
+            <span className="text-2xl font-extrabold leading-none md:text-3xl">
+              <img src="/images/random/less_than_icon.png" alt="Back-Icon" />
             </span>
           </button>
 
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-gray-900 md:text-3xl">
             {nearbyMode ? "Properties near you" : "Property Listings"}
           </h1>
-        </div>
+        </div> */}
 
-        <div className="flex flex-col md:flex-row gap-6">
+        <div className="flex flex-col gap-6 md:flex-row">
           {/* Filters sidebar */}
           <div className="md:w-1/4">
             <PropertyFilters
@@ -366,28 +382,37 @@ const PropertyListing: React.FC = () => {
           {/* Main content */}
           <div className="md:w-3/4">
             {/* Sort and view controls */}
-            <div className="bg-white p-4 rounded-lg shadow-sm mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <div className="flex items-center">
-                <span className="text-gray-700 mr-2">Sort by:</span>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
-                >
-                  <option value="newest">Newest First</option>
-                  <option value="oldest">Oldest First</option>
-                  <option value="priceLowToHigh">Price: Low to High</option>
-                  <option value="priceHighToLow">Price: High to Low</option>
-                </select>
+            <div className="mb-4 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-muted-foreground">
+                  Sort by:
+                </span>
+
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="w-[180px] rounded-xl">
+                    <SelectValue placeholder="Sort by" />
+                  </SelectTrigger>
+
+                  <SelectContent className="rounded-xl bg-white/80">
+                    <SelectItem value="newest">Newest First</SelectItem>
+                    <SelectItem value="oldest">Oldest First</SelectItem>
+                    <SelectItem value="priceLowToHigh">
+                      Price: Low to High
+                    </SelectItem>
+                    <SelectItem value="priceHighToLow">
+                      Price: High to Low
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
-              <div className="flex items-center space-x-2">
+              {/* <div className="flex items-center space-x-2">
                 <span className="text-gray-700">View:</span>
                 <button
                   onClick={() => setViewMode("grid")}
-                  className={`p-2 rounded-md ${
+                  className={`rounded-md p-2 ${
                     viewMode === "grid"
-                      ? "bg-[#CCF0E1FF] text-[#2AB09C]"
+                      ? "bg-[#CCF0E1FF] text-[#35B1C6]"
                       : "text-gray-500 hover:bg-gray-100"
                   }`}
                 >
@@ -395,19 +420,19 @@ const PropertyListing: React.FC = () => {
                 </button>
                 <button
                   onClick={() => setViewMode("list")}
-                  className={`p-2 rounded-md ${
+                  className={`rounded-md p-2 ${
                     viewMode === "list"
-                      ? "bg-[#CCF0E1FF] text-[#2AB09C]"
+                      ? "bg-[#CCF0E1FF] text-[#35B1C6]"
                       : "text-gray-500 hover:bg-gray-100"
                   }`}
                 >
                   <ListIcon className="h-5 w-5" />
                 </button>
-              </div>
+              </div> */}
             </div>
 
             {/* Results count */}
-            <p className="text-gray-600 mb-6">
+            <p className="mb-6 text-gray-600">
               {loading
                 ? "Loading…"
                 : `${total} ${total === 1 ? "property" : "properties"} found`}
@@ -416,7 +441,7 @@ const PropertyListing: React.FC = () => {
 
             {/* Error state */}
             {error && (
-              <div className="bg-red-50 text-red-700 p-4 rounded mb-6">
+              <div className="mb-6 rounded bg-red-50 p-4 text-red-700">
                 {error}
               </div>
             )}
@@ -426,14 +451,14 @@ const PropertyListing: React.FC = () => {
               <div
                 className={
                   viewMode === "grid"
-                    ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+                    ? "grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
                     : "space-y-6"
                 }
               >
                 {Array.from({ length: 6 }).map((_, i) => (
                   <div
                     key={i}
-                    className="bg-white rounded-lg shadow-sm animate-pulse h-64"
+                    className="h-64 animate-pulse rounded-lg bg-white shadow-sm"
                   />
                 ))}
               </div>
@@ -441,8 +466,8 @@ const PropertyListing: React.FC = () => {
 
             {/* Empty state */}
             {!loading && properties.length === 0 && (
-              <div className="bg-white rounded-lg shadow-sm p-8 text-center">
-                <h3 className="text-xl font-semibold text-gray-700 mb-2">
+              <div className="rounded-lg bg-white p-8 text-center shadow-sm">
+                <h3 className="mb-2 text-xl font-semibold text-gray-700">
                   No properties found
                 </h3>
                 <p className="text-gray-600">
@@ -455,7 +480,7 @@ const PropertyListing: React.FC = () => {
             {!loading &&
               properties.length > 0 &&
               (viewMode === "grid" ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {properties.map((property) => (
                     <PropertyCard key={property.id} property={property} />
                   ))}
@@ -465,33 +490,33 @@ const PropertyListing: React.FC = () => {
                   {properties.map((property) => (
                     <div
                       key={property.id}
-                      className="bg-white rounded-lg shadow-sm overflow-hidden flex flex-col sm:flex-row"
+                      className="flex flex-col overflow-hidden rounded-lg bg-white shadow-sm sm:flex-row"
                     >
-                      <div className="sm:w-1/3 h-48 sm:h-auto">
+                      <div className="h-48 sm:h-auto sm:w-1/3">
                         <img
                           src={
                             property.images?.[0] ||
                             "https://via.placeholder.com/600x400?text=No+Image"
                           }
                           alt={property.title}
-                          className="w-full h-full object-cover"
+                          className="h-full w-full object-cover"
                         />
                       </div>
-                      <div className="p-4 sm:p-6 flex-1">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      <div className="flex-1 p-4 sm:p-6">
+                        <h3 className="mb-2 text-lg font-semibold text-gray-900">
                           {property.title}
                         </h3>
-                        <p className="text-gray-600 mb-2">
+                        <p className="mb-2 text-gray-600">
                           {property.location}
                         </p>
-                        <p className="text-[#2AB09C] font-bold text-lg mb-2">
+                        <p className="mb-2 text-lg font-bold text-[#35B1C6]">
                           ₹{property.price.toLocaleString()}
                           {property.for === "rent" ? "/month" : ""}
                         </p>
                         <div className="flex flex-wrap gap-4 text-sm text-gray-600">
                           {property.bedrooms && (
                             <div className="flex items-center">
-                              <BedIcon className="h-4 w-4 mr-1" />
+                              <BedIcon className="mr-1 h-4 w-4" />
                               <span>
                                 {property.bedrooms}{" "}
                                 {property.bedrooms === 1 ? "Bed" : "Beds"}
@@ -500,7 +525,7 @@ const PropertyListing: React.FC = () => {
                           )}
                           {property.bathrooms && (
                             <div className="flex items-center">
-                              <BathIcon className="h-4 w-4 mr-1" />
+                              <BathIcon className="mr-1 h-4 w-4" />
                               <span>
                                 {property.bathrooms}{" "}
                                 {property.bathrooms === 1 ? "Bath" : "Baths"}
@@ -509,7 +534,7 @@ const PropertyListing: React.FC = () => {
                           )}
                           {property.area && (
                             <div className="flex items-center">
-                              <SquareIcon className="h-4 w-4 mr-1" />
+                              <SquareIcon className="mr-1 h-4 w-4" />
                               <span>{property.area} sq.ft</span>
                             </div>
                           )}
@@ -522,11 +547,11 @@ const PropertyListing: React.FC = () => {
 
             {/* Simple pagination */}
             {!loading && lastPage > 1 && (
-              <div className="flex justify-center items-center gap-3 mt-8">
+              <div className="mt-8 flex items-center justify-center gap-3">
                 <button
                   disabled={page <= 1}
                   onClick={() => setPage(page - 1)}
-                  className="px-3 py-1 border rounded disabled:opacity-50"
+                  className="rounded border px-3 py-1 disabled:opacity-50"
                 >
                   Prev
                 </button>
@@ -536,7 +561,7 @@ const PropertyListing: React.FC = () => {
                 <button
                   disabled={page >= lastPage}
                   onClick={() => setPage(page + 1)}
-                  className="px-3 py-1 border rounded disabled:opacity-50"
+                  className="rounded border px-3 py-1 disabled:opacity-50"
                 >
                   Next
                 </button>
@@ -545,67 +570,9 @@ const PropertyListing: React.FC = () => {
           </div>
         </div>
       </div>
+      <CTASection />
     </div>
   );
 };
-
-// Icons for the list view
-const BedIcon = ({ className }: { className?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M2 4v16"></path>
-    <path d="M2 8h18a2 2 0 0 1 2 2v10"></path>
-    <path d="M2 17h20"></path>
-    <path d="M6 8v9"></path>
-  </svg>
-);
-
-const BathIcon = ({ className }: { className?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"></path>
-    <line x1="10" x2="8" y1="5" y2="7"></line>
-    <line x1="2" x2="22" y1="12" y2="12"></line>
-    <line x1="7" x2="7" y1="19" y2="21"></line>
-    <line x1="17" x2="17" y1="19" y2="21"></line>
-  </svg>
-);
-
-const SquareIcon = ({ className }: { className?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
-  </svg>
-);
 
 export default PropertyListing;

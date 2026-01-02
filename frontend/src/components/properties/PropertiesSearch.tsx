@@ -1,100 +1,22 @@
-import React, { useEffect, useLayoutEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import SearchBar from "./SearchBar";
 import { normalizeName } from "../../utils/location";
 import { Loader } from "@googlemaps/js-api-loader";
+import SearchBar from "../home/SearchBar";
+import {
+  PhoneCallIcon,
+  SmartphoneChargingIcon,
+  SmartphoneIcon,
+} from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
-type HeroSectionProps = {
+type PropertiesSearchProps = {
   onLocationReady?: (coords: { lat: number; lng: number } | null) => void;
 };
 
-function WordCycler({
-  words,
-  interval = 1500,
-  className = "",
-}: {
-  words: string[];
-  interval?: number;
-  className?: string;
-}) {
-  const [idx, setIdx] = useState(0);
-  const [boxW, setBoxW] = useState<number | null>(null);
-  const [boxH, setBoxH] = useState<number | null>(null);
-  const containerRef = useRef<HTMLSpanElement | null>(null);
-  const sizerRef = useRef<HTMLSpanElement | null>(null);
-
-  useEffect(() => {
-    const id = setInterval(
-      () => setIdx((i) => (i + 1) % words.length),
-      interval,
-    );
-    return () => clearInterval(id);
-  }, [interval, words.length]);
-
-  const longest = React.useMemo(
-    () =>
-      words.reduce(
-        (a, b) => (String(b).length > String(a).length ? b : a),
-        words[0] || "Home",
-      ),
-    [words],
-  );
-
-  const measure = () => {
-    const el = sizerRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    if (rect.width) setBoxW(Math.ceil(rect.width));
-    if (rect.height) setBoxH(Math.ceil(rect.height));
-  };
-
-  useLayoutEffect(() => {
-    measure();
-    const ro = new ResizeObserver(measure);
-    if (containerRef.current) ro.observe(containerRef.current);
-    window.addEventListener("resize", measure);
-    return () => {
-      ro.disconnect();
-      window.removeEventListener("resize", measure);
-    };
-  }, [longest]);
-
-  return (
-    <span
-      ref={containerRef}
-      className={[
-        "relative inline-block overflow-hidden align-baseline",
-        "mx-auto block lg:mx-0 lg:block",
-        className,
-      ].join(" ")}
-      style={{ width: boxW ?? undefined, height: boxH ?? undefined }}
-    >
-      <AnimatePresence mode="wait">
-        <motion.span
-          key={idx}
-          initial={{ y: "0.6em", opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: "-0.6em", opacity: 0 }}
-          transition={{ duration: 0.25, ease: "easeOut" }}
-          className="absolute inset-0 flex items-center justify-center lg:justify-start"
-        >
-          <span className="whitespace-nowrap">{words[idx]}</span>
-        </motion.span>
-      </AnimatePresence>
-      <span
-        ref={sizerRef}
-        aria-hidden
-        className="pointer-events-none invisible absolute whitespace-nowrap"
-        style={{ left: 0, top: 0 }}
-      >
-        {longest}
-      </span>
-    </span>
-  );
-}
-
-const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
+const PropertiesSearch: React.FC<PropertiesSearchProps> = ({
+  onLocationReady,
+}) => {
   const navigate = useNavigate();
 
   const [locText, setLocText] = useState<string>("Locating…");
@@ -442,190 +364,61 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
   }, []);
 
   return (
-    <div className="bg-gray-50">
-      {/* Section */}
-      <section className="pb-12 pt-12 sm:pb-16 lg:pt-8">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-y-12 lg:grid-cols-12 lg:items-center lg:gap-x-16">
-            {/* Left */}
-            <div className="relative z-10 mx-auto max-w-2xl lg:col-span-7 lg:mx-0">
-              <div className="text-center lg:text-left">
-                <h1 className="text-4xl font-bold leading-tight text-gray-900 sm:text-5xl lg:text-6xl">
-                  ~<span className="block">Find Your Perfect</span>
-                  <span className="mt-1 block text-[#2AB09C] lg:ml-0 lg:mt-1 lg:block">
-                    <WordCycler
-                      words={["Home", "Flat", "PG"]}
-                      interval={1500}
-                    />
-                  </span>
-                </h1>
-                <p className="mt-3 text-lg text-gray-600 sm:mt-6">
-                  Discover your perfect living space from thousands of verified
-                  PGs, rental flats, and independent homes.
-                </p>
+    <section className="relative h-[550px] w-full overflow-hidden rounded-3xl px-5 sm:mx-auto sm:h-[60vh] sm:max-w-6xl">
+      {/* Background image */}
+      <div
+        className="absolute inset-4 rounded-3xl bg-cover bg-center sm:inset-0"
+        style={{
+          backgroundImage: "url('/images/property/Hero.png')",
+        }}
+      />
+      {/* Overlay */}
+      <div className="absolute inset-4 rounded-3xl bg-black/20 sm:inset-0" />
 
-                <div className="mt-8 sm:mt-10">
-                  <div className="relative z-40 overflow-visible bg-white p-2 sm:rounded-xl sm:border sm:border-gray-300">
-                    <div className="min-w-0">
-                      <SearchBar
-                        onSearch={handleSearch}
-                        initialLocation={initialLoc}
-                        initialCoords={coords}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
+      {/* Content */}
+      <div className="relative top-[30%] z-10 mx-auto flex max-w-7xl -translate-y-1/2 flex-col items-center justify-center px-4 text-center sm:top-[50%] sm:px-6 lg:px-8">
+        <h1 className="text-4xl font-semibold text-white sm:text-5xl lg:text-6xl">
+          We&apos;re Here For You
+        </h1>
+
+        <p className="max-w-2xl text-base leading-tight tracking-tight text-white/90 sm:text-lg">
+          We&apos;d love to have a chat with you to see how we can help you and
+          your plans.
+        </p>
+
+        <Popover>
+          <PopoverTrigger>
+            <p className="mt-4 inline-flex items-center gap-2 rounded-xl bg-[#E3E7F1] px-4 py-3 text-sm font-semibold text-black">
+              <PhoneCallIcon className="text-[#35B1C6]" size={18} />
+              Book a call now
+            </p>
+          </PopoverTrigger>
+          <PopoverContent className="max-w-[240px] overflow-hidden rounded-xl text-sm font-medium">
+            <div className="bg-white p-3">
+              <p>
+                Hello There! Feel free to react out to us regarding any query.
+              </p>
+              <p className="mt-3 flex items-center justify-between rounded-[10px] bg-[#E4E9F2] p-2">
+                Call our front desk
+                <SmartphoneIcon className="text-[#35B1C6]" size={15} />
+              </p>
             </div>
+          </PopoverContent>
+        </Popover>
+
+        {/* Floating search bar */}
+        <div className="absolute -bottom-[150%] w-full px-4 sm:px-6 md:-bottom-[70%] lg:px-8">
+          <div className="mx-auto max-w-5xl rounded-2xl bg-white shadow-xl md:rounded-full">
+            <SearchBar
+              onSearch={handleSearch}
+              initialLocation={initialLoc}
+              initialCoords={coords}
+            />
           </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 };
 
-export default HeroSection;
-
-// function collapseParts(...raw: (string | undefined)[]) {
-//   const out: string[] = [];
-//   const seen = new Set<string>();
-//   for (const part of raw) {
-//     const t = (part || "").trim();
-//     if (!t) continue;
-//     const key = t.toLowerCase();
-//     if (seen.has(key)) continue;
-//     seen.add(key);
-//     out.push(t);
-//   }
-//   return out.join(", ");
-// }
-
-// const getCityFromComponents = (comps: any[]) => {
-//   const get = (type: string) =>
-//     comps.find((c: any) => c.types?.includes(type))?.long_name || "";
-//   const cityRaw =
-//     get("locality") ||
-//     get("administrative_area_level_2") ||
-//     get("administrative_area_level_1") ||
-//     "";
-//   return normalizeName(cityRaw);
-// };
-
-// Prefer a major city (locality), sanitize suffixes like "District"
-
-// Extract the area (sublocality/neighborhood) for guard checks
-// const extractAreaFromGoogle = (comps: any[]) => {
-//   const get = (t: string) =>
-//     comps.find((c: any) => (c.types || []).includes(t))?.long_name || "";
-//   const area =
-//     get("sublocality") ||
-//     get("sublocality_level_1") ||
-//     get("neighborhood") ||
-//     "";
-//   return normalizeName(area);
-// };
-
-// const extractMajorCityFromGoogle = (comps: any[]) => {
-//   const get = (t: string) =>
-//     comps.find((c: any) => c.types?.includes(t))?.long_name || "";
-//   // Prefer city (locality), else district (admin_area_level_2), else state
-//   const city =
-//     get("locality") ||
-//     get("administrative_area_level_2") ||
-//     get("administrative_area_level_1") ||
-//     "";
-//   return sanitizeCity(city);
-// };
-
-// const extractMajorCityFromGoogleAnyComponent = (results: any[]) => {
-//   const prefer = (type: string) => {
-//     for (const r of results) {
-//       const comp = (r.address_components || []).find((c: any) =>
-//         (c.types || []).includes(type)
-//       );
-//       if (comp?.long_name) return sanitizeCity(comp.long_name);
-//     }
-//     return "";
-//   };
-//   return (
-//     prefer("locality") ||
-//     prefer("administrative_area_level_2") ||
-//     prefer("administrative_area_level_1")
-//   );
-// };
-
-// Prefer district over locality for Indian addresses (more stable city proxy), then fallback
-// const extractCityPreferAdmin2 = (results: any[]) => {
-//   const fromAny = (type: string) => {
-//     for (const r of results) {
-//       for (const c of r.address_components || []) {
-//         if ((c.types || []).includes(type) && c.long_name) {
-//           return sanitizeCity(c.long_name);
-//         }
-//       }
-//     }
-//     return "";
-//   };
-
-//   // Order: District -> City -> State
-//   return (
-//     fromAny("administrative_area_level_2") ||
-//     fromAny("locality") ||
-//     fromAny("administrative_area_level_1")
-//   );
-// };
-
-// const extractMajorCityFromGoogleResults = (results: any[]) => {
-//   // Prefer the result whose types include 'locality', then district, then state
-//   const pick = (type: string) =>
-//     results.find((r: any) => (r.types || []).includes(type));
-//   const candidate =
-//     pick("locality") ||
-//     pick("administrative_area_level_2") ||
-//     pick("administrative_area_level_1");
-
-//   return candidate
-//     ? extractMajorCityFromGoogle(candidate.address_components || [])
-//     : "";
-// };
-
-// Optional: Count-up (unchanged)
-// function CountUp({
-//   end,
-//   duration = 1200,
-//   suffix = "",
-//   locale = "en-IN",
-//   className = "",
-// }: {
-//   end: number;
-//   duration?: number;
-//   suffix?: string;
-//   locale?: string;
-//   className?: string;
-// }) {
-//   const ref = useRef<HTMLSpanElement | null>(null);
-//   const inView = useInView(ref, { once: true, margin: "-20% 0px" });
-//   const [val, setVal] = useState(0);
-//   useEffect(() => {
-//     if (!inView) return;
-//     let start: number | undefined;
-//     let rAF = 0;
-//     const from = 0,
-//       to = end;
-//     const step = (ts: number) => {
-//       if (start === undefined) start = ts;
-//       const p = Math.min((ts - start) / duration, 1);
-//       const eased = 1 - Math.pow(1 - p, 3);
-//       setVal(Math.round(from + (to - from) * eased));
-//       if (p < 1) rAF = requestAnimationFrame(step);
-//     };
-//     rAF = requestAnimationFrame(step);
-//     return () => cancelAnimationFrame(rAF);
-//   }, [inView, end, duration]);
-//   return (
-//     <span ref={ref} className={className}>
-//       {val.toLocaleString(locale)}
-//       {suffix}
-//     </span>
-//   );
-// }
+export default PropertiesSearch;
