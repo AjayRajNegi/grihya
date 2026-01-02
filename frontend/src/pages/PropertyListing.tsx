@@ -5,6 +5,7 @@ import PropertyCard from "../components/properties/PropertyCard";
 import PropertyFilters from "../components/properties/PropertyFilters";
 import type { Property } from "../data/mockData"; // type-only import
 import HeroSection from "@/components/home/HeroSection";
+import PropertiesSearch from "@/components/properties/PropertiesSearch";
 
 const API_URL =
   import.meta.env.VITE_API_URL ||
@@ -336,7 +337,7 @@ const PropertyListing: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <HeroSection />
+      <PropertiesSearch />
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-6 flex items-center gap-2">
           <button
