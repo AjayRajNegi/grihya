@@ -3,11 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { normalizeName } from "../../utils/location";
 import { Loader } from "@googlemaps/js-api-loader";
 import SearchBar from "../home/SearchBar";
-import {
-  PhoneCallIcon,
-  SmartphoneChargingIcon,
-  SmartphoneIcon,
-} from "lucide-react";
+import { PhoneCallIcon, SmartphoneIcon } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 type PropertiesSearchProps = {
