@@ -37,7 +37,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-white">
       <motion.div
-        className="mx-auto max-w-6xl px-6 pb-6 pt-16"
+        className="mx-auto max-w-6xl px-6 pb-6 pt-10"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
