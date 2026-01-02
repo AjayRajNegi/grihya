@@ -1,31 +1,14 @@
 import React, { useEffect, useLayoutEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence, useInView } from "framer-motion";
-import { MapPin, CheckCircle2, Menu } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import SearchBar from "./SearchBar";
 import { normalizeName } from "../../utils/location";
 import { Loader } from "@googlemaps/js-api-loader";
-import { Navbar } from "../layout/Navbar";
 
 type HeroSectionProps = {
   onLocationReady?: (coords: { lat: number; lng: number } | null) => void;
 };
 
-// function collapseParts(...raw: (string | undefined)[]) {
-//   const out: string[] = [];
-//   const seen = new Set<string>();
-//   for (const part of raw) {
-//     const t = (part || "").trim();
-//     if (!t) continue;
-//     const key = t.toLowerCase();
-//     if (seen.has(key)) continue;
-//     seen.add(key);
-//     out.push(t);
-//   }
-//   return out.join(", ");
-// }
-
-// Reflow-proof word cycler (unchanged)
 function WordCycler({
   words,
   interval = 1500,
@@ -44,7 +27,7 @@ function WordCycler({
   useEffect(() => {
     const id = setInterval(
       () => setIdx((i) => (i + 1) % words.length),
-      interval
+      interval,
     );
     return () => clearInterval(id);
   }, [interval, words.length]);
@@ -53,9 +36,9 @@ function WordCycler({
     () =>
       words.reduce(
         (a, b) => (String(b).length > String(a).length ? b : a),
-        words[0] || "Home"
+        words[0] || "Home",
       ),
-    [words]
+    [words],
   );
 
   const measure = () => {
@@ -81,8 +64,8 @@ function WordCycler({
     <span
       ref={containerRef}
       className={[
-        "relative inline-block align-baseline overflow-hidden",
-        "block mx-auto lg:block lg:mx-0",
+        "relative inline-block overflow-hidden align-baseline",
+        "mx-auto block lg:mx-0 lg:block",
         className,
       ].join(" ")}
       style={{ width: boxW ?? undefined, height: boxH ?? undefined }}
@@ -102,52 +85,11 @@ function WordCycler({
       <span
         ref={sizerRef}
         aria-hidden
-        className="absolute invisible pointer-events-none whitespace-nowrap"
+        className="pointer-events-none invisible absolute whitespace-nowrap"
         style={{ left: 0, top: 0 }}
       >
         {longest}
       </span>
-    </span>
-  );
-}
-
-// Optional: Count-up (unchanged)
-function CountUp({
-  end,
-  duration = 1200,
-  suffix = "",
-  locale = "en-IN",
-  className = "",
-}: {
-  end: number;
-  duration?: number;
-  suffix?: string;
-  locale?: string;
-  className?: string;
-}) {
-  const ref = useRef<HTMLSpanElement | null>(null);
-  const inView = useInView(ref, { once: true, margin: "-20% 0px" });
-  const [val, setVal] = useState(0);
-  useEffect(() => {
-    if (!inView) return;
-    let start: number | undefined;
-    let rAF = 0;
-    const from = 0,
-      to = end;
-    const step = (ts: number) => {
-      if (start === undefined) start = ts;
-      const p = Math.min((ts - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setVal(Math.round(from + (to - from) * eased));
-      if (p < 1) rAF = requestAnimationFrame(step);
-    };
-    rAF = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(rAF);
-  }, [inView, end, duration]);
-  return (
-    <span ref={ref} className={className}>
-      {val.toLocaleString(locale)}
-      {suffix}
     </span>
   );
 }
@@ -158,13 +100,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
   const [locText, setLocText] = useState<string>("Locating…");
   const [initialLoc, setInitialLoc] = useState<string>("");
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(
-    null
+    null,
   );
   const [locLoading, setLocLoading] = useState<boolean>(true);
   const [locError, setLocError] = useState<string | null>(null);
 
-  // NEW: control SubHeader mobile accordion
-  const [subheaderMobileOpen, setSubheaderMobileOpen] = useState(false);
   const [currentCity, setCurrentCity] = useState<string>("");
 
   const handleSearch = (searchParams: any) => {
@@ -211,43 +151,17 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
       "Your location"
     );
   };
-
-  const getCityFromComponents = (comps: any[]) => {
-    const get = (type: string) =>
-      comps.find((c: any) => c.types?.includes(type))?.long_name || "";
-    const cityRaw =
-      get("locality") ||
-      get("administrative_area_level_2") ||
-      get("administrative_area_level_1") ||
-      "";
-    return normalizeName(cityRaw);
-  };
-
-  // Prefer a major city (locality), sanitize suffixes like "District"
-
   const sanitizeCity = (name: string) =>
     normalizeName(
       String(name || "")
         .replace(
           /\s*(district|sub[\s-]?district|tehsil|tahsil|taluk|taluka|mandal|block|sub[\s-]?division)$/i,
-          ""
+          "",
         )
         .replace(/\s*division$/i, "")
         .replace(/\s*metropolitan\s*(region|area)$/i, "")
-        .trim()
+        .trim(),
     );
-
-  // Extract the area (sublocality/neighborhood) for guard checks
-  // const extractAreaFromGoogle = (comps: any[]) => {
-  //   const get = (t: string) =>
-  //     comps.find((c: any) => (c.types || []).includes(t))?.long_name || "";
-  //   const area =
-  //     get("sublocality") ||
-  //     get("sublocality_level_1") ||
-  //     get("neighborhood") ||
-  //     "";
-  //   return normalizeName(area);
-  // };
 
   // Collect all sublocality/neighborhood names from all Google results
   const collectAreasFromResults = (results: any[]) => {
@@ -272,72 +186,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
     return set;
   };
 
-  const extractMajorCityFromGoogle = (comps: any[]) => {
-    const get = (t: string) =>
-      comps.find((c: any) => c.types?.includes(t))?.long_name || "";
-    // Prefer city (locality), else district (admin_area_level_2), else state
-    const city =
-      get("locality") ||
-      get("administrative_area_level_2") ||
-      get("administrative_area_level_1") ||
-      "";
-    return sanitizeCity(city);
-  };
-
-  // const extractMajorCityFromGoogleAnyComponent = (results: any[]) => {
-  //   const prefer = (type: string) => {
-  //     for (const r of results) {
-  //       const comp = (r.address_components || []).find((c: any) =>
-  //         (c.types || []).includes(type)
-  //       );
-  //       if (comp?.long_name) return sanitizeCity(comp.long_name);
-  //     }
-  //     return "";
-  //   };
-  //   return (
-  //     prefer("locality") ||
-  //     prefer("administrative_area_level_2") ||
-  //     prefer("administrative_area_level_1")
-  //   );
-  // };
-
-  // Prefer district over locality for Indian addresses (more stable city proxy), then fallback
-  // const extractCityPreferAdmin2 = (results: any[]) => {
-  //   const fromAny = (type: string) => {
-  //     for (const r of results) {
-  //       for (const c of r.address_components || []) {
-  //         if ((c.types || []).includes(type) && c.long_name) {
-  //           return sanitizeCity(c.long_name);
-  //         }
-  //       }
-  //     }
-  //     return "";
-  //   };
-
-  //   // Order: District -> City -> State
-  //   return (
-  //     fromAny("administrative_area_level_2") ||
-  //     fromAny("locality") ||
-  //     fromAny("administrative_area_level_1")
-  //   );
-  // };
-
-  // const extractMajorCityFromGoogleResults = (results: any[]) => {
-  //   // Prefer the result whose types include 'locality', then district, then state
-  //   const pick = (type: string) =>
-  //     results.find((r: any) => (r.types || []).includes(type));
-  //   const candidate =
-  //     pick("locality") ||
-  //     pick("administrative_area_level_2") ||
-  //     pick("administrative_area_level_1");
-
-  //   return candidate
-  //     ? extractMajorCityFromGoogle(candidate.address_components || [])
-  //     : "";
-  // };
-
   const extractMajorCityFromNominatim = (addr: any) => {
-    // Prefer city/town; fallback to state_district/county/state
     const city =
       addr.city ||
       addr.town ||
@@ -348,16 +197,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
     return sanitizeCity(city);
   };
 
-  // Names we don't want to show as "city" (common divisions in India)
   const isBadCityName = (name: string) => {
     const n = (name || "").trim().toLowerCase();
     return n === "garhwal" || n === "kumaon" || /division$/i.test(name);
   };
 
-  // Fallback: fetch city/town from OpenStreetMap (Nominatim) even when Google is used
   const fetchNominatimCity = async (
     lat: number,
-    lng: number
+    lng: number,
   ): Promise<string> => {
     try {
       const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&zoom=12&accept-language=en-IN&addressdetails=1`;
@@ -373,20 +220,17 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
     }
   };
 
-  // Looks like a neighborhood/area, not a city
   const looksLikeArea = (name: string) => {
     const n = (name || "").toLowerCase();
     return (
       /(?:\broad\b|\brd\b|\bmarg\b|\bchowk\b|\bmarket\b|\bbazar\b|\bsector\b|\bphase\b|\bcolony\b|\bnagar\b|\benclave\b|\bvihar\b|\blayout\b|\bextension\b|\bext\b)/i.test(
-        n
+        n,
       ) || /wala$/i.test(n)
     );
   };
 
-  // Pick best city from Google results (India-optimized)
   const pickCityIndian = (results: any[]) => {
-    // Collect all sublocality/neighborhood names across results
-    const areaSet = collectAreasFromResults(results); // you already have this helper
+    const areaSet = collectAreasFromResults(results);
 
     // Gather candidates with a rank (lower is better)
     type Cand = { val: string; rank: number; count: number };
@@ -396,10 +240,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
       const v = sanitizeCity(val);
       if (!v) return;
       const key = v.toLowerCase();
-      // Don't accept names that look like areas or clearly divisional names
       if (areaSet.has(key)) return;
       if (looksLikeArea(v)) return;
-      if (isBadCityName(v)) return; // you already have this helper (filters Garhwal/Kumaon)
+      if (isBadCityName(v)) return;
       const prev = map.get(key);
       if (!prev) map.set(key, { val: v, rank, count: 1 });
       else {
@@ -424,7 +267,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
 
     if (map.size === 0) return "";
 
-    // Choose the best: lowest rank, then highest count
     let best: Cand | null = null;
     for (const cand of map.values()) {
       if (!best) best = cand;
@@ -473,7 +315,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
               if (status === "OK" && results && results.length) {
                 const best = pickBestGeocodeResult(results) || results[0];
                 const label = buildLabelFromComponents(
-                  best.address_components || []
+                  best.address_components || [],
                 );
                 setLocText(label);
                 setInitialLoc(label);
@@ -510,7 +352,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
               addr.village ||
               addr.county ||
               addr.state ||
-              ""
+              "",
           );
           const area = normalizeName(
             addr.road ||
@@ -518,7 +360,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
               addr.neighbourhood ||
               addr.city_district ||
               addr.borough ||
-              ""
+              "",
           );
           const label =
             [area, city].filter(Boolean).join(", ") || city || "Your location";
@@ -527,8 +369,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
 
           const major = extractMajorCityFromNominatim(addr);
           if (major) setCurrentCity(major);
-          // NEW: set current city
-          // if (city) setCurrentCity(city);
         }
       } catch {
         setLocText("Location set");
@@ -539,7 +379,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
       navigator.geolocation.getCurrentPosition(
         (pos) => resolve(pos),
         () => resolve(null),
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
       );
     });
 
@@ -576,7 +416,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
               }
             },
             () => finish(),
-            { enableHighAccuracy: true, maximumAge: 0, timeout: 4000 }
+            { enableHighAccuracy: true, maximumAge: 0, timeout: 4000 },
           );
           setTimeout(finish, 2000);
         } catch {
@@ -601,27 +441,18 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const houseImg = "/life.jpg";
-
-  const stats = [
-    { value: 1000, label: "PG Accommodations" },
-    { value: 2500, label: "Apartments & Flats" },
-    { value: 1200, label: "Independent Houses" },
-    { value: 5000, label: "Happy Customers" },
-  ];
-
   return (
     <div className="bg-gray-50">
       {/* Section */}
-      <section className="pt-12 pb-12 sm:pb-16 lg:pt-8">
-        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 lg:items-center gap-y-12 lg:gap-x-16">
+      <section className="pb-12 pt-12 sm:pb-16 lg:pt-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 gap-y-12 lg:grid-cols-12 lg:items-center lg:gap-x-16">
             {/* Left */}
-            <div className="lg:col-span-7 relative z-10 max-w-2xl mx-auto lg:mx-0">
+            <div className="relative z-10 mx-auto max-w-2xl lg:col-span-7 lg:mx-0">
               <div className="text-center lg:text-left">
                 <h1 className="text-4xl font-bold leading-tight text-gray-900 sm:text-5xl lg:text-6xl">
                   ~<span className="block">Find Your Perfect</span>
-                  <span className="block mt-1 text-[#2AB09C] lg:block lg:mt-1 lg:ml-0">
+                  <span className="mt-1 block text-[#2AB09C] lg:ml-0 lg:mt-1 lg:block">
                     <WordCycler
                       words={["Home", "Flat", "PG"]}
                       interval={1500}
@@ -634,7 +465,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
                 </p>
 
                 <div className="mt-8 sm:mt-10">
-                  <div className="relative z-40 p-2 sm:border sm:border-gray-300 sm:rounded-xl bg-white overflow-visible">
+                  <div className="relative z-40 overflow-visible bg-white p-2 sm:rounded-xl sm:border sm:border-gray-300">
                     <div className="min-w-0">
                       <SearchBar
                         onSearch={handleSearch}
@@ -645,64 +476,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
                   </div>
                 </div>
               </div>
-
-              {/* Stats */}
-              <div className="mt-10">
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center lg:text-left">
-                  {stats.map((s, i) => (
-                    <div
-                      key={i}
-                      className="flex flex-col items-center lg:items-start"
-                    >
-                      <CountUp
-                        end={s.value}
-                        suffix="+"
-                        className="text-3xl font-semibold text-[#2AB09C] sm:text-4xl"
-                      />
-                      <p className="mt-1 text-sm text-gray-700">{s.label}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Right */}
-            <div className="lg:col-span-5 relative flex justify-center lg:justify-end">
-              <div className="w-full max-w-[520px] xl:max-w-[560px]">
-                <img
-                  src="/life.jpg"
-                  alt="Homes and apartments"
-                  className="w-full rounded-3xl shadow-xl ring-1 ring-slate-900/10 object-cover"
-                />
-              </div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.5 }}
-                transition={{ duration: 0.4 }}
-                className="absolute bottom-[2%] right-[2%] w-[min(90%,18rem)] rounded-2xl backdrop-blur-xl bg-white/90 ring-1 ring-slate-200 shadow-xl p-4"
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <h3 className="text-sm font-bold text-slate-900">
-                    Why EasyLease
-                  </h3>
-                </div>
-                <ul className="space-y-1.5 text-sm text-slate-700">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-[#2AB09C]" /> 100%
-                    free - no platform fee
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-[#2AB09C]" />{" "}
-                    Verified, up‑to‑date listings
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-[#2AB09C]" /> Direct
-                    owner/broker contact
-                  </li>
-                </ul>
-              </motion.div>
             </div>
           </div>
         </div>
@@ -712,3 +485,147 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onLocationReady }) => {
 };
 
 export default HeroSection;
+
+// function collapseParts(...raw: (string | undefined)[]) {
+//   const out: string[] = [];
+//   const seen = new Set<string>();
+//   for (const part of raw) {
+//     const t = (part || "").trim();
+//     if (!t) continue;
+//     const key = t.toLowerCase();
+//     if (seen.has(key)) continue;
+//     seen.add(key);
+//     out.push(t);
+//   }
+//   return out.join(", ");
+// }
+
+// const getCityFromComponents = (comps: any[]) => {
+//   const get = (type: string) =>
+//     comps.find((c: any) => c.types?.includes(type))?.long_name || "";
+//   const cityRaw =
+//     get("locality") ||
+//     get("administrative_area_level_2") ||
+//     get("administrative_area_level_1") ||
+//     "";
+//   return normalizeName(cityRaw);
+// };
+
+// Prefer a major city (locality), sanitize suffixes like "District"
+
+// Extract the area (sublocality/neighborhood) for guard checks
+// const extractAreaFromGoogle = (comps: any[]) => {
+//   const get = (t: string) =>
+//     comps.find((c: any) => (c.types || []).includes(t))?.long_name || "";
+//   const area =
+//     get("sublocality") ||
+//     get("sublocality_level_1") ||
+//     get("neighborhood") ||
+//     "";
+//   return normalizeName(area);
+// };
+
+// const extractMajorCityFromGoogle = (comps: any[]) => {
+//   const get = (t: string) =>
+//     comps.find((c: any) => c.types?.includes(t))?.long_name || "";
+//   // Prefer city (locality), else district (admin_area_level_2), else state
+//   const city =
+//     get("locality") ||
+//     get("administrative_area_level_2") ||
+//     get("administrative_area_level_1") ||
+//     "";
+//   return sanitizeCity(city);
+// };
+
+// const extractMajorCityFromGoogleAnyComponent = (results: any[]) => {
+//   const prefer = (type: string) => {
+//     for (const r of results) {
+//       const comp = (r.address_components || []).find((c: any) =>
+//         (c.types || []).includes(type)
+//       );
+//       if (comp?.long_name) return sanitizeCity(comp.long_name);
+//     }
+//     return "";
+//   };
+//   return (
+//     prefer("locality") ||
+//     prefer("administrative_area_level_2") ||
+//     prefer("administrative_area_level_1")
+//   );
+// };
+
+// Prefer district over locality for Indian addresses (more stable city proxy), then fallback
+// const extractCityPreferAdmin2 = (results: any[]) => {
+//   const fromAny = (type: string) => {
+//     for (const r of results) {
+//       for (const c of r.address_components || []) {
+//         if ((c.types || []).includes(type) && c.long_name) {
+//           return sanitizeCity(c.long_name);
+//         }
+//       }
+//     }
+//     return "";
+//   };
+
+//   // Order: District -> City -> State
+//   return (
+//     fromAny("administrative_area_level_2") ||
+//     fromAny("locality") ||
+//     fromAny("administrative_area_level_1")
+//   );
+// };
+
+// const extractMajorCityFromGoogleResults = (results: any[]) => {
+//   // Prefer the result whose types include 'locality', then district, then state
+//   const pick = (type: string) =>
+//     results.find((r: any) => (r.types || []).includes(type));
+//   const candidate =
+//     pick("locality") ||
+//     pick("administrative_area_level_2") ||
+//     pick("administrative_area_level_1");
+
+//   return candidate
+//     ? extractMajorCityFromGoogle(candidate.address_components || [])
+//     : "";
+// };
+
+// Optional: Count-up (unchanged)
+// function CountUp({
+//   end,
+//   duration = 1200,
+//   suffix = "",
+//   locale = "en-IN",
+//   className = "",
+// }: {
+//   end: number;
+//   duration?: number;
+//   suffix?: string;
+//   locale?: string;
+//   className?: string;
+// }) {
+//   const ref = useRef<HTMLSpanElement | null>(null);
+//   const inView = useInView(ref, { once: true, margin: "-20% 0px" });
+//   const [val, setVal] = useState(0);
+//   useEffect(() => {
+//     if (!inView) return;
+//     let start: number | undefined;
+//     let rAF = 0;
+//     const from = 0,
+//       to = end;
+//     const step = (ts: number) => {
+//       if (start === undefined) start = ts;
+//       const p = Math.min((ts - start) / duration, 1);
+//       const eased = 1 - Math.pow(1 - p, 3);
+//       setVal(Math.round(from + (to - from) * eased));
+//       if (p < 1) rAF = requestAnimationFrame(step);
+//     };
+//     rAF = requestAnimationFrame(step);
+//     return () => cancelAnimationFrame(rAF);
+//   }, [inView, end, duration]);
+//   return (
+//     <span ref={ref} className={className}>
+//       {val.toLocaleString(locale)}
+//       {suffix}
+//     </span>
+//   );
+// }
