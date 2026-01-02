@@ -4,8 +4,15 @@ import { ListIcon, GridIcon } from "lucide-react";
 import PropertyCard from "../components/properties/PropertyCard";
 import PropertyFilters from "../components/properties/PropertyFilters";
 import type { Property } from "../data/mockData"; // type-only import
-import HeroSection from "@/components/home/HeroSection";
+
 import PropertiesSearch from "@/components/properties/PropertiesSearch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const API_URL =
   import.meta.env.VITE_API_URL ||
@@ -336,10 +343,10 @@ const PropertyListing: React.FC = () => {
   const nearbyMode = filters.lat != null && filters.lng != null;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <PropertiesSearch />
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="mb-6 flex items-center gap-2">
+      <div className="mx-auto max-w-7xl px-4 pt-8">
+        {/* <div className="mb-6 flex items-center gap-2">
           <button
             type="button"
             aria-label="Go back"
@@ -355,7 +362,7 @@ const PropertyListing: React.FC = () => {
           <h1 className="text-2xl font-bold text-gray-900 md:text-3xl">
             {nearbyMode ? "Properties near you" : "Property Listings"}
           </h1>
-        </div>
+        </div> */}
 
         <div className="flex flex-col gap-6 md:flex-row">
           {/* Filters sidebar */}
@@ -369,28 +376,37 @@ const PropertyListing: React.FC = () => {
           {/* Main content */}
           <div className="md:w-3/4">
             {/* Sort and view controls */}
-            <div className="mb-6 flex flex-col items-start justify-between gap-4 rounded-lg bg-white p-4 shadow-sm sm:flex-row sm:items-center">
-              <div className="flex items-center">
-                <span className="mr-2 text-gray-700">Sort by:</span>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="rounded-md border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500"
-                >
-                  <option value="newest">Newest First</option>
-                  <option value="oldest">Oldest First</option>
-                  <option value="priceLowToHigh">Price: Low to High</option>
-                  <option value="priceHighToLow">Price: High to Low</option>
-                </select>
+            <div className="mb-4 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-muted-foreground">
+                  Sort by:
+                </span>
+
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="w-[180px] rounded-xl">
+                    <SelectValue placeholder="Sort by" />
+                  </SelectTrigger>
+
+                  <SelectContent className="rounded-xl bg-white/80">
+                    <SelectItem value="newest">Newest First</SelectItem>
+                    <SelectItem value="oldest">Oldest First</SelectItem>
+                    <SelectItem value="priceLowToHigh">
+                      Price: Low to High
+                    </SelectItem>
+                    <SelectItem value="priceHighToLow">
+                      Price: High to Low
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
-              <div className="flex items-center space-x-2">
+              {/* <div className="flex items-center space-x-2">
                 <span className="text-gray-700">View:</span>
                 <button
                   onClick={() => setViewMode("grid")}
                   className={`rounded-md p-2 ${
                     viewMode === "grid"
-                      ? "bg-[#CCF0E1FF] text-[#2AB09C]"
+                      ? "bg-[#CCF0E1FF] text-[#35B1C6]"
                       : "text-gray-500 hover:bg-gray-100"
                   }`}
                 >
@@ -400,13 +416,13 @@ const PropertyListing: React.FC = () => {
                   onClick={() => setViewMode("list")}
                   className={`rounded-md p-2 ${
                     viewMode === "list"
-                      ? "bg-[#CCF0E1FF] text-[#2AB09C]"
+                      ? "bg-[#CCF0E1FF] text-[#35B1C6]"
                       : "text-gray-500 hover:bg-gray-100"
                   }`}
                 >
                   <ListIcon className="h-5 w-5" />
                 </button>
-              </div>
+              </div> */}
             </div>
 
             {/* Results count */}
@@ -487,7 +503,7 @@ const PropertyListing: React.FC = () => {
                         <p className="mb-2 text-gray-600">
                           {property.location}
                         </p>
-                        <p className="mb-2 text-lg font-bold text-[#2AB09C]">
+                        <p className="mb-2 text-lg font-bold text-[#35B1C6]">
                           ₹{property.price.toLocaleString()}
                           {property.for === "rent" ? "/month" : ""}
                         </p>

@@ -20,8 +20,8 @@ export const Navbar = () => {
 
   return (
     <nav className="w-full bg-[#FFFFFF]">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-12">
-        <div className="flex h-20 items-center justify-between">
+      <div className="mx-auto max-w-7xl px-4 lg:px-12">
+        <div className="-mb-[14px] flex h-16 items-center justify-between md:-mb-0 md:h-20">
           {/* Logo */}
           <div
             className="flex max-w-32 cursor-pointer items-center gap-2 object-contain"
@@ -31,7 +31,7 @@ export const Navbar = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden items-center gap-8 md:flex">
+          <div className="hidden items-center gap-6 md:flex">
             {navLinks.map((link) => (
               <div
                 key={link.name}
@@ -121,26 +121,26 @@ export const Navbar = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex items-center gap-3 bg-[#ffffff] md:hidden">
+          <div className="flex items-center gap-2 bg-[#ffffff] md:hidden">
             {isAuthenticated ? (
               <>Profile</>
             ) : (
               <button
                 onClick={() => navigate("/account")}
-                className="rounded-full bg-gray-900 px-6 py-3 text-sm text-white transition-colors hover:bg-gray-800"
+                className="rounded-full bg-gray-900 px-4 py-2 text-sm text-white transition-colors hover:bg-gray-800"
               >
                 Sign In
               </button>
             )}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="rounded-full bg-[#2DB8D1] p-2 text-white transition-colors hover:bg-gray-100 hover:text-black"
+              className="rounded-full bg-[#2DB8D1] p-1.5 text-white transition-colors hover:bg-gray-100 hover:text-black"
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? (
-                <X className="h-6 w-6" />
+                <X className="h-5 w-5" />
               ) : (
-                <Menu className="h-6 w-6" />
+                <Menu className="h-5 w-5" />
               )}
             </button>
           </div>

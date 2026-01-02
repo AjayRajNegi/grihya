@@ -10,6 +10,13 @@ import {
 import LocationAutocomplete, {
   PickedPlace,
 } from "../common/LocationAutocomplete";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 interface SearchBarProps {
   onSearch: (searchParams: Record<string, string>) => void;
@@ -160,39 +167,44 @@ const SearchBar: React.FC<SearchBarProps> = ({
       <div className="hidden h-10 w-px bg-gray-200 md:block" />
 
       {/* Rent or Sale */}
-      <div className="relative flex items-center px-4 md:w-[180px]">
-        <HomeIcon className="h-5 w-5 text-slate-400" />
-        <select
-          value={dealType}
-          onChange={(e) => setDealType(e.target.value)}
-          className="ml-3 w-full appearance-none border-0 bg-transparent text-sm text-slate-700 focus:ring-0"
-        >
-          <option value="">Rent or Sale</option>
-          <option value="rent">Rent</option>
-          <option value="sale">Sale</option>
-        </select>
-        <ChevronDownIcon className="absolute right-2 h-4 w-4 text-slate-500" />
+      <div className="flex items-center px-4 md:w-[180px]">
+        <HomeIcon className="mr-3 h-5 w-5 text-slate-400" />
+        <Select value={dealType} onValueChange={setDealType}>
+          <SelectTrigger className="h-auto w-full border-0 bg-red-100 bg-transparent p-0 text-sm text-slate-700 focus:ring-0 focus:ring-offset-0 [&>svg]:hidden">
+            <SelectValue placeholder="Rent or Sale" />
+          </SelectTrigger>
+
+          <SelectContent className="w-[--radix-select-trigger-width] rounded-xl bg-white">
+            <SelectItem value="rent">Rent</SelectItem>
+            <SelectItem value="sale">Sale</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <ChevronDownIcon className="ml-2 h-4 w-4 text-slate-500" />
       </div>
 
       {/* Divider */}
       <div className="hidden h-10 w-px bg-gray-200 md:block" />
 
       {/* Price Range */}
-      <div className="relative flex items-center px-4 md:w-[220px]">
-        <IndianRupeeIcon className="h-5 w-5 text-slate-400" />
-        <select
-          value={priceRange}
-          onChange={(e) => setPriceRange(e.target.value)}
-          className="ml-3 w-full appearance-none border-0 bg-transparent text-sm text-slate-700 focus:ring-0"
-        >
-          <option value="">Price Range</option>
-          <option value="0-10000">Under ₹10,000</option>
-          <option value="10000-25000">₹10,000 - ₹25,000</option>
-          <option value="25000-50000">₹25,000 - ₹50,000</option>
-          <option value="50000-100000">₹50,000 - ₹1,00,000</option>
-          <option value="100000+">Above ₹1,00,000</option>
-        </select>
-        <ChevronDownIcon className="absolute right-2 h-4 w-4 text-slate-500" />
+      <div className="flex items-center px-4 md:w-[220px]">
+        <IndianRupeeIcon className="mr-3 h-5 w-5 text-slate-400" />
+
+        <Select value={priceRange} onValueChange={setPriceRange}>
+          <SelectTrigger className="h-auto w-full border-0 bg-transparent p-0 text-sm text-slate-700 focus:ring-0 focus:ring-offset-0 [&>svg]:hidden">
+            <SelectValue placeholder="Price Range" />
+          </SelectTrigger>
+
+          <SelectContent className="rounded-xl bg-white">
+            <SelectItem value="0-10000">Under ₹10,000</SelectItem>
+            <SelectItem value="10000-25000">₹10,000 – ₹25,000</SelectItem>
+            <SelectItem value="25000-50000">₹25,000 – ₹50,000</SelectItem>
+            <SelectItem value="50000-100000">₹50,000 – ₹1,00,000</SelectItem>
+            <SelectItem value="100000+">Above ₹1,00,000</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <ChevronDownIcon className="ml-2 h-4 w-4 text-slate-500" />
       </div>
 
       {/* Search Button */}

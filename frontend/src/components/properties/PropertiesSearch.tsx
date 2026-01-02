@@ -373,7 +373,7 @@ const PropertiesSearch: React.FC<PropertiesSearchProps> = ({
         }}
       />
       {/* Overlay */}
-      <div className="absolute inset-2 rounded-3xl bg-black/20 sm:inset-0" />
+      <div className="absolute inset-4 rounded-3xl bg-black/20 sm:inset-0" />
 
       {/* Content */}
       <div className="relative top-[30%] z-10 mx-auto flex max-w-7xl -translate-y-1/2 flex-col items-center justify-center px-4 text-center sm:top-[50%] sm:px-6 lg:px-8">

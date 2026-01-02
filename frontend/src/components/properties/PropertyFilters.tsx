@@ -38,20 +38,18 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({
   return (
     <>
       {/* Mobile filter button */}
-      <div className="md:hidden mb-4">
+      <div className="mb-4 md:hidden">
         <button
           onClick={() => setIsOpen(true)}
-          className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md bg-white shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50"
+          className="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
         >
-          <FilterIcon className="h-5 w-5 mr-2" />
+          <FilterIcon className="mr-2 h-5 w-5" />
           Filters
         </button>
       </div>
       {/* Filter sidebar - desktop always visible, mobile as overlay */}
       <div
-        className={`
-        ${isOpen ? "fixed inset-0 z-40 flex md:hidden" : "hidden md:block"}
-      `}
+        className={` ${isOpen ? "fixed inset-0 z-40 flex md:hidden" : "hidden md:block"} `}
       >
         {/* Overlay */}
         {isOpen && (
@@ -62,12 +60,9 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({
         )}
         {/* Sidebar */}
         <div
-          className={`
-          ${isOpen ? "fixed right-0 top-0 w-full max-w-xs h-full" : ""}
-          bg-white shadow-lg overflow-y-auto p-4 md:p-6 md:sticky md:top-24 md:h-auto
-        `}
+          className={` ${isOpen ? "fixed right-0 top-0 h-full w-full max-w-xs" : ""} overflow-y-auto rounded-2xl border-[1px] border-gray-400 p-4 shadow-lg md:sticky md:top-24 md:h-auto md:p-6`}
         >
-          <div className="flex items-center justify-between mb-6 md:hidden">
+          <div className="mb-6 flex items-center justify-between md:hidden">
             <h3 className="text-lg font-medium text-gray-900">Filters</h3>
             <button
               onClick={() => setIsOpen(false)}
@@ -76,12 +71,12 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({
               <XIcon className="h-6 w-6" />
             </button>
           </div>
-          <h3 className="hidden md:block text-lg font-medium text-gray-900 mb-6">
+          <h3 className="mb-6 hidden text-lg font-medium text-gray-900 md:block">
             Filters
           </h3>
           {/* Property Type */}
           <div className="mb-6">
-            <h4 className="font-medium text-gray-900 mb-2">Property Type</h4>
+            <h4 className="mb-2 font-medium text-gray-900">Property Type</h4>
             <div className="space-y-2">
               {["pg", "flat", "house", "commercial", "land"].map((type) => (
                 <div key={type} className="flex items-center">
@@ -91,21 +86,21 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({
                     type="radio"
                     checked={filters.type === type}
                     onChange={() => handleFilterChange("type", type)}
-                    className="h-4 w-4 accent-[var(--brand)] border-white focus:outline-none focus:ring-0 focus:ring-offset-0"
+                    className="h-4 w-4 border-white accent-[var(--brand)] focus:outline-none focus:ring-0 focus:ring-offset-0"
                   />
                   <label
                     htmlFor={`type-${type}`}
-                    className="ml-2 text-gray-700 capitalize"
+                    className="ml-2 capitalize text-gray-700"
                   >
                     {type === "pg"
                       ? "PG Accommodation"
                       : type === "flat"
-                      ? "Apartment/Flat"
-                      : type === "house"
-                      ? "Independent House/Villa"
-                      : type === "commercial"
-                      ? "Commercial Property"
-                      : "Plot/Land"}
+                        ? "Apartment/Flat"
+                        : type === "house"
+                          ? "Independent House/Villa"
+                          : type === "commercial"
+                            ? "Commercial Property"
+                            : "Plot/Land"}
                   </label>
                 </div>
               ))}
@@ -113,7 +108,7 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({
           </div>
           {/* For Rent/Sale */}
           <div className="mb-6">
-            <h4 className="font-medium text-gray-900 mb-2">Property For</h4>
+            <h4 className="mb-2 font-medium text-gray-900">Property For</h4>
             <div className="space-y-2">
               {["rent", "sale"].map((forType) => (
                 <div key={forType} className="flex items-center">
@@ -127,7 +122,7 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({
                   />
                   <label
                     htmlFor={`for-${forType}`}
-                    className="ml-2 text-gray-700 capitalize"
+                    className="ml-2 capitalize text-gray-700"
                   >
                     For {forType.charAt(0).toUpperCase() + forType.slice(1)}
                   </label>
@@ -137,7 +132,7 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({
           </div>
           {/* Bedrooms */}
           <div className="mb-6">
-            <h4 className="font-medium text-gray-900 mb-2">Bedrooms</h4>
+            <h4 className="mb-2 font-medium text-gray-900">Bedrooms</h4>
             <div className="space-y-2">
               {["any", "1", "2", "3", "4+"].map((beds) => (
                 <div key={beds} className="flex items-center">
@@ -156,10 +151,10 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({
                     {beds === "any"
                       ? "Any"
                       : beds === "4+"
-                      ? "4 or more"
-                      : `${beds} ${
-                          parseInt(beds) === 1 ? "Bedroom" : "Bedrooms"
-                        }`}
+                        ? "4 or more"
+                        : `${beds} ${
+                            parseInt(beds) === 1 ? "Bedroom" : "Bedrooms"
+                          }`}
                   </label>
                 </div>
               ))}
@@ -167,7 +162,7 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({
           </div>
           {/* Bathrooms */}
           <div className="mb-6">
-            <h4 className="font-medium text-gray-900 mb-2">Bathrooms</h4>
+            <h4 className="mb-2 font-medium text-gray-900">Bathrooms</h4>
             <div className="space-y-2">
               {["any", "1", "2", "3+"].map((baths) => (
                 <div key={baths} className="flex items-center">
@@ -186,10 +181,10 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({
                     {baths === "any"
                       ? "Any"
                       : baths === "3+"
-                      ? "3 or more"
-                      : `${baths} ${
-                          parseInt(baths) === 1 ? "Bathroom" : "Bathrooms"
-                        }`}
+                        ? "3 or more"
+                        : `${baths} ${
+                            parseInt(baths) === 1 ? "Bathroom" : "Bathrooms"
+                          }`}
                   </label>
                 </div>
               ))}
@@ -197,7 +192,7 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({
           </div>
           {/* Price Range */}
           <div className="mb-6">
-            <h4 className="font-medium text-gray-900 mb-2">Price Range</h4>
+            <h4 className="mb-2 font-medium text-gray-900">Price Range</h4>
             <div className="space-y-2">
               {[
                 {
@@ -248,7 +243,7 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({
           </div>
           {/* Furnishing */}
           <div className="mb-6">
-            <h4 className="font-medium text-gray-900 mb-2">Furnishing</h4>
+            <h4 className="mb-2 font-medium text-gray-900">Furnishing</h4>
             <div className="space-y-2">
               {["any", "furnished", "semifurnished", "unfurnished"].map(
                 (furnish) => (
@@ -263,16 +258,16 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({
                     />
                     <label
                       htmlFor={`furnish-${furnish}`}
-                      className="ml-2 text-gray-700 capitalize"
+                      className="ml-2 capitalize text-gray-700"
                     >
                       {furnish === "any"
                         ? "Any"
                         : furnish === "semifurnished"
-                        ? "Semi-Furnished"
-                        : furnish}
+                          ? "Semi-Furnished"
+                          : furnish}
                     </label>
                   </div>
-                )
+                ),
               )}
             </div>
           </div>
@@ -280,18 +275,18 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({
           <div className="flex space-x-4">
             <button
               onClick={applyFilters}
-              className="flex-1 bg-[#2AB09C] hover:bg-[#ffffff] hover:text-[#2AB09C] text-white py-2 px-4 rounded-md transition-colors"
+              className="flex-1 rounded-[8px] bg-[#35B1C6] px-4 py-2 text-white transition-colors hover:bg-[#ffffff] hover:text-[#35B1C6]"
             >
               Apply Filters
             </button>
             <button
               onClick={clearFilters}
-              className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-md transition-colors"
+              className="flex-1 rounded-[8px] bg-gray-200 px-4 py-2 text-gray-800 transition-colors hover:bg-gray-300"
             >
               Clear All
             </button>
           </div>
-          <div className="flex space-x-4 h-16 mb-2"></div>
+          {/* <div className="mb-2 flex h-16 space-x-4"></div> */}
         </div>
       </div>
     </>
