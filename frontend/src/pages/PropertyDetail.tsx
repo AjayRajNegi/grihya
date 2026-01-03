@@ -174,6 +174,17 @@ const PropertyDetail: React.FC = () => {
     null,
   );
 
+  // Navigate to chat section in contact page
+  const navigateToChat = () => {
+    navigate("/contact");
+    setTimeout(() => {
+      const chatsection = document.getElementById("chat");
+      if (chatsection) {
+        chatsection.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 300);
+  };
+
   useEffect(() => {
     let cancelled = false;
     async function load() {
@@ -655,7 +666,7 @@ const PropertyDetail: React.FC = () => {
             </div>
             <div className="space-y-6 lg:sticky lg:top-24">
               <button
-                onClick={() => navigate("/chat-with-us")}
+                onClick={navigateToChat}
                 className="w-full rounded-xl bg-[#2DB8D1] px-6 py-4 text-sm font-semibold text-white transition hover:opacity-90"
               >
                 Chat with Us to get personlized properties.

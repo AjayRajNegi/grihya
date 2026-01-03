@@ -2,13 +2,18 @@ import React, { useEffect, useRef, useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
-import { Send, ChevronRight, Phone, Mail, LogIn } from "lucide-react";
+import {
+  Send,
+  LogIn,
+  ArrowLeft,
+  ChevronRight,
+  Mail,
+  Phone,
+} from "lucide-react";
 
-// Lazy-load Echo only if configured
 let EchoCtor: any = null;
 let PusherCtor: any = null;
 
-// IMPORTANT: Your base already includes /api
 const API = (
   import.meta.env.VITE_API_BASE_URL ||
   import.meta.env.VITE_API_BASE ||
@@ -47,8 +52,6 @@ const baseHeaders = () => {
 };
 
 const baseFetchInit = (init: RequestInit = {}): RequestInit => {
-  // If your app uses Sanctum SPA cookie session, uncomment credentials:
-  // return { ...init, headers: { ...(init.headers || {}), ...baseHeaders() }, credentials: 'include' };
   return { ...init, headers: { ...(init.headers || {}), ...baseHeaders() } };
 };
 
@@ -56,13 +59,12 @@ const ChatWithUs: React.FC = () => {
   const navigate = useNavigate();
   const listRef = useRef<HTMLDivElement | null>(null);
 
-  // Require login
   const isLoggedIn = useMemo(() => {
     return Boolean(
       localStorage.getItem("access_token") ||
-        localStorage.getItem("authToken") ||
-        localStorage.getItem("token") ||
-        localStorage.getItem("user")
+      localStorage.getItem("authToken") ||
+      localStorage.getItem("token") ||
+      localStorage.getItem("user"),
     );
   }, []);
 
@@ -143,13 +145,13 @@ const ChatWithUs: React.FC = () => {
     try {
       const res = await fetch(
         `${API}/chat/conversations/${token}/messages`,
-        baseFetchInit()
+        baseFetchInit(),
       );
       if (!res.ok) {
         console.warn(
           "fetchMessages failed",
           res.status,
-          await safeResText(res)
+          await safeResText(res),
         );
         return;
       }
@@ -161,14 +163,11 @@ const ChatWithUs: React.FC = () => {
         ts: new Date(m.created_at).getTime(),
       }));
 
-      // Replace current list with server list, keeping the greeting if it’s at index 0
       setMessages((prev) => {
         const base = prev.length && !prev[0].id ? [prev[0]] : [];
         return [...base, ...msgs];
       });
-    } catch (e) {
-      // silent
-    }
+    } catch (e) {}
   }
 
   function subscribe(token: string) {
@@ -182,7 +181,6 @@ const ChatWithUs: React.FC = () => {
     });
     echoRef.current = echo;
 
-    // Dedupe helper: try to upgrade a pending optimistic message
     const normalize = (s: string) =>
       s.replace(/\s+/g, " ").trim().toLowerCase();
 
@@ -190,13 +188,12 @@ const ChatWithUs: React.FC = () => {
       .channel(`chat.conversation.${token}`)
       .listen(".message.sent", (payload: ServerMsg) => {
         setMessages((m) => {
-          // 1) Try to upgrade an optimistic message (same sender + same normalized text)
           const idx = m.findIndex(
             (x) =>
               !x.id &&
               x.temp_id &&
               x.from === payload.sender &&
-              normalize(x.text) === normalize(payload.body)
+              normalize(x.text) === normalize(payload.body),
           );
           if (idx !== -1) {
             const copy = m.slice();
@@ -208,7 +205,6 @@ const ChatWithUs: React.FC = () => {
             return copy;
           }
 
-          // 2) Otherwise, append only if we don’t already have this id
           if (m.some((x) => x.id === payload.id)) return m;
           return [
             ...m,
@@ -234,7 +230,7 @@ const ChatWithUs: React.FC = () => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({}),
-        })
+        }),
       );
       if (!res.ok) {
         console.error("chat/start failed", res.status, await safeResText(res));
@@ -273,9 +269,7 @@ const ChatWithUs: React.FC = () => {
     ]);
     setText("");
 
-    // Try sending once; if 404, refresh conversation and retry once
     const trySend = async (tk: string) => {
-      // IMPORTANT: include X-Socket-ID so toOthers() will exclude this client
       const socketId =
         (echoRef.current &&
           typeof echoRef.current.socketId === "function" &&
@@ -294,7 +288,7 @@ const ChatWithUs: React.FC = () => {
             ...(socketId ? { "X-Socket-ID": socketId } : {}),
           },
           body: JSON.stringify({ body: t, sender: "user", temp_id: tempId }),
-        })
+        }),
       );
 
       if (res.status === 404) return false;
@@ -311,8 +305,8 @@ const ChatWithUs: React.FC = () => {
                 text: data.message.body,
                 ts: new Date(data.message.created_at).getTime(),
               }
-            : msg
-        )
+            : msg,
+        ),
       );
       return true;
     };
@@ -345,18 +339,17 @@ const ChatWithUs: React.FC = () => {
     },
     {
       label: "Post my property",
-      text: "How can I post my property on EasyLease?",
+      text: "How can I post my property on Grihya?",
     },
-    // { label: 'Area conversion', text: 'Convert 1200 sqft to sqm and gaj.' },
   ];
 
   const formatTime = (ts: number) =>
     new Date(ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <Header />
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+    <div className="bg-white" id="chat">
+      {/* <Header /> */}
+      <main className="mx-auto max-w-7xl pt-10 sm:px-6 md:pb-10 lg:px-8">
         {/* Hero */}
         <div className="mb-6">
           <div className="mb-6 flex items-center gap-2">
@@ -364,36 +357,32 @@ const ChatWithUs: React.FC = () => {
               type="button"
               aria-label="Go back"
               onClick={() => navigate(-1)}
-              className="inline-flex h-9 w-9 -ml-1 items-center justify-center bg-transparent text-gray-800 hover:text-gray-900 active:scale-95 cursor-pointer"
+              className="-ml-1 inline-flex h-9 w-9 cursor-pointer items-center justify-center bg-transparent text-gray-800 hover:text-gray-900 active:scale-95"
               title="Back"
             >
-              <span className="text-2xl md:text-3xl font-extrabold leading-none">
-                <img src="less_than_icon.png" alt="Back-Icon" />
+              <span className="text-2xl font-extrabold leading-none md:text-3xl">
+                <ArrowLeft size={30} />
               </span>
             </button>
-            <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
+            <h1 className="text-2xl font-bold text-slate-900 md:text-3xl">
               Chat with Us
             </h1>
           </div>
-          <p className="mt-2 text-slate-600">
-            Start a conversation. We typically respond within minutes during
-            business hours.
-          </p>
         </div>
 
         {/* Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
           {/* Chat panel */}
-          <div className="rounded-xl border border-slate-200 bg-white shadow-sm flex flex-col h-[560px]">
+          <div className="flex h-[560px] flex-col rounded-xl border border-slate-200 bg-white shadow-sm">
             {/* Header (agent status) */}
-            <div className="border-b border-slate-200 p-3 flex items-center justify-between">
+            <div className="flex items-center justify-between border-b border-slate-200 p-3">
               <div className="text-sm font-semibold text-slate-900">
                 Support
               </div>
               <div className="flex items-center gap-2 text-xs text-slate-600">
                 <span
                   className={`inline-flex h-2.5 w-2.5 rounded-full ${
-                    isLoggedIn ? "bg-emerald-500" : "bg-slate-400"
+                    isLoggedIn ? "bg-[#2DB8D1]" : "bg-slate-400"
                   }`}
                 />
                 {isLoggedIn ? "Online" : "Offline"}
@@ -403,9 +392,9 @@ const ChatWithUs: React.FC = () => {
             {/* Messages */}
             <div ref={listRef} className="flex-1 overflow-y-auto p-4">
               {!isLoggedIn ? (
-                <div className="h-full flex items-center justify-center">
-                  <div className="rounded-lg border border-slate-200 bg-slate-50 p-6 text-center">
-                    <div className="flex items-center justify-center mb-2">
+                <div className="flex h-full items-center justify-center">
+                  <div className="rounded-[8px] border border-slate-200 bg-slate-50 p-6 text-center">
+                    <div className="mb-2 flex items-center justify-center">
                       <LogIn className="h-5 w-5 text-slate-600" />
                     </div>
                     <div className="font-semibold text-slate-900">
@@ -417,13 +406,13 @@ const ChatWithUs: React.FC = () => {
                     <div className="mt-3 flex items-center justify-center gap-2">
                       <Link
                         to="/account"
-                        className="rounded-md bg-emerald-600 px-3 py-1.5 text-white text-sm hover:bg-emerald-700"
+                        className="rounded-[8px] bg-[#2DB8D1] px-3 py-1.5 text-sm text-white hover:bg-[#28aec6]"
                       >
                         Login
                       </Link>
                       <Link
                         to="/account"
-                        className="rounded-md border border-emerald-600 px-3 py-1.5 text-emerald-700 text-sm hover:bg-emerald-50"
+                        className="rounded-[8px] border border-[#2DB8D1] px-3 py-1.5 text-sm text-[#2DB8D1] hover:bg-blue-50"
                       >
                         Register
                       </Link>
@@ -444,7 +433,7 @@ const ChatWithUs: React.FC = () => {
                           className={[
                             "rounded-2xl px-3 py-2 text-sm",
                             m.from === "user"
-                              ? "bg-emerald-600 text-white"
+                              ? "bg-[#2DB8D1] text-white"
                               : "bg-slate-100 text-slate-900",
                           ].join(" ")}
                         >
@@ -464,10 +453,10 @@ const ChatWithUs: React.FC = () => {
                   ))}
                   {isTyping && (
                     <div className="mb-3 flex justify-start">
-                      <div className="rounded-2xl px-3 py-2 text-sm bg-slate-100 text-slate-900 inline-flex items-center gap-1.5">
-                        <span className="inline-block h-1.5 w-1.5 rounded-full bg-slate-400 animate-pulse" />
-                        <span className="inline-block h-1.5 w-1.5 rounded-full bg-slate-400 animate-pulse" />
-                        <span className="inline-block h-1.5 w-1.5 rounded-full bg-slate-400 animate-pulse" />
+                      <div className="inline-flex items-center gap-1.5 rounded-2xl bg-slate-100 px-3 py-2 text-sm text-slate-900">
+                        <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-slate-400" />
+                        <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-slate-400" />
+                        <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-slate-400" />
                       </div>
                     </div>
                   )}
@@ -490,13 +479,13 @@ const ChatWithUs: React.FC = () => {
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && isLoggedIn) send();
                   }}
-                  className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm"
+                  className="flex-1 rounded-[8px] border border-slate-300 px-3 py-2 text-sm"
                   disabled={!isLoggedIn}
                 />
                 <button
                   type="button"
                   onClick={() => send()}
-                  className="inline-flex items-center gap-2 rounded-md bg-emerald-600 px-3 py-2 text-white hover:bg-emerald-700 disabled:opacity-60"
+                  className="inline-flex items-center gap-2 rounded-[8px] bg-[#2DB8D1] px-3 py-1.5 text-white hover:bg-[#23acc4] disabled:opacity-60"
                   disabled={!isLoggedIn || !text.trim()}
                 >
                   <Send className="h-4 w-4" /> Send
@@ -519,60 +508,18 @@ const ChatWithUs: React.FC = () => {
           </div>
 
           {/* Right rail */}
-          {/* <div className="space-y-4">
-            <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-              <div className="text-sm font-semibold text-slate-900">
-                Quick links
-              </div>
-              <div className="mt-3 grid grid-cols-1 gap-2 text-sm">
-                <Link
-                  to="/help-center"
-                  className="group flex items-center justify-between rounded border border-slate-200 p-3 hover:bg-slate-50"
-                >
-                  Help Center{" "}
-                  <ChevronRight className="h-4 w-4 text-emerald-600 opacity-0 group-hover:opacity-100 transition" />
-                </Link>
-                <Link
-                  to="/home-loans/emi-calculator"
-                  className="group flex items-center justify-between rounded border border-slate-200 p-3 hover:bg-slate-50"
-                >
-                  EMI Calculator{" "}
-                  <ChevronRight className="h-4 w-4 text-emerald-600 opacity-0 group-hover:opacity-100 transition" />
-                </Link>
-                <Link
-                  to="/area-converter"
-                  className="group flex items-center justify-between rounded border border-slate-200 p-3 hover:bg-slate-50"
-                >
-                  Area Converter{" "}
-                  <ChevronRight className="h-4 w-4 text-emerald-600 opacity-0 group-hover:opacity-100 transition" />
-                </Link>
-              </div>
-            </div>
-
-            <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-              <div className="text-sm font-semibold text-slate-900">
-                Contact options
-              </div>
-              <div className="mt-3 space-y-2 text-sm">
-                <a
-                  href="mailto:support@easylease.in"
-                  className="flex items-center gap-2 rounded-md border border-slate-200 p-2 hover:bg-slate-50"
-                >
-                  <Mail className="h-4 w-4 text-emerald-600" />{" "}
-                  support@easylease.in
-                </a>
-                <a
-                  href="tel:+918448163874"
-                  className="flex items-center gap-2 rounded-md border border-slate-200 p-2 hover:bg-slate-50"
-                >
-                  <Phone className="h-4 w-4 text-emerald-600" /> +91 8448163874
-                </a>
-              </div>
-            </div>
-          </div> */}
+          <div className="hidden h-[300px] flex-col space-y-4 lg:flex lg:h-[560px]">
+            <h2 className="text-3xl font-medium tracking-tighter">
+              Start a conversation. We will get back to you as soon as we can.
+            </h2>
+            <img
+              src="/images/contact/Chat.png"
+              className="h-full w-full rounded-[10px] object-cover object-center"
+            />
+          </div>
         </div>
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };
