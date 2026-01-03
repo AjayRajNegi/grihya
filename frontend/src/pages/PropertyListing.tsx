@@ -1,10 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { ListIcon, GridIcon } from "lucide-react";
 import PropertyCard from "../components/properties/PropertyCard";
 import PropertyFilters from "../components/properties/PropertyFilters";
-import type { Property } from "../data/mockData"; // type-only import
-
+import type { Property } from "../data/mockData";
 import PropertiesSearch from "@/components/properties/PropertiesSearch";
 import {
   Select,
@@ -61,7 +59,6 @@ type ApiPaginated<T> = {
 
 const PropertyListing: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
 
   const [properties, setProperties] = useState<Property[]>([]);
   const [sortBy, setSortBy] = useState("newest");

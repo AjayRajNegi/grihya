@@ -24,7 +24,13 @@ export const Navbar = () => {
         <div className="-mb-[14px] flex h-16 items-center justify-between md:-mb-0 md:h-20">
           {/* Logo */}
           <div
-            className="flex max-w-32 cursor-pointer items-center gap-2 object-contain"
+            className="flex max-w-[120px] cursor-pointer items-center gap-2 object-contain md:hidden"
+            onClick={() => navigate("/")}
+          >
+            <img src="/logo/GrihyaLogoWithName.png" />
+          </div>
+          <div
+            className="hidden max-w-32 cursor-pointer items-center gap-2 object-contain md:flex"
             onClick={() => navigate("/")}
           >
             <img src="/logo/GrihyaLogoWithName.png" />
@@ -134,7 +140,7 @@ export const Navbar = () => {
             )}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="rounded-full bg-[#2DB8D1] p-1.5 text-white transition-colors hover:bg-gray-100 hover:text-black"
+              className="rounded-full bg-[#2DB8D1] p-2 text-white transition-colors hover:bg-gray-100 hover:text-black"
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? (

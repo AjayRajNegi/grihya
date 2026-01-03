@@ -13,6 +13,9 @@
   font-weight: 300 900;
   font-style: normal;
 }
+@theme {
+  --breakpoint-xs: 30rem;
+}
 
 body {
   font-family: "Satoshi";

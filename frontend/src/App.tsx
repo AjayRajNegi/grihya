@@ -23,6 +23,7 @@ import {
 import { AuthProvider } from "./context/AuthContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Contact from "./pages/Contact";
 
 export function App() {
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
@@ -78,6 +79,7 @@ export function App() {
                         />
                         <Route path="/blog" element={<AllBlogs />} />
                         <Route path="/blog/:slug" element={<BlogDetail />} />
+                        <Route path="/contact" element={<Contact />} />
                       </Routes>
                     </main>
                     <Footer />
