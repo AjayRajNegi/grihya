@@ -1,7 +1,7 @@
 import ContactHero from "@/components/contact/ContactHero";
 import { Variants, motion } from "framer-motion";
 import ChatWithUs from "./ChatWithUs";
-import Agents from "./Agents";
+
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
   visible: {
@@ -38,7 +38,6 @@ export default function Contact() {
       </motion.div>
 
       <ChatWithUs />
-      {/* <Agents /> */}
     </div>
   );
 }

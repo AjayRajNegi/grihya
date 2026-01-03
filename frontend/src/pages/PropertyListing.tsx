@@ -59,7 +59,6 @@ type ApiPaginated<T> = {
 
 const PropertyListing: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
 
   const [properties, setProperties] = useState<Property[]>([]);
   const [sortBy, setSortBy] = useState("newest");

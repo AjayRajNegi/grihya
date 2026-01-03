@@ -1,15 +1,6 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Header from "../components/layout/Header";
-import Footer from "../components/layout/Footer";
-import {
-  Send,
-  LogIn,
-  ArrowLeft,
-  ChevronRight,
-  Mail,
-  Phone,
-} from "lucide-react";
+import { Send, LogIn, ArrowLeft } from "lucide-react";
 
 let EchoCtor: any = null;
 let PusherCtor: any = null;
