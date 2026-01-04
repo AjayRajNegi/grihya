@@ -15,6 +15,7 @@ import {
   LogOut as LogOutIcon,
   Trash2 as TrashIcon,
   MoreVertical as MoreIcon,
+  ArrowLeftIcon,
 } from "lucide-react";
 import { Listbox } from "@headlessui/react";
 import ReactCountryFlag from "react-country-flag";
@@ -412,9 +413,8 @@ const Account: React.FC = () => {
     const nameTrim = (profile.name || "").trim();
     const emailTrim = (profile.email || "").trim();
     const fullPhoneTrim = fullPhone.trim();
-    const cityTrim = (profile.city || "").trim(); // CHANGE: normalize city
+    const cityTrim = (profile.city || "").trim();
 
-    // CHANGE: quick local constraint (optional)
     if (cityTrim.length > 100) {
       setFieldErrors((prev) => ({
         ...prev,
@@ -428,7 +428,7 @@ const Account: React.FC = () => {
     if (emailTrim !== (user.email || "")) payload.email = emailTrim;
     if (fullPhoneTrim !== (user.phone || "").trim())
       payload.phone = fullPhoneTrim;
-    if (cityTrim !== (user.city || "")) payload.city = cityTrim; // CHANGE: send city if changed
+    if (cityTrim !== (user.city || "")) payload.city = cityTrim;
 
     if (Object.keys(payload).length === 0) {
       setEditingProfile(false);
@@ -442,7 +442,6 @@ const Account: React.FC = () => {
       return;
     }
 
-    // Final local guard for phone
     if (payload.phone) {
       const localDigits = digits(profile.phoneLocal);
       if (localDigits && !/^[6-9]\d{9}$/.test(localDigits)) {
@@ -474,7 +473,6 @@ const Account: React.FC = () => {
         throw new Error(data?.message || "Unable to save your changes.");
       }
 
-      // If email change is staged
       if (data?.pending_email_change) {
         const verifyData = { email: data.email, resendUrl: data.resend_url };
         sessionStorage.setItem("verifyEmail", JSON.stringify(verifyData));
@@ -483,11 +481,9 @@ const Account: React.FC = () => {
         return;
       }
 
-      // Normal update: reflect instantly
       setProfileMessage("Your profile has been updated.");
       setEditingProfile(false);
 
-      // CHANGE: update context user with city
       if (setUser) {
         setUser({
           id: String(data.id),
@@ -499,7 +495,6 @@ const Account: React.FC = () => {
         });
       }
 
-      // CHANGE: also sync local profile fields including city
       const { c, local } = splitE164ToCountryAndLocal(data.phone || "");
       setCountry(c);
       setProfile({
@@ -641,226 +636,238 @@ const Account: React.FC = () => {
 
     return (
       <>
-        <main className="min-h-screen bg-gray-50 pb-24 md:pb-40">
+        <Navbar />
+        <main className="min-h-screen bg-white pb-24 md:pb-40">
           <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-            {/* Back + title */}
-            <div className="mb-6 flex items-center gap-3">
-              <button
-                type="button"
-                aria-label="Go back"
-                onClick={() => navigate(-1)}
-                className="-ml-1 inline-flex h-9 w-9 cursor-pointer items-center justify-center bg-transparent text-gray-800 hover:text-gray-900 active:scale-95"
-                title="Back"
-              >
-                <span className="text-2xl font-extrabold leading-none md:text-3xl">
-                  <img src="less_than_icon.png" alt="Back-Icon" />
-                </span>
-              </button>
-              <h1 className="text-2xl font-bold text-gray-900 md:text-3xl">
-                Profile
-              </h1>
+            {/* User Name Header */}
+            <div className="mb-5 text-center text-5xl font-medium tracking-tighter">
+              Welcome back, {user.name}
             </div>
+            <div className="relative rounded-2xl border border-gray-300 bg-white shadow-sm">
+              {/* subtle brand header */}
+              <div className="h-24 rounded-t-2xl bg-gradient-to-r from-[#c7f3f3] to-[#F0FBF9]" />
 
-            <div className="rounded-lg bg-white p-6 shadow md:p-8">
-              <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-                <div className="flex items-start gap-4">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#E6F7F3] text-2xl font-bold text-[#2DB8D1]">
-                    {initialLetter}
-                  </div>
-
-                  <div className="flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <h1 className="text-2xl font-bold text-gray-900">
-                        {user.name || "User"}
-                      </h1>
-                      <span className="inline-flex items-center rounded-full bg-[#CCF0E1FF] px-2 py-0.5 text-xs font-semibold text-[#2DB8D1]">
-                        <BuildingIcon className="mr-1 h-3.5 w-3.5" />
-                        {roleLabel}
-                      </span>
+              <div className="relative -mt-12 px-6 pb-6 md:px-8">
+                <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+                  {/* LEFT */}
+                  <div className="flex gap-5">
+                    {/* Avatar */}
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white ring-4 ring-[#c7f3f3] md:h-20 md:w-20">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#c7f3f3] text-2xl font-bold text-[#2DB8D1] md:h-16 md:w-16">
+                        {initialLetter}
+                      </div>
                     </div>
 
-                    {!editingProfile ? (
-                      <div className="mt-3 grid grid-cols-1 gap-3 text-sm text-gray-700 sm:grid-cols-2">
-                        <div className="flex items-center">
-                          <MailIcon className="mr-2 h-4 w-4 text-gray-500" />
-                          <span>{user.email || " - "}</span>
-                        </div>
-                        <div className="flex items-center">
-                          <PhoneIcon className="mr-2 h-4 w-4 text-gray-500" />
-                          <span>{user.phone || " - "}</span>
-                        </div>
-                        <div className="flex items-center">
-                          <MapPinIcon className="mr-2 h-4 w-4 text-gray-500" />
-                          <span>{user.city ? user.city : " - "}</span>
-                        </div>
-                        {needsCity && (
-                          <div className="flex items-center rounded border border-amber-200 bg-amber-50 px-2 py-1 text-xs text-amber-700">
-                            Please enter your city to complete your profile.
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setEditingProfile(true);
-                                setProfileMessage(null);
-                                setProfileError(null);
-                              }}
-                              className="ml-2 text-amber-800 underline"
-                            >
-                              Edit
-                            </button>
-                          </div>
-                        )}
+                    {/* Info */}
+                    <div className="flex-1">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <h1 className="text-2xl font-semibold text-gray-900">
+                          {user.name || "User"}
+                        </h1>
+                        <span className="inline-flex items-center gap-1 rounded-full border border-black/10 bg-[#E6F7F3] px-3 py-1 text-xs font-semibold text-[#2DB8D1]">
+                          <BuildingIcon className="h-3.5 w-3.5" />
+                          {roleLabel}
+                        </span>
                       </div>
-                    ) : (
-                      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <div>
-                          <label className="mb-1 block text-sm text-gray-600">
-                            Name
-                          </label>
-                          <input
-                            className={`w-full rounded border px-3 py-2 focus:border-[#2DB8D1] focus:ring-[#2DB8D1] ${
-                              fieldErrors.name
-                                ? "border-red-500"
-                                : "border-gray-300"
-                            }`}
-                            value={profile.name}
-                            onChange={(e) => {
-                              setProfile({ ...profile, name: e.target.value });
-                              if (fieldErrors.name)
-                                setFieldErrors((prev) => ({
-                                  ...prev,
-                                  name: undefined,
-                                }));
-                            }}
-                          />
-                          {fieldErrors.name && (
-                            <p className="mt-1 text-xs text-red-600">
-                              {fieldErrors.name}
-                            </p>
-                          )}
-                        </div>
 
-                        <div>
-                          <label className="mb-1 block text-sm text-gray-600">
-                            Email
-                          </label>
-                          <input
-                            type="email"
-                            className={`w-full rounded border px-3 py-2 focus:border-[#2DB8D1] focus:ring-[#2DB8D1] ${
-                              fieldErrors.email
-                                ? "border-red-500"
-                                : "border-gray-300"
-                            }`}
-                            value={profile.email}
-                            onChange={(e) => {
-                              setProfile({ ...profile, email: e.target.value });
-                              if (fieldErrors.email)
-                                setFieldErrors((prev) => ({
-                                  ...prev,
-                                  email: undefined,
-                                }));
-                            }}
-                          />
-                          {emailChecking && !fieldErrors.email && (
-                            <p className="mt-1 text-xs text-gray-500">
-                              Checking…
-                            </p>
-                          )}
-                          {fieldErrors.email && (
-                            <p className="mt-1 text-xs text-red-600">
-                              {fieldErrors.email}
-                            </p>
-                          )}
-                        </div>
+                      {/* VIEW MODE */}
+                      {!editingProfile ? (
+                        <div className="mt-8 grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
+                          <div className="flex items-center gap-2 rounded-lg bg-gray-50 px-3 py-2">
+                            <MailIcon className="h-4 w-4 text-gray-400" />
+                            <span>{user.email || " - "}</span>
+                          </div>
+                          <div className="flex items-center gap-2 rounded-lg bg-gray-50 px-3 py-2">
+                            <PhoneIcon className="h-4 w-4 text-gray-400" />
+                            <span>{user.phone || " - "}</span>
+                          </div>
+                          <div className="flex items-center gap-2 rounded-lg bg-gray-50 px-3 py-2">
+                            <MapPinIcon className="h-4 w-4 text-gray-400" />
+                            <span>{user.city || " - "}</span>
+                          </div>
 
-                        <div>
-                          <label className="mb-1 block text-sm text-gray-600">
-                            City
-                          </label>
-                          <input
-                            className={`w-full rounded border px-3 py-2 focus:border-[#2DB8D1] focus:ring-[#2DB8D1] ${
-                              fieldErrors.city
-                                ? "border-red-500"
-                                : "border-gray-300"
-                            }`}
-                            value={profile.city}
-                            onChange={(e) => {
-                              setProfile({ ...profile, city: e.target.value });
-                              if (fieldErrors.city)
-                                setFieldErrors((prev) => ({
-                                  ...prev,
-                                  city: undefined,
-                                }));
-                            }}
-                            placeholder="e.g., Dehradun"
-                          />
-                          {fieldErrors.city && (
-                            <p className="mt-1 text-xs text-red-600">
-                              {fieldErrors.city}
-                            </p>
-                          )}
-                        </div>
-
-                        <div className="sm:col-span-2">
-                          <label className="mb-1 block text-sm text-gray-600">
-                            Mobile number
-                          </label>
-                          <div className="grid grid-cols-[auto,1fr] gap-2">
-                            <div>
-                              <Listbox
-                                value={country}
-                                onChange={(c) => {
-                                  setCountry(c);
-                                  if (fieldErrors.phone)
-                                    setFieldErrors((prev) => ({
-                                      ...prev,
-                                      phone: undefined,
-                                    }));
+                          {needsCity && (
+                            <div className="flex items-center justify-between rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-700 sm:col-span-2">
+                              <span>
+                                Please enter your city to complete your profile.
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setEditingProfile(true);
+                                  setProfileMessage(null);
+                                  setProfileError(null);
                                 }}
+                                className="font-medium underline"
                               >
-                                <div className="relative w-28">
-                                  <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-1.5 pl-8 pr-7 text-left text-sm focus:outline-none focus:ring-2 focus:ring-[#2DB8D1]">
-                                    <span className="absolute inset-y-0 left-2 flex items-center">
-                                      <ReactCountryFlag
-                                        svg
-                                        countryCode={country.code}
-                                        style={{
-                                          width: 16,
-                                          height: 16,
-                                          borderRadius: 2,
-                                        }}
-                                      />
-                                    </span>
-                                    <span className="block truncate">
-                                      {country.code}
-                                    </span>
-                                    <span className="pointer-events-none absolute inset-y-0 right-2 flex items-center">
-                                      <svg
-                                        width="16"
-                                        height="16"
-                                        viewBox="0 0 20 20"
-                                        fill="currentColor"
-                                        className="text-gray-500"
-                                      >
-                                        <path
-                                          fillRule="evenodd"
-                                          d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
-                                          clipRule="evenodd"
+                                Edit
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="mt-5 rounded-xl bg-gray-50 p-4">
+                          <div>
+                            <label className="mb-1 block text-sm text-gray-600">
+                              Name
+                            </label>
+                            <input
+                              className={`w-full rounded border px-3 py-2 focus:border-[#2DB8D1] focus:ring-[#2DB8D1] ${
+                                fieldErrors.name
+                                  ? "border-red-500"
+                                  : "border-gray-300"
+                              }`}
+                              value={profile.name}
+                              onChange={(e) => {
+                                setProfile({
+                                  ...profile,
+                                  name: e.target.value,
+                                });
+                                if (fieldErrors.name)
+                                  setFieldErrors((prev) => ({
+                                    ...prev,
+                                    name: undefined,
+                                  }));
+                              }}
+                            />
+                            {fieldErrors.name && (
+                              <p className="mt-1 text-xs text-red-600">
+                                {fieldErrors.name}
+                              </p>
+                            )}
+                          </div>
+
+                          <div>
+                            <label className="mb-1 block text-sm text-gray-600">
+                              Email
+                            </label>
+                            <input
+                              type="email"
+                              className={`w-full rounded border px-3 py-2 focus:border-[#2DB8D1] focus:ring-[#2DB8D1] ${
+                                fieldErrors.email
+                                  ? "border-red-500"
+                                  : "border-gray-300"
+                              }`}
+                              value={profile.email}
+                              onChange={(e) => {
+                                setProfile({
+                                  ...profile,
+                                  email: e.target.value,
+                                });
+                                if (fieldErrors.email)
+                                  setFieldErrors((prev) => ({
+                                    ...prev,
+                                    email: undefined,
+                                  }));
+                              }}
+                            />
+                            {emailChecking && !fieldErrors.email && (
+                              <p className="mt-1 text-xs text-gray-500">
+                                Checking…
+                              </p>
+                            )}
+                            {fieldErrors.email && (
+                              <p className="mt-1 text-xs text-red-600">
+                                {fieldErrors.email}
+                              </p>
+                            )}
+                          </div>
+
+                          <div>
+                            <label className="mb-1 block text-sm text-gray-600">
+                              City
+                            </label>
+                            <input
+                              className={`w-full rounded border px-3 py-2 focus:border-[#2DB8D1] focus:ring-[#2DB8D1] ${
+                                fieldErrors.city
+                                  ? "border-red-500"
+                                  : "border-gray-300"
+                              }`}
+                              value={profile.city}
+                              onChange={(e) => {
+                                setProfile({
+                                  ...profile,
+                                  city: e.target.value,
+                                });
+                                if (fieldErrors.city)
+                                  setFieldErrors((prev) => ({
+                                    ...prev,
+                                    city: undefined,
+                                  }));
+                              }}
+                              placeholder="e.g., Dehradun"
+                            />
+                            {fieldErrors.city && (
+                              <p className="mt-1 text-xs text-red-600">
+                                {fieldErrors.city}
+                              </p>
+                            )}
+                          </div>
+
+                          <div className="sm:col-span-2">
+                            <label className="mb-1 block text-sm text-gray-600">
+                              Mobile number
+                            </label>
+
+                            {/* Responsive container */}
+                            <div className="grid grid-cols-1 gap-2 sm:grid-cols-[auto,1fr]">
+                              {/* Country selector */}
+                              <div>
+                                <Listbox
+                                  value={country}
+                                  onChange={(c) => {
+                                    setCountry(c);
+                                    if (fieldErrors.phone)
+                                      setFieldErrors((prev) => ({
+                                        ...prev,
+                                        phone: undefined,
+                                      }));
+                                  }}
+                                >
+                                  <div className="relative w-full sm:w-28">
+                                    <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-9 pr-7 text-left text-sm focus:outline-none focus:ring-2 focus:ring-[#2DB8D1]">
+                                      <span className="absolute inset-y-0 left-2 flex items-center">
+                                        <ReactCountryFlag
+                                          svg
+                                          countryCode={country.code}
+                                          style={{
+                                            width: 16,
+                                            height: 16,
+                                            borderRadius: 2,
+                                          }}
                                         />
-                                      </svg>
-                                    </span>
-                                  </Listbox.Button>
-                                  <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border border-gray-200 bg-white py-1 text-sm shadow-lg focus:outline-none">
-                                    {COUNTRY_OPTIONS.map((c) => (
-                                      <Listbox.Option
-                                        key={c.code}
-                                        value={c}
-                                        className={({ active }) =>
-                                          `relative cursor-pointer select-none py-1.5 pl-8 pr-2 ${
-                                            active ? "bg-gray-100" : ""
-                                          }`
-                                        }
-                                      >
-                                        <>
+                                      </span>
+                                      <span className="block truncate">
+                                        {country.code}
+                                      </span>
+                                      <span className="pointer-events-none absolute inset-y-0 right-2 flex items-center">
+                                        <svg
+                                          width="16"
+                                          height="16"
+                                          viewBox="0 0 20 20"
+                                          fill="currentColor"
+                                          className="text-gray-500"
+                                        >
+                                          <path
+                                            fillRule="evenodd"
+                                            d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
+                                            clipRule="evenodd"
+                                          />
+                                        </svg>
+                                      </span>
+                                    </Listbox.Button>
+
+                                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border border-gray-200 bg-white py-1 text-sm shadow-lg focus:outline-none">
+                                      {COUNTRY_OPTIONS.map((c) => (
+                                        <Listbox.Option
+                                          key={c.code}
+                                          value={c}
+                                          className={({ active }) =>
+                                            `relative cursor-pointer select-none py-2 pl-8 pr-2 ${
+                                              active ? "bg-gray-100" : ""
+                                            }`
+                                          }
+                                        >
                                           <span className="absolute inset-y-0 left-2 flex items-center">
                                             <ReactCountryFlag
                                               svg
@@ -873,170 +880,170 @@ const Account: React.FC = () => {
                                             />
                                           </span>
                                           <span className="truncate">
-                                            {c.dial} - {c.label}
+                                            {c.dial} – {c.label}
                                           </span>
-                                        </>
-                                      </Listbox.Option>
-                                    ))}
-                                  </Listbox.Options>
-                                </div>
-                              </Listbox>
+                                        </Listbox.Option>
+                                      ))}
+                                    </Listbox.Options>
+                                  </div>
+                                </Listbox>
+                              </div>
+
+                              {/* Phone input */}
+                              <div className="flex">
+                                <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-700">
+                                  {country.dial}
+                                </span>
+                                <input
+                                  type="tel"
+                                  inputMode="tel"
+                                  autoComplete="tel"
+                                  maxLength={country.code === "IN" ? 10 : 15}
+                                  value={profile.phoneLocal}
+                                  onChange={(e) => {
+                                    const raw = e.target.value.replace(
+                                      /\D/g,
+                                      "",
+                                    );
+                                    const limited =
+                                      country.code === "IN"
+                                        ? raw.slice(0, 10)
+                                        : raw.slice(0, 15);
+                                    setProfile({
+                                      ...profile,
+                                      phoneLocal: limited,
+                                    });
+                                    if (fieldErrors.phone)
+                                      setFieldErrors((prev) => ({
+                                        ...prev,
+                                        phone: undefined,
+                                      }));
+                                  }}
+                                  className={`w-full rounded-r-md border px-3 py-2 outline-none focus:ring-2 focus:ring-[#2DB8D1] ${
+                                    fieldErrors.phone
+                                      ? "border-red-500"
+                                      : "border-gray-300"
+                                  }`}
+                                  placeholder="9xxxxxxxxx"
+                                />
+                              </div>
                             </div>
-                            <div className="flex">
-                              <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-700">
-                                {country.dial}
-                              </span>
-                              <input
-                                type="tel"
-                                inputMode="tel"
-                                autoComplete="tel"
-                                maxLength={country.code === "IN" ? 10 : 15}
-                                value={profile.phoneLocal}
-                                onChange={(e) => {
-                                  const raw = e.target.value.replace(/\D/g, "");
-                                  const limited =
-                                    country.code === "IN"
-                                      ? raw.slice(0, 10)
-                                      : raw.slice(0, 15);
-                                  setProfile({
-                                    ...profile,
-                                    phoneLocal: limited,
-                                  });
-                                  if (fieldErrors.phone)
-                                    setFieldErrors((prev) => ({
-                                      ...prev,
-                                      phone: undefined,
-                                    }));
-                                }}
-                                className={`w-full rounded-r-md border px-3 py-2 outline-none focus:ring-2 focus:ring-[#2DB8D1] ${
-                                  fieldErrors.phone
-                                    ? "border-red-500"
-                                    : "border-gray-300"
-                                }`}
-                                placeholder="9xxxxxxxxx"
-                              />
+
+                            {/* Helper / error */}
+                            <div className="mt-1 text-xs">
+                              {phoneChecking && !fieldErrors.phone && (
+                                <span className="text-gray-500">Checking…</span>
+                              )}
+                              {fieldErrors.phone && (
+                                <p className="text-red-600">
+                                  {fieldErrors.phone}
+                                </p>
+                              )}
                             </div>
-                          </div>
-                          <div className="mt-1 text-xs">
-                            {phoneChecking && !fieldErrors.phone && (
-                              <span className="text-gray-500">Checking…</span>
-                            )}
-                            {fieldErrors.phone && (
-                              <p className="text-red-600">
-                                {fieldErrors.phone}
-                              </p>
-                            )}
                           </div>
                         </div>
-                      </div>
-                    )}
+                      )}
 
-                    {profileMessage && !editingProfile && (
-                      <div className="mt-3 rounded border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-700">
-                        {profileMessage}
-                      </div>
-                    )}
-                    {profileError && (
-                      <div className="mt-3 rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-                        {profileError}
-                      </div>
+                      {/* Messages */}
+                      {profileMessage && !editingProfile && (
+                        <div className="mt-4 rounded-lg border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-700">
+                          {profileMessage}
+                        </div>
+                      )}
+                      {profileError && (
+                        <div className="mt-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                          {profileError}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* ACTIONS */}
+                  <div className="flex flex-wrap gap-3">
+                    {!editingProfile ? (
+                      <>
+                        <button
+                          onClick={() => {
+                            setEditingProfile(true);
+                            setProfileMessage(null);
+                            setProfileError(null);
+                            setFieldErrors({});
+                          }}
+                          className="inline-flex items-center gap-2 rounded-[8px] border border-[#2DB8D1] px-4 py-2 text-sm font-medium text-[#2DB8D1] hover:bg-[#E6F7F3]"
+                        >
+                          <EditIcon className="h-4 w-4" /> Edit Profile
+                        </button>
+                        <button
+                          onClick={logout}
+                          className="inline-flex items-center gap-2 rounded-[8px] bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
+                        >
+                          <LogOutIcon className="h-4 w-4" /> Sign out
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          onClick={handleProfileSave}
+                          disabled={savingProfile || !hasChanges}
+                          className="inline-flex items-center gap-2 rounded-[8px] bg-[#2DB8D1] px-5 py-2 text-sm font-medium text-white hover:bg-[#229882] disabled:opacity-60"
+                        >
+                          <SaveIcon className="h-4 w-4" />
+                          {savingProfile ? "Saving…" : "Save changes"}
+                        </button>
+                        <button
+                          onClick={() => {
+                            setEditingProfile(false);
+                            setProfileError(null);
+                            setFieldErrors({});
+                            const { c, local } = splitE164ToCountryAndLocal(
+                              user?.phone || "",
+                            );
+                            setCountry(c);
+                            setProfile({
+                              name: user?.name || "",
+                              email: user?.email || "",
+                              phoneLocal: local,
+                              city: user?.city || "",
+                            });
+                          }}
+                          className="inline-flex items-center gap-2 rounded-[8px] border px-4 py-2 text-sm hover:bg-gray-50"
+                        >
+                          <XIcon className="h-4 w-4" /> Cancel
+                        </button>
+                      </>
                     )}
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  {!editingProfile ? (
-                    <>
-                      <button
-                        onClick={() => {
-                          setEditingProfile(true);
-                          setProfileMessage(null);
-                          setProfileError(null);
-                          setFieldErrors({});
-                        }}
-                        className="inline-flex items-center gap-2 rounded-md border px-4 py-2 text-[#2DB8D1] hover:bg-[#E6F7F3]"
+                {/* LISTER METRICS */}
+                {isLister && (
+                  <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    <div className="rounded-xl border bg-gray-50 p-4">
+                      <div className="text-sm text-gray-500">
+                        Total Properties
+                      </div>
+                      <div className="mt-1 text-3xl font-semibold text-gray-900">
+                        {totalListings}
+                      </div>
+                    </div>
+                    <div className="rounded-xl border bg-gray-50 p-4">
+                      <div className="text-sm text-gray-500">Account Role</div>
+                      <div className="mt-1 text-lg font-semibold text-[#2DB8D1]">
+                        {roleLabel}
+                      </div>
+                    </div>
+                    <div className="rounded-xl border bg-gradient-to-r from-[#2DB8D1] to-[#3EC9B0] p-4 text-white">
+                      <div className="text-sm opacity-90">Quick Action</div>
+                      <Link
+                        to="/list-property"
+                        className="mt-2 inline-block rounded-lg bg-white/20 px-4 py-2 text-sm font-medium hover:bg-white/30"
                       >
-                        <EditIcon className="h-4 w-4" /> Edit Profile
-                      </button>
-                      <button
-                        onClick={logout}
-                        className="inline-flex items-center gap-2 rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-600"
-                      >
-                        <LogOutIcon className="h-4 w-4" /> Sign out
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        onClick={handleProfileSave}
-                        disabled={
-                          savingProfile ||
-                          !hasChanges ||
-                          emailChecking ||
-                          phoneChecking ||
-                          !!fieldErrors.email ||
-                          !!fieldErrors.phone ||
-                          !!fieldErrors.name ||
-                          !!fieldErrors.city
-                        }
-                        className="inline-flex items-center gap-2 rounded-md bg-[#2DB8D1] px-4 py-2 text-white hover:bg-[#229882] disabled:opacity-60"
-                      >
-                        <SaveIcon className="h-4 w-4" />
-                        {savingProfile ? "Saving…" : "Save"}
-                      </button>
-                      <button
-                        onClick={() => {
-                          setEditingProfile(false);
-                          setProfileError(null);
-                          setFieldErrors({});
-                          const { c, local } = splitE164ToCountryAndLocal(
-                            user?.phone || "",
-                          );
-                          setCountry(c);
-
-                          setProfile({
-                            name: user?.name || "",
-                            email: user?.email || "",
-                            phoneLocal: local,
-                            city: user?.city || "",
-                          });
-                        }}
-                        className="inline-flex items-center gap-2 rounded-md border px-4 py-2 hover:bg-gray-50"
-                      >
-                        <XIcon className="h-4 w-4" /> Cancel
-                      </button>
-                    </>
-                  )}
-                </div>
+                        + Add New Property
+                      </Link>
+                    </div>
+                  </div>
+                )}
               </div>
-
-              {isLister && (
-                <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-                  <div className="rounded-lg border bg-white p-4">
-                    <div className="text-sm text-gray-500">
-                      Total Properties Listed
-                    </div>
-                    <div className="text-3xl font-extrabold text-gray-900">
-                      {totalListings}
-                    </div>
-                  </div>
-                  <div className="rounded-lg border bg-white p-4">
-                    <div className="text-sm text-gray-500">Role</div>
-                    <div className="text-xl font-semibold capitalize text-[#2DB8D1]">
-                      {roleLabel}
-                    </div>
-                  </div>
-                  <div className="rounded-lg border bg-white p-4">
-                    <div className="text-sm text-gray-500">Quick Action</div>
-                    <Link
-                      to="/list-property"
-                      className="mt-1 inline-block rounded-md bg-[#2DB8D1] px-3 py-2 text-white hover:bg-[#229882]"
-                    >
-                      + Add New Property
-                    </Link>
-                  </div>
-                </div>
-              )}
             </div>
 
             {isLister && (
@@ -1321,6 +1328,7 @@ const Account: React.FC = () => {
             )}
           </div>
         </main>
+        <Footer />
 
         {/* Delete confirmation modal */}
         {confirmDialog.open && (
