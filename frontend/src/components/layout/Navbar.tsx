@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, UserIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
@@ -109,7 +109,12 @@ export const Navbar = () => {
               Sign In
             </button> */}
             {isAuthenticated ? (
-              <>Profile</>
+              <button
+                onClick={() => navigate("/account")}
+                className="rounded-full bg-gray-900 px-3 py-3 text-base font-medium text-white transition-colors hover:bg-gray-800"
+              >
+                <UserIcon />
+              </button>
             ) : (
               <button
                 onClick={() => navigate("/account")}
@@ -129,7 +134,12 @@ export const Navbar = () => {
           {/* Mobile Menu Button */}
           <div className="flex items-center gap-2 bg-[#ffffff] md:hidden">
             {isAuthenticated ? (
-              <>Profile</>
+              <button
+                onClick={() => navigate("/account")}
+                className="rounded-full bg-gray-900 p-2 text-sm text-white transition-colors hover:bg-gray-800"
+              >
+                <UserIcon size={20} />
+              </button>
             ) : (
               <button
                 onClick={() => navigate("/account")}
