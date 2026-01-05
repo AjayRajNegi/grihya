@@ -637,10 +637,10 @@ const Account: React.FC = () => {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-white pb-24 md:pb-40">
-          <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+        <main className="bg-white">
+          <div className="mx-auto max-w-6xl px-4 pt-14 sm:px-6 md:pb-8 lg:px-8">
             {/* User Name Header */}
-            <div className="mb-5 text-center text-5xl font-medium tracking-tighter">
+            <div className="mb-5 text-center text-3xl font-medium tracking-tighter md:text-5xl">
               Welcome back, {user.name}
             </div>
             <div className="relative rounded-2xl border border-gray-300 bg-white shadow-sm">
@@ -825,7 +825,7 @@ const Account: React.FC = () => {
                                   }}
                                 >
                                   <div className="relative w-full sm:w-28">
-                                    <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-9 pr-7 text-left text-sm focus:outline-none focus:ring-2 focus:ring-[#2DB8D1]">
+                                    <Listbox.Button className="relative w-full cursor-default rounded-[8px] border border-gray-300 bg-white py-2 pl-9 pr-7 text-left text-sm focus:outline-none focus:ring-2 focus:ring-[#2DB8D1]">
                                       <span className="absolute inset-y-0 left-2 flex items-center">
                                         <ReactCountryFlag
                                           svg
@@ -857,7 +857,7 @@ const Account: React.FC = () => {
                                       </span>
                                     </Listbox.Button>
 
-                                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border border-gray-200 bg-white py-1 text-sm shadow-lg focus:outline-none">
+                                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-[8px] border border-gray-200 bg-white py-1 text-sm shadow-lg focus:outline-none">
                                       {COUNTRY_OPTIONS.map((c) => (
                                         <Listbox.Option
                                           key={c.code}
@@ -1028,7 +1028,7 @@ const Account: React.FC = () => {
                     </div>
                     <div className="rounded-xl border bg-gray-50 p-4">
                       <div className="text-sm text-gray-500">Account Role</div>
-                      <div className="mt-1 text-lg font-semibold text-[#2DB8D1]">
+                      <div className="mt-1 text-xl font-semibold text-[#2DB8D1]">
                         {roleLabel}
                       </div>
                     </div>
@@ -1036,7 +1036,7 @@ const Account: React.FC = () => {
                       <div className="text-sm opacity-90">Quick Action</div>
                       <Link
                         to="/list-property"
-                        className="mt-2 inline-block rounded-lg bg-white/20 px-4 py-2 text-sm font-medium hover:bg-white/30"
+                        className="mt-2 inline-block rounded-[8px] bg-white/20 px-4 py-2 text-sm font-medium hover:bg-white/30"
                       >
                         + Add New Property
                       </Link>
@@ -1047,125 +1047,108 @@ const Account: React.FC = () => {
             </div>
 
             {isLister && (
-              <section className="mt-8">
-                <div className="mb-2 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                  <h2 className="text-xl font-bold text-gray-900 md:text-2xl">
-                    My Listings
+              <section className="mt-10">
+                {/* Header */}
+                <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                  <h2 className="text-2xl font-semibold text-gray-900">
+                    Your Listings
                   </h2>
-                  <div className="inline-flex overflow-hidden rounded-md border bg-white">
-                    <button
-                      type="button"
-                      onClick={() => setStatusFilter("all")}
-                      className={`px-3 py-1.5 text-sm ${
-                        statusFilter === "all"
-                          ? "bg-[#2DB8D1] text-white"
-                          : "text-gray-700 hover:bg-gray-50"
-                      }`}
-                      aria-pressed={statusFilter === "all"}
-                    >
-                      All
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setStatusFilter("active")}
-                      className={`border-l px-3 py-1.5 text-sm ${
-                        statusFilter === "active"
-                          ? "bg-[#2DB8D1] text-white"
-                          : "text-gray-700 hover:bg-gray-50"
-                      }`}
-                      aria-pressed={statusFilter === "active"}
-                    >
-                      Active
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setStatusFilter("inactive")}
-                      className={`border-l px-3 py-1.5 text-sm ${
-                        statusFilter === "inactive"
-                          ? "bg-[#2DB8D1] text-white"
-                          : "text-gray-700 hover:bg-gray-50"
-                      }`}
-                      aria-pressed={statusFilter === "inactive"}
-                    >
-                      Inactive
-                    </button>
+
+                  {/* Status Filter */}
+                  <div className="inline-flex w-fit rounded-[8px] border bg-white p-1 shadow-sm">
+                    {["all", "active", "inactive"].map((s) => (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => setStatusFilter(s as any)}
+                        aria-pressed={statusFilter === s}
+                        className={`rounded-[8px] px-4 py-1.5 text-sm font-medium transition ${
+                          statusFilter === s
+                            ? "bg-[#2DB8D1] text-white shadow"
+                            : "text-gray-600 hover:bg-gray-50"
+                        }`}
+                      >
+                        {s.charAt(0).toUpperCase() + s.slice(1)}
+                      </button>
+                    ))}
                   </div>
                 </div>
 
-                <p className="mb-4 text-xs text-gray-600">
-                  <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full border border-blue-400 bg-blue-100 font-semibold text-blue-700">
+                {/* Info note */}
+                <div className="mb-5 flex items-start gap-2 rounded-[8px] border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-700">
+                  <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border border-blue-400 bg-white font-bold">
                     !
                   </span>
-                  <span>
-                    &nbsp; You can set status to Active or Inactive. Other users
-                    will only see your properties with status Active.
-                  </span>
-                </p>
+                  <p>
+                    Mark the status to Active or Inactive. Only Active
+                    properties are showed to users.
+                  </p>
+                </div>
 
-                <div className="rounded-lg bg-white p-4 shadow md:p-6">
+                {/* Main Card */}
+                <div className="rounded-xl border bg-white p-5 shadow-sm md:p-6">
                   {listMessage && (
-                    <div className="mb-4 rounded border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-700">
+                    <div className="mb-4 rounded-lg border border-green-200 bg-green-50 px-4 py-2 text-sm text-green-700">
                       {listMessage}
                     </div>
                   )}
+
                   {propsError && (
-                    <div className="mb-4 rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                    <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-700">
                       {propsError}
                     </div>
                   )}
 
+                  {/* Loading */}
                   {loadingProps ? (
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                       {Array.from({ length: 4 }).map((_, i) => (
                         <div
                           key={i}
-                          className="h-40 animate-pulse rounded bg-gray-100"
+                          className="h-44 animate-pulse rounded-xl bg-gray-100"
                         />
                       ))}
                     </div>
                   ) : myProps.length === 0 ? (
-                    <div className="text-gray-600">
+                    <div className="py-10 text-center text-gray-500">
                       {statusFilter === "all"
                         ? "You haven’t listed any properties yet."
                         : "No properties found for the selected filter."}
                     </div>
                   ) : (
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                       {myProps.map((p) => {
                         const img =
                           absolutize(p.images?.[0] || "") ||
                           "https://via.placeholder.com/600x400?text=No+Image";
                         const ts = new Date(p.created_at);
                         const isDeleting = deletingId === String(p.id);
+
                         return (
                           <div
                             key={String(p.id)}
-                            className="relative flex overflow-hidden rounded-md border bg-gray-50"
+                            className="group relative overflow-hidden rounded-xl border bg-white shadow-sm transition hover:shadow-md"
                           >
-                            <div className="relative h-28 w-28 flex-shrink-0">
-                              {typeof p.status !== "undefined" &&
-                                p.status !== null && (
-                                  <span
-                                    className={`absolute left-1 top-2 z-10 inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold shadow-sm ${
-                                      p.status === "active"
-                                        ? "bg-green-600 text-white"
-                                        : "bg-gray-600 text-white"
-                                    }`}
-                                    title={
-                                      p.status === "active"
-                                        ? "Active"
-                                        : "Inactive"
-                                    }
-                                  >
-                                    {p.status === "active"
-                                      ? "Active"
-                                      : "Inactive"}
-                                  </span>
-                                )}
+                            {/* Image */}
+                            <div className="relative h-36 w-full overflow-hidden">
+                              {p.status != null && (
+                                <span
+                                  className={`absolute left-3 top-3 z-10 rounded-full px-3 py-1 text-xs font-semibold shadow ${
+                                    p.status === "active"
+                                      ? "bg-green-600 text-white"
+                                      : "bg-gray-600 text-white"
+                                  }`}
+                                >
+                                  {p.status === "active"
+                                    ? "Active"
+                                    : "Inactive"}
+                                </span>
+                              )}
+
                               <img
                                 src={img}
                                 alt={p.title}
-                                className="h-full w-full object-cover"
+                                className="h-full w-full object-cover transition group-hover:scale-105"
                                 onError={(e) => {
                                   (e.target as HTMLImageElement).src =
                                     "https://via.placeholder.com/600x400?text=No+Image";
@@ -1173,12 +1156,14 @@ const Account: React.FC = () => {
                               />
                             </div>
 
-                            <div className="flex flex-1 flex-col p-3">
+                            {/* Content */}
+                            <div className="flex flex-col p-4">
                               <div className="flex items-start justify-between gap-2">
                                 <h3 className="line-clamp-1 font-semibold text-gray-900">
                                   {p.title}
                                 </h3>
 
+                                {/* Menu */}
                                 <div className="relative">
                                   <button
                                     type="button"
@@ -1191,18 +1176,15 @@ const Account: React.FC = () => {
                                           : String(p.id),
                                       );
                                     }}
-                                    className="rounded p-1.5 hover:bg-white"
-                                    aria-label="More actions"
-                                    title="More actions"
+                                    className="rounded-[8px] p-1.5 text-gray-500 hover:bg-gray-100"
                                   >
-                                    <MoreIcon className="h-4 w-4 text-gray-600" />
+                                    <MoreIcon className="h-4 w-4" />
                                   </button>
 
                                   {menuOpenId === String(p.id) && (
                                     <div
-                                      className="absolute right-0 z-20 mt-1 w-36 rounded-md border bg-white shadow-lg"
+                                      className="absolute right-0 z-20 mt-1 w-36 overflow-hidden rounded-[8px] border bg-white shadow-lg"
                                       onClick={(e) => e.stopPropagation()}
-                                      onMouseDown={(e) => e.stopPropagation()}
                                     >
                                       <button
                                         type="button"
@@ -1213,19 +1195,9 @@ const Account: React.FC = () => {
                                         onClick={() =>
                                           handleSetStatus(p.id, "active")
                                         }
-                                        className={`block w-full px-3 py-2 text-left text-sm hover:bg-gray-50 ${
-                                          p.status === "active"
-                                            ? "font-medium text-green-600"
-                                            : "text-gray-700"
-                                        } ${
-                                          statusSavingId === String(p.id)
-                                            ? "cursor-not-allowed opacity-60"
-                                            : ""
-                                        }`}
+                                        className="block w-full px-3 py-2 text-left text-sm hover:bg-gray-50 disabled:opacity-60"
                                       >
-                                        {statusSavingId === String(p.id)
-                                          ? "Saving…"
-                                          : "Active"}
+                                        Active
                                       </button>
                                       <button
                                         type="button"
@@ -1237,62 +1209,52 @@ const Account: React.FC = () => {
                                         onClick={() =>
                                           handleSetStatus(p.id, "pending")
                                         }
-                                        className={`block w-full px-3 py-2 text-left text-sm hover:bg-gray-50 ${
-                                          p.status === "pending" ||
-                                          p.status == null
-                                            ? "font-medium text-gray-500"
-                                            : "text-gray-700"
-                                        } ${
-                                          statusSavingId === String(p.id)
-                                            ? "cursor-not-allowed opacity-60"
-                                            : ""
-                                        }`}
+                                        className="block w-full px-3 py-2 text-left text-sm hover:bg-gray-50 disabled:opacity-60"
                                       >
-                                        {statusSavingId === String(p.id)
-                                          ? "Saving…"
-                                          : "Inactive"}
+                                        Inactive
                                       </button>
                                     </div>
                                   )}
                                 </div>
                               </div>
 
-                              <div className="mt-0.5 flex items-center gap-2">
-                                <div className="font-bold text-[#2DB8D1]">
-                                  ₹{Number(p.price).toLocaleString()}
-                                  {p.for === "rent" ? "/month" : ""}
-                                </div>
+                              <div className="mt-1 font-bold text-[#2DB8D1]">
+                                ₹{Number(p.price).toLocaleString()}
+                                {p.for === "rent" ? "/month" : ""}
                               </div>
 
-                              <div className="mt-0.5 flex items-center text-xs text-gray-600">
-                                <MapPinIcon className="mr-1 h-3.5 w-3.5" />
+                              <div className="mt-1 flex items-center text-xs text-gray-600">
+                                <MapPinIcon className="mr-1 h-4 w-4" />
                                 {p.location}
                               </div>
 
-                              <div className="mt-auto flex flex-wrap items-center gap-2 pt-2">
+                              {/* Actions */}
+                              <div className="mt-4 flex flex-wrap gap-2">
                                 <Link
                                   to={`/properties/${p.id}`}
-                                  className="inline-flex items-center gap-1 rounded border px-2.5 py-1.5 text-sm hover:bg-white"
+                                  className="inline-flex items-center gap-1 rounded-[8px] border px-3 py-1.5 text-sm hover:bg-gray-50"
                                 >
                                   <EyeIcon className="h-4 w-4" /> View
                                 </Link>
+
                                 <Link
                                   to={`/properties/${p.id}/edit`}
-                                  className="inline-flex items-center gap-1 rounded border border-[#2DB8D1] px-2.5 py-1.5 text-sm text-[#2DB8D1] hover:bg-[#E6F7F3]"
+                                  className="inline-flex items-center gap-1 rounded-[8px] border border-[#2DB8D1] px-3 py-1.5 text-sm text-[#2DB8D1] hover:bg-[#E6F7F3]"
                                 >
                                   <EditIcon className="h-4 w-4" /> Edit
                                 </Link>
+
                                 <button
                                   onClick={() => openDeleteConfirm(p)}
-                                  disabled={deletingId === String(p.id)}
-                                  className="inline-flex items-center gap-1 rounded border border-red-500 px-2.5 py-1.5 text-sm text-red-600 hover:bg-red-50 disabled:opacity-60"
+                                  disabled={isDeleting}
+                                  className="inline-flex items-center gap-1 rounded-[8px] border border-red-500 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 disabled:opacity-60"
                                 >
                                   <TrashIcon className="h-4 w-4" />
                                   {isDeleting ? "Deleting…" : "Delete"}
                                 </button>
                               </div>
 
-                              <div className="mt-1 text-xs text-gray-500">
+                              <div className="mt-2 text-xs text-gray-400">
                                 Listed on {ts.toLocaleDateString()}
                               </div>
                             </div>
@@ -1302,22 +1264,23 @@ const Account: React.FC = () => {
                     </div>
                   )}
 
+                  {/* Pagination */}
                   {!loadingProps && lastPage > 1 && (
-                    <div className="mt-6 flex items-center justify-center gap-3">
+                    <div className="mt-8 flex items-center justify-center gap-4">
                       <button
                         disabled={page <= 1}
                         onClick={() => setPage((p) => p - 1)}
-                        className="rounded border px-3 py-1 disabled:opacity-50"
+                        className="rounded-[8px] border px-4 py-1.5 disabled:opacity-50"
                       >
                         Prev
                       </button>
-                      <span>
+                      <span className="text-sm text-gray-600">
                         Page {page} of {lastPage}
                       </span>
                       <button
                         disabled={page >= lastPage}
                         onClick={() => setPage((p) => p + 1)}
-                        className="rounded border px-3 py-1 disabled:opacity-50"
+                        className="rounded-[8px] border px-4 py-1.5 disabled:opacity-50"
                       >
                         Next
                       </button>
@@ -1343,9 +1306,9 @@ const Account: React.FC = () => {
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="confirm-delete-title"
-                className="w-full max-w-md rounded-lg bg-white shadow-xl"
+                className="w-full max-w-md rounded-xl bg-white shadow-xl"
               >
-                <div className="flex items-center justify-between border-b px-4 py-3">
+                <div className="flex items-center justify-between px-4 pt-3">
                   <h3
                     id="confirm-delete-title"
                     className="text-lg font-semibold text-gray-900"
@@ -1375,17 +1338,17 @@ const Account: React.FC = () => {
                   )}
                   ? This action cannot be undone.
                 </div>
-                <div className="flex justify-end gap-2 border-t px-4 py-3">
+                <div className="flex justify-end gap-2 px-4 pb-3">
                   <button
                     onClick={closeDeleteConfirm}
-                    className="rounded-md border px-4 py-2 text-gray-700 hover:bg-gray-50"
+                    className="rounded-[8px] border px-4 py-2 text-gray-700 hover:bg-gray-50"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={confirmDelete}
                     disabled={deletingId === String(confirmDialog.id)}
-                    className="rounded-md bg-red-600 px-4 py-2 text-white hover:bg-red-700 disabled:opacity-60"
+                    className="rounded-[8px] bg-red-600 px-4 py-2 text-white hover:bg-red-700 disabled:opacity-60"
                   >
                     {deletingId === String(confirmDialog.id)
                       ? "Deleting…"
@@ -1422,7 +1385,7 @@ const Account: React.FC = () => {
           <div className="mb-6 flex items-center justify-center gap-3">
             <button
               onClick={() => setMode("login")}
-              className={`rounded-md px-4 py-2 ${
+              className={`rounded-[8px] px-4 py-2 ${
                 mode === "login"
                   ? "bg-[#2DB8D1] text-white"
                   : "bg-gray-100 text-gray-700"
@@ -1432,7 +1395,7 @@ const Account: React.FC = () => {
             </button>
             <button
               onClick={() => setMode("signup")}
-              className={`rounded-md px-4 py-2 ${
+              className={`rounded-[8px] px-4 py-2 ${
                 mode === "signup"
                   ? "bg-[#2DB8D1] text-white"
                   : "bg-gray-100 text-gray-700"
