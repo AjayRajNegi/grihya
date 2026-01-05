@@ -22,7 +22,7 @@ const ImagesInput: React.FC<ImagesInputProps> = ({
     const filePreviews = files.map((f) => {
       const key = `${f.name}-${f.size}-${f.lastModified}`;
       const isUnsupported = ["image/heic", "image/heif", "image/tiff"].includes(
-        f.type
+        f.type,
       );
       return {
         key,
@@ -139,8 +139,8 @@ const ImagesInput: React.FC<ImagesInputProps> = ({
   return (
     <div className="space-y-3">
       <div
-        className={`border-2 border-dashed rounded-md p-6 text-center transition ${
-          isDragging ? "border-[#2AB09C] bg-[#E6F7F3]" : "border-gray-300"
+        className={`rounded-md border-2 border-dashed p-6 text-center transition ${
+          isDragging ? "border-[#2DB8D1] bg-[#E6F7F3]" : "border-gray-300"
         }`}
         onDrop={onDrop}
         onDragOver={onDragOver}
@@ -150,7 +150,7 @@ const ImagesInput: React.FC<ImagesInputProps> = ({
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          className="mt-2 inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#2AB09C]"
+          className="mt-2 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#2DB8D1]"
         >
           Select Images
         </button>
@@ -168,16 +168,16 @@ const ImagesInput: React.FC<ImagesInputProps> = ({
       </div>
 
       {(files.length > 0 || existingImages.length > 0) && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
           {previews.map((p, idx) => (
             <div
               key={p.key}
-              className="relative group border rounded overflow-hidden"
+              className="group relative overflow-hidden rounded border"
             >
               {p.url ? (
                 <img
                   src={p.url}
-                  className="w-full h-28 object-cover"
+                  className="h-28 w-full object-cover"
                   alt={`image-${idx}`}
                   onError={(e) => {
                     console.error(`Failed to load image: ${p.url}`);
@@ -189,7 +189,7 @@ const ImagesInput: React.FC<ImagesInputProps> = ({
                 />
               ) : null}
               <div
-                className={`w-full h-28 flex items-center justify-center bg-gray-100 text-gray-600 text-xs ${
+                className={`flex h-28 w-full items-center justify-center bg-gray-100 text-xs text-gray-600 ${
                   p.url ? "hidden" : "flex"
                 }`}
                 title={p.name}
@@ -201,7 +201,7 @@ const ImagesInput: React.FC<ImagesInputProps> = ({
               <button
                 type="button"
                 onClick={() => removeAt(idx)}
-                className="absolute top-1 right-1 bg-black/60 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition"
+                className="absolute right-1 top-1 rounded bg-black/60 px-2 py-1 text-xs text-white opacity-0 transition group-hover:opacity-100"
                 aria-label="Remove image"
                 title="Remove"
               >

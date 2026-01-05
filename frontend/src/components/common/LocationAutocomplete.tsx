@@ -71,7 +71,7 @@ const LocationAutocomplete: React.FC<Props> = ({
   value,
   onChange,
   onPick,
-  placeholder = "Search address or place",
+  placeholder = "Add address",
   disabled,
   className,
   error,
@@ -270,7 +270,7 @@ const LocationAutocomplete: React.FC<Props> = ({
   }
 
   return (
-    <div className="relative">
+    <div className="relative rounded-[8px]">
       <input
         type="text"
         disabled={disabled}
@@ -288,9 +288,9 @@ const LocationAutocomplete: React.FC<Props> = ({
         placeholder={placeholder}
         className={
           className ||
-          `w-full border px-3 py-3 ${
+          `w-full border px-3 py-2 ${
             error ? "border-red-500" : "border-gray-300"
-          } rounded-md bg-red-200 focus:outline-none focus:ring-2 focus:ring-[#2AB09C]`
+          } rounded-[8px] focus:outline-none`
         }
         autoComplete="off"
         aria-autocomplete="list"

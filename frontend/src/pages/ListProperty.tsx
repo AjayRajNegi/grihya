@@ -3,7 +3,6 @@ import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import ImagesInput from "../components/forms/ImagesInput";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet";
 import {
   MapContainer,
   TileLayer,
@@ -19,6 +18,17 @@ import LocationAutocomplete, {
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import { ArrowLeft } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Input } from "@/components/ui/input";
 
 const API_URL =
   import.meta.env.VITE_API_URL ||
@@ -95,7 +105,7 @@ const ListProperty: React.FC = () => {
   // Google Places selection
   const [pickedPlace, setPickedPlace] = useState<PickedPlace | null>(null);
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(
-    null
+    null,
   ); // bias suggestions
 
   // Prevent page scroll when not authenticated
@@ -117,7 +127,7 @@ const ListProperty: React.FC = () => {
       (pos) =>
         setCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
       () => setCoords(null),
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
     );
   }, []);
 
@@ -135,8 +145,8 @@ const ListProperty: React.FC = () => {
           setSubmitError("Your session has expired. Please sign in again.");
           navigate(
             `/account?show=login&redirect=${encodeURIComponent(
-              location.pathname + location.search
-            )}`
+              location.pathname + location.search,
+            )}`,
           );
           return;
         }
@@ -151,13 +161,13 @@ const ListProperty: React.FC = () => {
             setSubmitError("Your session has expired. Please sign in again.");
             navigate(
               `/account?show=login&redirect=${encodeURIComponent(
-                location.pathname + location.search
-              )}`
+                location.pathname + location.search,
+              )}`,
             );
             return;
           }
           setLoadError(
-            errorData?.message || "Unable to load property details."
+            errorData?.message || "Unable to load property details.",
           );
           return;
         }
@@ -236,7 +246,7 @@ const ListProperty: React.FC = () => {
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const { name, value } = e.target;
 
@@ -312,7 +322,7 @@ const ListProperty: React.FC = () => {
   const handleImageChange = (
     files: File[],
     existingImages: string[],
-    error?: string
+    error?: string,
   ) => {
     setImageError(error || "");
     setImageFiles(files);
@@ -328,7 +338,7 @@ const ListProperty: React.FC = () => {
     if (!isAuthenticated) {
       const currentUrl = location.pathname + location.search;
       navigate(
-        `/account?show=login&redirect=${encodeURIComponent(currentUrl)}`
+        `/account?show=login&redirect=${encodeURIComponent(currentUrl)}`,
       );
       return;
     }
@@ -357,7 +367,7 @@ const ListProperty: React.FC = () => {
       }
       if (!allowedTypes.includes(file.type)) {
         setImageError(
-          "Images must be in JPEG, PNG, WEBP, AVIF, HEIC, GIF, BMP, or TIFF format."
+          "Images must be in JPEG, PNG, WEBP, AVIF, HEIC, GIF, BMP, or TIFF format.",
         );
         return;
       }
@@ -369,8 +379,8 @@ const ListProperty: React.FC = () => {
       setSubmitError("Your session has expired. Please sign in again.");
       navigate(
         `/account?show=login&redirect=${encodeURIComponent(
-          location.pathname + location.search
-        )}`
+          location.pathname + location.search,
+        )}`,
       );
       return;
     }
@@ -416,7 +426,7 @@ const ListProperty: React.FC = () => {
         if (formData.immediatelyAvailable) {
           form.append(
             "available_immediately",
-            formData.immediatelyAvailable === "yes" ? "1" : "0"
+            formData.immediatelyAvailable === "yes" ? "1" : "0",
           );
         }
         if (
@@ -430,7 +440,7 @@ const ListProperty: React.FC = () => {
         if (formData.readyToMove) {
           form.append(
             "ready_to_move",
-            formData.readyToMove === "yes" ? "1" : "0"
+            formData.readyToMove === "yes" ? "1" : "0",
           );
         }
         if (formData.readyToMove === "no" && formData.possessionDate) {
@@ -506,8 +516,8 @@ const ListProperty: React.FC = () => {
           setSubmitError("Your session has expired. Please sign in again.");
           navigate(
             `/account?show=login&redirect=${encodeURIComponent(
-              location.pathname + location.search
-            )}`
+              location.pathname + location.search,
+            )}`,
           );
           return;
         }
@@ -517,7 +527,7 @@ const ListProperty: React.FC = () => {
         }
         if (res.status === 429) {
           setSubmitError(
-            "You’ve tried too many times. Please wait a minute and try again."
+            "You’ve tried too many times. Please wait a minute and try again.",
           );
           return;
         }
@@ -563,14 +573,14 @@ const ListProperty: React.FC = () => {
           const hasFieldErrors =
             Object.keys(nextErrors).length > 0 || !!nextImageError;
           setSubmitError(
-            hasFieldErrors ? "" : data?.message || "Please check your inputs."
+            hasFieldErrors ? "" : data?.message || "Please check your inputs.",
           );
           return;
         }
 
         setSubmitError(
           data?.message ||
-            `Unable to ${isEditing ? "update" : "submit"} your property.`
+            `Unable to ${isEditing ? "update" : "submit"} your property.`,
         );
         return;
       }
@@ -581,21 +591,21 @@ const ListProperty: React.FC = () => {
     } catch (err: any) {
       if (err.name === "AbortError") {
         setSubmitError(
-          "The request took too long. Please check your connection and try again."
+          "The request took too long. Please check your connection and try again.",
         );
       } else if (
         err.message?.includes("Failed to fetch") ||
         err.message?.includes("NetworkError")
       ) {
         setSubmitError(
-          "Unable to connect to the server. Please check your internet and try again."
+          "Unable to connect to the server. Please check your internet and try again.",
         );
       } else {
         setSubmitError(
           err.message ||
             `Unable to ${
               isEditing ? "update" : "submit"
-            } your property. Please try again.`
+            } your property. Please try again.`,
         );
       }
     } finally {
@@ -608,17 +618,17 @@ const ListProperty: React.FC = () => {
 
   if (formSubmitted) {
     return (
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16 text-center">
-        <div className="bg-green-50 border border-green-200 rounded-lg p-8">
-          <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-green-100 text-green-600 mb-4">
+      <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6">
+        <div className="rounded-lg border border-green-200 bg-green-50 p-8">
+          <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-600">
             <CheckIcon className="h-8 w-8" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <h2 className="mb-2 text-2xl font-bold text-gray-900">
             {isEditing
               ? "Property Updated Successfully!"
               : "Property Listed Successfully!"}
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className="mb-6 text-gray-600">
             Your property has been submitted for review.
           </p>
           <p className="text-gray-600">You will be redirected shortly…</p>
@@ -629,22 +639,10 @@ const ListProperty: React.FC = () => {
 
   return (
     <>
-      <div className="bg-gray-50 min-h-screen py-10">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          <div className="mb-6 flex items-center gap-3">
-            <button
-              type="button"
-              aria-label="Go back"
-              onClick={() => navigate(-1)}
-              className="inline-flex h-9 w-9 -ml-1 items-center justify-center bg-transparent text-gray-800 hover:text-gray-900 active:scale-95 cursor-pointer"
-              title="Back"
-            >
-              <span className="text-2xl md:text-3xl font-extrabold leading-none">
-                <img src="/less_than_icon.png" alt="Back-Icon" />
-              </span>
-            </button>
-
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+      <div className="min-h-screen py-10">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6">
+          <div className="mb-6 flex items-center">
+            <h1 className="text-2xl font-bold text-gray-900 md:text-3xl">
               {isEditing ? "Edit Property" : "List Your Property"}
             </h1>
           </div>
@@ -666,25 +664,25 @@ const ListProperty: React.FC = () => {
           )}
 
           <div
-            className={`bg-white rounded-lg shadow-md p-6 md:p-8 ${
+            className={`rounded-[12px] border border-gray-200 bg-white p-6 md:p-8 ${
               isBusy ? "opacity-95" : ""
             }`}
           >
             {loading && (
-              <p className="text-gray-600 mb-4">Loading property details...</p>
+              <p className="mb-4 text-gray-600">Loading property details...</p>
             )}
 
             <form onSubmit={handleSubmit} aria-busy={isBusy}>
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                  <h2 className="mb-4 text-xl font-semibold text-gray-900">
                     Basic Information
                   </h2>
                   <div className="grid grid-cols-1 gap-6">
                     <div>
                       <label
                         htmlFor="title"
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="mb-1 block text-sm font-medium text-gray-700"
                       >
                         Property Title <span className="text-red-500">*</span>
                       </label>
@@ -695,10 +693,10 @@ const ListProperty: React.FC = () => {
                         name="title"
                         value={formData.title}
                         onChange={handleChange}
-                        className={`w-full px-3 py-2 border ${
+                        className={`w-full border px-3 py-2 ${
                           errors.title ? "border-red-500" : "border-gray-300"
-                        } rounded-md focus:outline-none focus:ring-2 focus:ring-[#2AB09C]`}
-                        placeholder="e.g. Spacious 2BHK Apartment in Koramangala"
+                        } rounded-[8px] focus:outline-none focus:ring-2 focus:ring-[#2DB8D1]`}
+                        placeholder="e.g. Spacious 3BHK Apartment in Port Blair for Sale."
                       />
                       {errors.title && (
                         <p className="mt-1 text-sm text-red-600">
@@ -709,7 +707,7 @@ const ListProperty: React.FC = () => {
                     <div>
                       <label
                         htmlFor="description"
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        className="mb-1 block text-sm font-medium text-gray-700"
                       >
                         Description <span className="text-red-500">*</span>
                       </label>
@@ -720,12 +718,12 @@ const ListProperty: React.FC = () => {
                         rows={4}
                         value={formData.description}
                         onChange={handleChange}
-                        className={`w-full px-3 py-2 border ${
+                        className={`w-full border px-3 py-2 ${
                           errors.description
                             ? "border-red-500"
                             : "border-gray-300"
-                        } rounded-md focus:outline-none focus:ring-2 focus:ring-[#2AB09C]`}
-                        placeholder="Describe your property, key features, nearby facilities, etc."
+                        } rounded-[8px] focus:outline-none focus:ring-2 focus:ring-[#2DB8D1]`}
+                        placeholder="Give a detailed description of your"
                       />
                       {errors.description && (
                         <p className="mt-1 text-sm text-red-600">
@@ -733,71 +731,91 @@ const ListProperty: React.FC = () => {
                         </p>
                       )}
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                      <div>
-                        <label
-                          htmlFor="type"
-                          className="block text-sm font-medium text-gray-700 mb-1"
-                        >
-                          Property Type <span className="text-red-500">*</span>
-                        </label>
-                        <select
+
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                      {/* Property Type */}
+                      <div className="space-y-2">
+                        <Label htmlFor="type" className="text-sm font-medium">
+                          Property Type{" "}
+                          <span className="text-destructive">*</span>
+                        </Label>
+
+                        <Select
                           disabled={isBusy}
-                          id="type"
-                          name="type"
                           value={formData.type}
-                          onChange={handleChange}
-                          className={`w-full px-3 py-2 border ${
-                            errors.type ? "border-red-500" : "border-gray-300"
-                          } rounded-md focus:outline-none focus:ring-2 focus:ring-[#2AB09C]`}
+                          onValueChange={(value) =>
+                            handleChange({
+                              target: { name: "type", value },
+                            } as any)
+                          }
                         >
-                          <option value="">Select Type</option>
-                          <option value="pg">PG Accommodation</option>
-                          <option value="flat">Apartment/Flat</option>
-                          <option value="house">Independent House/Villa</option>
-                          <option value="commercial">
-                            Commercial Property
-                          </option>
-                          <option value="land">Plot/Land</option>
-                        </select>
+                          <SelectTrigger
+                            id="type"
+                            className={
+                              errors.type
+                                ? "rounded-[8px] border-destructive"
+                                : "rounded-[8px]"
+                            }
+                          >
+                            <SelectValue placeholder="Select Type" />
+                          </SelectTrigger>
+
+                          <SelectContent className="rounded-[8px] bg-white">
+                            <SelectItem value="pg">PG Accommodation</SelectItem>
+                            <SelectItem value="flat">
+                              Apartment / Flat
+                            </SelectItem>
+                            <SelectItem value="house">
+                              Independent House / Villa
+                            </SelectItem>
+                            <SelectItem value="commercial">
+                              Commercial Property
+                            </SelectItem>
+                            <SelectItem value="land">Plot / Land</SelectItem>
+                          </SelectContent>
+                        </Select>
+
                         {errors.type && (
-                          <p className="mt-1 text-sm text-red-600">
+                          <p className="text-sm text-destructive">
                             {errors.type}
                           </p>
                         )}
                       </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Listing For <span className="text-red-500">*</span>
-                        </label>
-                        <div className="flex space-x-4">
-                          <label className="inline-flex items-center">
-                            <input
-                              disabled={isBusy}
-                              type="radio"
-                              name="for"
-                              value="rent"
-                              checked={formData.for === "rent"}
-                              onChange={handleChange}
-                              className="h-4 w-4 text-blue-600 focus:ring-blue-500"
-                            />
-                            <span className="ml-2">Rent</span>
-                          </label>
-                          <label className="inline-flex items-center">
-                            <input
-                              disabled={isBusy}
-                              type="radio"
-                              name="for"
-                              value="sale"
-                              checked={formData.for === "sale"}
-                              onChange={handleChange}
-                              className="h-4 w-4 text-blue-600 focus:ring-blue-500"
-                            />
-                            <span className="ml-2">Sale</span>
-                          </label>
-                        </div>
+
+                      {/* Listing For */}
+                      <div className="space-y-3">
+                        <Label className="text-sm font-medium">
+                          Listing For{" "}
+                          <span className="text-destructive">*</span>
+                        </Label>
+
+                        <RadioGroup
+                          disabled={isBusy}
+                          value={formData.for}
+                          onValueChange={(value) =>
+                            handleChange({
+                              target: { name: "for", value },
+                            } as any)
+                          }
+                          className="flex gap-6"
+                        >
+                          <div className="flex items-center gap-2">
+                            <RadioGroupItem value="rent" id="rent" />
+                            <Label htmlFor="rent" className="cursor-pointer">
+                              Rent
+                            </Label>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <RadioGroupItem value="sale" id="sale" />
+                            <Label htmlFor="sale" className="cursor-pointer">
+                              Sale
+                            </Label>
+                          </div>
+                        </RadioGroup>
+
                         {errors.for && (
-                          <p className="mt-1 text-sm text-red-600">
+                          <p className="text-sm text-destructive">
                             {errors.for}
                           </p>
                         )}
@@ -805,54 +823,66 @@ const ListProperty: React.FC = () => {
                     </div>
 
                     {/* Availability/Readiness + Preferred Tenants */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                      {/* Rent: Immediately available? */}
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                      {/* Rent Flow */}
                       {formData.for === "rent" ? (
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <div className="space-y-2">
+                          <Label className="text-sm font-medium">
                             Immediately available?{" "}
-                            <span className="text-red-500">*</span>
-                          </label>
-                          <select
+                            <span className="text-destructive">*</span>
+                          </Label>
+
+                          <Select
                             disabled={isBusy}
-                            name="immediatelyAvailable"
                             value={formData.immediatelyAvailable}
-                            onChange={handleChange}
-                            className={`w-full px-3 py-2 border ${
-                              errors.immediatelyAvailable
-                                ? "border-red-500"
-                                : "border-gray-300"
-                            } rounded-md focus:outline-none focus:ring-2 focus:ring-[#2AB09C]`}
+                            onValueChange={(value) =>
+                              handleChange({
+                                target: { name: "immediatelyAvailable", value },
+                              } as any)
+                            }
                           >
-                            <option value="">Select</option>
-                            <option value="yes">Yes</option>
-                            <option value="no">No</option>
-                          </select>
+                            <SelectTrigger
+                              className={
+                                errors.immediatelyAvailable
+                                  ? "rounded-[8px] border-destructive"
+                                  : "rounded-[8px]"
+                              }
+                            >
+                              <SelectValue placeholder="Select" />
+                            </SelectTrigger>
+                            <SelectContent className="rounded-[8px] bg-white">
+                              <SelectItem value="yes">Yes</SelectItem>
+                              <SelectItem value="no">No</SelectItem>
+                            </SelectContent>
+                          </Select>
+
                           {errors.immediatelyAvailable && (
-                            <p className="mt-1 text-sm text-red-600">
+                            <p className="text-sm text-destructive">
                               {errors.immediatelyAvailable}
                             </p>
                           )}
 
                           {formData.immediatelyAvailable === "no" && (
-                            <div className="mt-3">
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <div className="mt-3 space-y-2">
+                              <Label className="text-sm font-medium">
                                 Available from (optional)
-                              </label>
-                              <input
+                              </Label>
+
+                              <Input
                                 disabled={isBusy}
                                 type="date"
                                 name="availableFromDate"
                                 value={formData.availableFromDate}
                                 onChange={handleChange}
-                                className={`w-full px-3 py-2 border ${
+                                className={
                                   errors.availableFromDate
-                                    ? "border-red-500"
-                                    : "border-gray-300"
-                                } rounded-md focus:outline-none focus:ring-2 focus:ring-[#2AB09C]`}
+                                    ? "rounded-[8px] border-destructive"
+                                    : "rounded-[8px]"
+                                }
                               />
+
                               {errors.availableFromDate && (
-                                <p className="mt-1 text-sm text-red-600">
+                                <p className="text-sm text-destructive">
                                   {errors.availableFromDate}
                                 </p>
                               )}
@@ -860,51 +890,63 @@ const ListProperty: React.FC = () => {
                           )}
                         </div>
                       ) : (
-                        // Sale: Ready to move?
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                        /* Sale Flow */
+                        <div className="space-y-2">
+                          <Label className="text-sm font-medium">
                             Ready to move?
-                          </label>
-                          <select
+                          </Label>
+
+                          <Select
                             disabled={isBusy}
-                            name="readyToMove"
                             value={formData.readyToMove}
-                            onChange={handleChange}
-                            className={`w-full px-3 py-2 border ${
-                              errors.readyToMove
-                                ? "border-red-500"
-                                : "border-gray-300"
-                            } rounded-md focus:outline-none focus:ring-2 focus:ring-[#2AB09C]`}
+                            onValueChange={(value) =>
+                              handleChange({
+                                target: { name: "readyToMove", value },
+                              } as any)
+                            }
                           >
-                            <option value="">Select</option>
-                            <option value="yes">Yes</option>
-                            <option value="no">No</option>
-                          </select>
+                            <SelectTrigger
+                              className={
+                                errors.readyToMove
+                                  ? "rounded-[8px] border-destructive"
+                                  : "rounded-[8px]"
+                              }
+                            >
+                              <SelectValue placeholder="Select" />
+                            </SelectTrigger>
+                            <SelectContent className="rounded-[8px] bg-white">
+                              <SelectItem value="yes">Yes</SelectItem>
+                              <SelectItem value="no">No</SelectItem>
+                            </SelectContent>
+                          </Select>
+
                           {errors.readyToMove && (
-                            <p className="mt-1 text-sm text-red-600">
+                            <p className="text-sm text-destructive">
                               {errors.readyToMove}
                             </p>
                           )}
 
                           {formData.readyToMove === "no" && (
-                            <div className="mt-3">
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <div className="mt-3 space-y-2">
+                              <Label className="text-sm font-medium">
                                 Possession from (optional)
-                              </label>
-                              <input
+                              </Label>
+
+                              <Input
                                 disabled={isBusy}
                                 type="date"
                                 name="possessionDate"
                                 value={formData.possessionDate}
                                 onChange={handleChange}
-                                className={`w-full px-3 py-2 border ${
+                                className={
                                   errors.possessionDate
-                                    ? "border-red-500"
-                                    : "border-gray-300"
-                                } rounded-md focus:outline-none focus:ring-2 focus:ring-[#2AB09C]`}
+                                    ? "rounded-[8px] border-destructive"
+                                    : "rounded-[8px]"
+                                }
                               />
+
                               {errors.possessionDate && (
-                                <p className="mt-1 text-sm text-red-600">
+                                <p className="text-sm text-destructive">
                                   {errors.possessionDate}
                                 </p>
                               )}
@@ -913,31 +955,42 @@ const ListProperty: React.FC = () => {
                         </div>
                       )}
 
-                      {/* Preferred Tenants (only for PG/Flat/House + Rent) */}
+                      {/* Preferred Tenants */}
                       {showPreferredTenants && (
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <div className="space-y-2">
+                          <Label className="text-sm font-medium">
                             Preferred tenants
-                          </label>
-                          <select
+                          </Label>
+
+                          <Select
                             disabled={isBusy}
-                            name="preferredTenants"
                             value={formData.preferredTenants}
-                            onChange={handleChange}
-                            className={`w-full px-3 py-2 border ${
-                              errors.preferredTenants
-                                ? "border-red-500"
-                                : "border-gray-300"
-                            } rounded-md focus:outline-none focus:ring-2 focus:ring-[#2AB09C]`}
+                            onValueChange={(value) =>
+                              handleChange({
+                                target: { name: "preferredTenants", value },
+                              } as any)
+                            }
                           >
-                            <option value="family">Family</option>
-                            <option value="bachelor">Bachelor</option>
-                            <option value="both">
-                              Both (Family and Bachelor)
-                            </option>
-                          </select>
+                            <SelectTrigger
+                              className={
+                                errors.preferredTenants
+                                  ? "rounded-[8px] border-destructive"
+                                  : "rounded-[8px]"
+                              }
+                            >
+                              <SelectValue placeholder="Select" />
+                            </SelectTrigger>
+                            <SelectContent className="rounded-[8px] bg-white">
+                              <SelectItem value="family">Family</SelectItem>
+                              <SelectItem value="bachelor">Bachelor</SelectItem>
+                              <SelectItem value="both">
+                                Both (Family & Bachelor)
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+
                           {errors.preferredTenants && (
-                            <p className="mt-1 text-sm text-red-600">
+                            <p className="text-sm text-destructive">
                               {errors.preferredTenants}
                             </p>
                           )}
@@ -945,15 +998,15 @@ const ListProperty: React.FC = () => {
                       )}
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                       <div>
                         <label
                           htmlFor="price"
-                          className="block text-sm font-medium text-gray-700 mb-1"
+                          className="mb-1 block text-sm font-medium text-gray-700"
                         >
                           Price (₹) <span className="text-red-500">*</span>
                         </label>
-                        <input
+                        <Input
                           disabled={isBusy}
                           type="number"
                           step="1"
@@ -964,9 +1017,9 @@ const ListProperty: React.FC = () => {
                           name="price"
                           value={formData.price}
                           onChange={handleChange}
-                          className={`w-full px-3 py-2 border ${
+                          className={`w-full border px-3 py-2 ${
                             errors.price ? "border-red-500" : "border-gray-300"
-                          } rounded-md focus:outline-none focus:ring-2 focus:ring-[#2AB09C]`}
+                          } rounded-[8px] focus:outline-none focus:ring-2 focus:ring-[#2DB8D1]`}
                           placeholder={
                             formData.for === "rent"
                               ? "Monthly rent amount"
@@ -984,12 +1037,12 @@ const ListProperty: React.FC = () => {
                       <div className="relative">
                         <label
                           htmlFor="location"
-                          className="block text-sm font-medium text-gray-700 mb-1"
+                          className="mb-1 block text-sm font-medium text-gray-700"
                         >
                           Location <span className="text-red-500">*</span>
                         </label>
 
-                        <div className="relative">
+                        <div className="relative overflow-hidden rounded-[8px]">
                           <LocationAutocomplete
                             value={formData.location}
                             onChange={(v) => {
@@ -1017,7 +1070,7 @@ const ListProperty: React.FC = () => {
                             country="IN"
                             disabled={isBusy}
                             error={errors.location}
-                            placeholder="Search address or place"
+                            placeholder="Search address from map button."
                           />
 
                           {/* Location icon button to open map picker */}
@@ -1025,12 +1078,12 @@ const ListProperty: React.FC = () => {
                             type="button"
                             onClick={() => setMapOpen(true)}
                             title="Pick on map"
-                            className="absolute right-2 pt-1 md:top-2 rounded bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#2AB09C]"
+                            className="absolute right-2 rounded bg-white pt-1 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#2DB8D1] md:top-2"
                             aria-label="Pick location on map"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5 text-[#2AB09C]"
+                              className="h-5 w-5 text-[#2DB8D1]"
                               viewBox="0 0 24 24"
                               fill="none"
                               stroke="currentColor"
@@ -1042,7 +1095,7 @@ const ListProperty: React.FC = () => {
                           </button>
                         </div>
 
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="mt-1 text-xs text-gray-500">
                           Type an address or use the map picker to pin the exact
                           location
                           {pickedPlace?.postalCode
@@ -1054,117 +1107,120 @@ const ListProperty: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="border-t border-gray-200 pt-6">
-                  <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                <div className="border-t pt-6">
+                  <h2 className="mb-4 text-lg font-semibold">
                     Property Details
                   </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                    <div>
-                      <label
-                        htmlFor="bedrooms"
-                        className="block text-sm font-medium text-gray-700 mb-1"
-                      >
-                        Bedrooms
-                      </label>
-                      <input
+
+                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+                    {/* Bedrooms */}
+                    <div className="space-y-2">
+                      <Label htmlFor="bedrooms">Bedrooms</Label>
+                      <Input
                         disabled={isBusy}
                         type="number"
-                        min="0"
+                        min={0}
                         id="bedrooms"
                         name="bedrooms"
                         value={formData.bedrooms}
                         onChange={handleChange}
-                        className={`w-full px-3 py-2 border ${
-                          errors.bedrooms ? "border-red-500" : "border-gray-300"
-                        } rounded-md focus:outline-none focus:ring-2 focus:ring-[#2AB09C]`}
+                        className={
+                          errors.bedrooms
+                            ? "rounded-[8px] border-destructive"
+                            : "rounded-[8px]"
+                        }
                       />
                       {errors.bedrooms && (
-                        <p className="mt-1 text-sm text-red-600">
+                        <p className="text-sm text-destructive">
                           {errors.bedrooms}
                         </p>
                       )}
                     </div>
-                    <div>
-                      <label
-                        htmlFor="bathrooms"
-                        className="block text-sm font-medium text-gray-700 mb-1"
-                      >
-                        Bathrooms
-                      </label>
-                      <input
+
+                    {/* Bathrooms */}
+                    <div className="space-y-2">
+                      <Label htmlFor="bathrooms">Bathrooms</Label>
+                      <Input
                         disabled={isBusy}
                         type="number"
-                        min="0"
+                        min={0}
                         id="bathrooms"
                         name="bathrooms"
                         value={formData.bathrooms}
                         onChange={handleChange}
-                        className={`w-full px-3 py-2 border ${
+                        className={
                           errors.bathrooms
-                            ? "border-red-500"
-                            : "border-gray-300"
-                        } rounded-md focus:outline-none focus:ring-2 focus:ring-[#2AB09C]`}
+                            ? "rounded-[8px] border-destructive"
+                            : "rounded-[8px]"
+                        }
                       />
                       {errors.bathrooms && (
-                        <p className="mt-1 text-sm text-red-600">
+                        <p className="text-sm text-destructive">
                           {errors.bathrooms}
                         </p>
                       )}
                     </div>
-                    <div>
-                      <label
-                        htmlFor="area"
-                        className="block text-sm font-medium text-gray-700 mb-1"
-                      >
-                        Area (sq.ft)
-                      </label>
-                      <input
+
+                    {/* Area */}
+                    <div className="space-y-2">
+                      <Label htmlFor="area">Area (sq.ft)</Label>
+                      <Input
                         disabled={isBusy}
                         type="number"
-                        min="0"
+                        min={0}
                         id="area"
                         name="area"
                         value={formData.area}
                         onChange={handleChange}
-                        className={`w-full px-3 py-2 border ${
-                          errors.area ? "border-red-500" : "border-gray-300"
-                        } rounded-md focus:outline-none focus:ring-2 focus:ring-[#2AB09C]`}
+                        className={
+                          errors.area
+                            ? "rounded-[8px] border-destructive"
+                            : "rounded-[8px]"
+                        }
                       />
                       {errors.area && (
-                        <p className="mt-1 text-sm text-red-600">
+                        <p className="text-sm text-destructive">
                           {errors.area}
                         </p>
                       )}
                     </div>
                   </div>
-                  <div className="mt-6">
-                    <label
-                      htmlFor="furnishing"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      Furnishing
-                    </label>
-                    <select
+
+                  {/* Furnishing */}
+                  <div className="mt-6 space-y-2">
+                    <Label htmlFor="furnishing">Furnishing</Label>
+
+                    <Select
                       disabled={isBusy}
-                      id="furnishing"
-                      name="furnishing"
                       value={formData.furnishing}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#2AB09C]"
+                      onValueChange={(value) =>
+                        handleChange({
+                          target: { name: "furnishing", value },
+                        } as any)
+                      }
                     >
-                      <option value="">Select Furnishing</option>
-                      <option value="furnished">Fully Furnished</option>
-                      <option value="semifurnished">Semi-Furnished</option>
-                      <option value="unfurnished">Unfurnished</option>
-                    </select>
+                      <SelectTrigger className="rounded-[8px] bg-white">
+                        <SelectValue placeholder="Select Furnishing" />
+                      </SelectTrigger>
+
+                      <SelectContent className="rounded-[8px] bg-white">
+                        <SelectItem value="furnished">
+                          Fully Furnished
+                        </SelectItem>
+                        <SelectItem value="semifurnished">
+                          Semi-Furnished
+                        </SelectItem>
+                        <SelectItem value="unfurnished">Unfurnished</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
                 <div className="border-t border-gray-200 pt-6">
-                  <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                  <h2 className="mb-4 text-lg font-semibold text-gray-900">
                     Amenities
                   </h2>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
                     {[
                       "WiFi",
                       "Parking",
@@ -1193,7 +1249,7 @@ const ListProperty: React.FC = () => {
                                 return {
                                   ...prev,
                                   amenities: amenities.filter(
-                                    (a) => a !== amenity
+                                    (a) => a !== amenity,
                                   ),
                                 };
                               return {
@@ -1205,7 +1261,7 @@ const ListProperty: React.FC = () => {
                               setErrors((prev) => ({ ...prev, amenities: "" }));
                             if (submitError) setSubmitError("");
                           }}
-                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+                          className="h-4 w-4 rounded text-blue-600 focus:ring-blue-500"
                         />
                         <span className="ml-2 text-sm">{amenity}</span>
                       </label>
@@ -1219,7 +1275,7 @@ const ListProperty: React.FC = () => {
                 </div>
 
                 <div className="border-t border-gray-200 pt-6">
-                  <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                  <h2 className="mb-4 text-lg font-semibold text-gray-900">
                     Property Images (max 15 MB each)
                   </h2>
                   <ImagesInput
@@ -1242,11 +1298,11 @@ const ListProperty: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="border-t border-gray-200 pt-6 flex justify-end gap-4">
+                <div className="flex justify-end gap-4 border-t border-gray-200 pt-6">
                   <button
                     type="button"
                     onClick={() => navigate("/account")}
-                    className="px-6 py-3 rounded-md border text-gray-700 hover:bg-gray-50"
+                    className="rounded-[8px] border px-6 py-3 text-gray-700 hover:bg-gray-50"
                     disabled={isBusy}
                   >
                     Cancel
@@ -1254,17 +1310,17 @@ const ListProperty: React.FC = () => {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className={`text-white px-6 py-3 rounded-md font-medium ${
+                    className={`rounded-[8px] px-6 py-3 font-medium text-white ${
                       submitting
-                        ? "bg-[#2AB09C]/70 cursor-not-allowed"
-                        : "bg-[#2AB09C] hover:bg-transparent hover:text-[#2AB09C]"
-                    } transition-colors focus:outline-none focus:ring-2 focus:ring-[#2AB09C] focus:ring-offset-2`}
+                        ? "cursor-not-allowed bg-[#2DB8D1]/70"
+                        : "bg-[#2DB8D1] hover:bg-transparent hover:text-[#2DB8D1]"
+                    } transition-colors focus:outline-none focus:ring-2 focus:ring-[#2DB8D1] focus:ring-offset-2`}
                   >
                     {submitting
                       ? "Submitting…"
                       : isEditing
-                      ? "Update Property"
-                      : "Submit Property"}
+                        ? "Update Property"
+                        : "Submit Property"}
                   </button>
                 </div>
               </div>
@@ -1323,11 +1379,11 @@ const ListProperty: React.FC = () => {
                   onClick={() =>
                     navigate(
                       `/account?show=login&redirect=${encodeURIComponent(
-                        currentUrl
-                      )}`
+                        currentUrl,
+                      )}`,
                     )
                   }
-                  className="inline-flex justify-center rounded-md bg-[#2AB09C] px-4 py-2.5 text-white hover:bg-[#229882] focus:outline-none focus:ring-2 focus:ring-[#2AB09C] focus:ring-offset-2"
+                  className="inline-flex justify-center rounded-[8px] bg-[#2DB8D1] px-4 py-2.5 text-white hover:bg-[#229882] focus:outline-none focus:ring-2 focus:ring-[#2DB8D1] focus:ring-offset-2"
                 >
                   Login
                 </button>
@@ -1336,11 +1392,11 @@ const ListProperty: React.FC = () => {
                   onClick={() =>
                     navigate(
                       `/account?show=signup&redirect=${encodeURIComponent(
-                        currentUrl
-                      )}`
+                        currentUrl,
+                      )}`,
                     )
                   }
-                  className="inline-flex justify-center rounded-md border border-[#2AB09C] px-4 py-2.5 text-[#2AB09C] hover:bg-[#E6F7F3] focus:outline-none focus:ring-2 focus:ring-[#2AB09C] focus:ring-offset-2"
+                  className="inline-flex justify-center rounded-[8px] border border-[#2DB8D1] px-4 py-2.5 text-[#2DB8D1] hover:bg-[#E6F7F3] focus:outline-none focus:ring-2 focus:ring-[#2DB8D1] focus:ring-offset-2"
                 >
                   Sign up
                 </button>
@@ -1398,15 +1454,15 @@ const MapPickerModal: React.FC<MapPickerModalProps> = ({
   onSelect,
 }) => {
   const [center, setCenter] = useState<{ lat: number; lng: number }>(
-    initialCenter
+    initialCenter,
   );
   const [marker, setMarker] = useState<{ lat: number; lng: number } | null>(
-    initialPlace ? { lat: initialPlace.lat, lng: initialPlace.lng } : null
+    initialPlace ? { lat: initialPlace.lat, lng: initialPlace.lng } : null,
   );
   const [working, setWorking] = useState(false);
   const [error, setError] = useState<string>("");
   const [picked, setPicked] = useState<PickedPlace | null>(
-    initialPlace || null
+    initialPlace || null,
   );
 
   // Input value and suggestions
@@ -1421,7 +1477,7 @@ const MapPickerModal: React.FC<MapPickerModalProps> = ({
     if (open) {
       setCenter(initialCenter);
       setMarker(
-        initialPlace ? { lat: initialPlace.lat, lng: initialPlace.lng } : null
+        initialPlace ? { lat: initialPlace.lat, lng: initialPlace.lng } : null,
       );
       setPicked(initialPlace || null);
       setQuery(initialPlace?.label || "");
@@ -1447,7 +1503,7 @@ const MapPickerModal: React.FC<MapPickerModalProps> = ({
       try {
         // Add &countrycodes=in to restrict to India
         const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=6&countrycodes=in&q=${encodeURIComponent(
-          term
+          term,
         )}`;
         const res = await fetch(url, { signal: controller.signal });
         if (!res.ok) throw new Error("Search failed");
@@ -1517,13 +1573,13 @@ const MapPickerModal: React.FC<MapPickerModalProps> = ({
 
   const reverseGeocode = async (
     lat: number,
-    lng: number
+    lng: number,
   ): Promise<PickedPlace | null> => {
     try {
       setWorking(true);
       setError("");
       const res = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`
+        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`,
       );
       if (!res.ok) throw new Error("Reverse geocoding failed");
       const j = await res.json();
@@ -1567,7 +1623,7 @@ const MapPickerModal: React.FC<MapPickerModalProps> = ({
       setWorking(true);
       setError("");
       const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=1&countrycodes=in&q=${encodeURIComponent(
-        term
+        term,
       )}`;
       const res = await fetch(url);
       if (!res.ok) throw new Error("Search failed");
@@ -1651,21 +1707,21 @@ const MapPickerModal: React.FC<MapPickerModalProps> = ({
     <>
       <div className="fixed inset-0 z-50 bg-black/40" onClick={onClose} />
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="w-full max-w-2xl rounded-lg bg-white shadow-xl overflow-visible relative bottom-[6%]">
+        <div className="relative bottom-[6%] w-full max-w-2xl overflow-visible rounded-lg bg-white shadow-xl">
           <div className="flex items-center justify-between border-b px-4 py-3">
             <h3 className="text-lg font-semibold text-gray-900">
               Pick exact location
             </h3>
             <button
               onClick={onClose}
-              className="p-1 rounded hover:bg-gray-100"
+              className="rounded p-1 hover:bg-gray-100"
               aria-label="Close"
             >
               ✕
             </button>
           </div>
 
-          <div className="p-4 space-y-3">
+          <div className="space-y-3 p-4">
             {/* Search row: autocomplete + our suggestions + search button */}
             <div className="grid grid-cols-[1fr,auto] gap-2">
               {/* High z-index so it sits above Leaflet controls */}
@@ -1689,7 +1745,7 @@ const MapPickerModal: React.FC<MapPickerModalProps> = ({
 
                 {/* Our suggestions dropdown (must be above Leaflet’s control z-index) */}
                 {suggestions.length > 0 && (
-                  <ul className="absolute left-0 right-0 mt-1 max-h-64 overflow-auto rounded-md border bg-white shadow-lg z-[2100]">
+                  <ul className="absolute left-0 right-0 z-[2100] mt-1 max-h-64 overflow-auto rounded-[8px] border bg-white shadow-lg">
                     {suggestions.map((s, idx) => {
                       const lat = parseFloat(s.lat);
                       const lng = parseFloat(s.lon);
@@ -1720,14 +1776,14 @@ const MapPickerModal: React.FC<MapPickerModalProps> = ({
                 type="button"
                 onClick={() => forwardGeocode(query)}
                 disabled={working}
-                className="px-3 rounded-md bg-[#2AB09C] text-white hover:bg-[#229882] disabled:opacity-60"
+                className="rounded-[8px] bg-[#2DB8D1] px-3 text-white hover:bg-[#229882] disabled:opacity-60"
                 title="Search"
               >
                 Search
               </button>
             </div>
 
-            <div className="rounded overflow-hidden border">
+            <div className="overflow-hidden rounded border">
               <MapContainer
                 center={[center.lat, center.lng]}
                 zoom={15}
@@ -1757,14 +1813,14 @@ const MapPickerModal: React.FC<MapPickerModalProps> = ({
           <div className="flex justify-end gap-2 border-t px-4 py-3">
             <button
               onClick={onClose}
-              className="px-4 py-2 rounded-md border hover:bg-gray-50"
+              className="rounded-[8px] border px-4 py-2 hover:bg-gray-50"
             >
               Cancel
             </button>
             <button
               onClick={confirm}
               disabled={working}
-              className="px-4 py-2 rounded-md bg-[#2AB09C] text-white hover:bg-[#229882] disabled:opacity-60"
+              className="rounded-[8px] bg-[#2DB8D1] px-4 py-2 text-white hover:bg-[#229882] disabled:opacity-60"
             >
               Use this location
             </button>
