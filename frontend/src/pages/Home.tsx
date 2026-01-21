@@ -5,11 +5,14 @@ import WhyChooseUsSection from "@/components/home/WhyChooseUsSection";
 import CTASection from "@/components/home/CTASection";
 import BlogSection from "@/components/blog/Blog";
 import { Categories } from "@/components/home/Categories";
+import { Options } from "@/components/home/Options";
 
 const Home = () => {
   return (
     <div className="min-h-screen bg-white">
       <Hero />
+      {/* Real Estate Options */}
+      <Options />
       <Categories
         ImageUrl="/images/home/Advantages3.avif"
         className="md:flex-row-reverse"
