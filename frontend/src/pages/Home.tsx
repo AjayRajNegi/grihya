@@ -11,7 +11,11 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-white">
       <Hero />
-      <Categories />
+      <Categories
+        ImageUrl="/images/home/Advantages3.avif"
+        className="md:flex-row-reverse"
+        url="/about"
+      />
       <BlogSection />
       {/* <ValueSection /> */}
       <FeatureSection />

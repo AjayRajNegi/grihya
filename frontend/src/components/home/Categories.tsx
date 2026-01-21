@@ -1,5 +1,6 @@
 import { motion, Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
   visible: {
@@ -24,14 +25,23 @@ const featureVariants: Variants = {
   }),
 };
 
-export function Categories() {
+type CategoriesProps = {
+  ImageUrl: String;
+  className: String;
+  url: String;
+};
+
+export function Categories({ ImageUrl, className, url }: CategoriesProps) {
+  const router = useNavigate();
   return (
-    <section className="mx-auto mt-12 flex max-w-7xl flex-col-reverse gap-4 px-6 md:flex-row md:px-12">
+    <section
+      className={`mx-auto mt-12 flex max-w-7xl flex-col-reverse gap-4 px-6 md:px-12 ${className}`}
+    >
       {/* Image */}
       <motion.div
         className="mx-0 h-[300px] w-full rounded-[20px] md:mx-2 md:h-auto md:w-1/2"
         style={{
-          backgroundImage: `url(/images/home/Advantages3.avif)`,
+          backgroundImage: `url(${ImageUrl})`,
           backgroundSize: "cover",
         }}
         initial={{ opacity: 0, y: 30 }}
@@ -40,9 +50,14 @@ export function Categories() {
         viewport={{ once: true }}
       >
         <div className="group relative flex h-full items-center justify-between">
-          <div className="absolute inset-0 flex h-full items-center justify-between rounded-[20px] bg-gradient-to-b from-transparent to-black/50 p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:p-10">
+          <div
+            className="absolute inset-0 flex h-full items-center justify-between rounded-[20px] bg-gradient-to-b from-transparent to-black/50 p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:p-10"
+            onClick={() => {
+              router(`${url}`);
+            }}
+          >
             {/* Text container */}
-            <div className="w-1/2 translate-y-6 transform transition-transform duration-300 ease-out group-hover:translate-y-0 md:w-[40%]">
+            <div className="w-1/2 translate-y-6 transform cursor-pointer transition-transform duration-300 ease-out group-hover:translate-y-0 md:w-[40%]">
               <h6 className="text-2xl font-semibold text-white">
                 Residential Homes
               </h6>
@@ -53,7 +68,7 @@ export function Categories() {
             </div>
 
             {/* Arrow */}
-            <div className="translate-y-6 transform rounded-full bg-white p-3 font-thin text-black transition-transform duration-300 ease-out group-hover:translate-y-0">
+            <div className="translate-y-6 transform cursor-pointer rounded-full bg-white p-3 font-thin text-black transition-transform duration-300 ease-out group-hover:translate-y-0">
               <ArrowRight size={30} />
             </div>
           </div>
@@ -73,7 +88,7 @@ export function Categories() {
           <div className="mb-3 flex items-center gap-2">
             <div className="h-2 w-2 rounded-sm bg-cyan-500"></div>
             <span className="text-base font-medium text-gray-700">
-              Our Vision
+              Categories
             </span>
           </div>
 
