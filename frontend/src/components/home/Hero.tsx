@@ -4,7 +4,7 @@ export default function Hero() {
   const navigate = useNavigate();
 
   return (
-    <div className="max-w-8xl relative mx-auto bg-[#ffffff] px-4 pt-[20px] md:px-0 md:pt-[10px]">
+    <div className="max-w-8xl relative mx-auto bg-[#FAFCFE] px-4 pt-[20px] md:px-0 md:pt-[10px]">
       {/* MASKED SECTION */}
       <section
         className="invertedRadius relative mx-auto flex min-h-[70vh] w-[95%] items-center overflow-hidden text-white md:min-h-[85vh] md:w-[90%]"
@@ -65,7 +65,7 @@ export default function Hero() {
           {[1, 2, 3, 4].map((i) => (
             <img
               key={i}
-              src={`https://i.pravatar.cc/40?img=${i}`}
+              src={`https://i.pravatar.cc/120?img=${i}`}
               className="h-11 w-11 rounded-full border-2 border-white sm:h-16 sm:w-16"
             />
           ))}

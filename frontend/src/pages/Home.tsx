@@ -6,10 +6,11 @@ import CTASection from "@/components/home/CTASection";
 import BlogSection from "@/components/blog/Blog";
 import { Categories } from "@/components/home/Categories";
 import { Options } from "@/components/home/Options";
+import { Testimonials } from "./Testimonials";
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#FAFCFE]">
       <Hero />
       {/* Real Estate Options */}
       <Options />
@@ -46,6 +47,7 @@ const Home = () => {
         highlight="Open Land"
         description="Editors' top picked blogs on Open Land Properties"
       />
+      <Testimonials />
       <CTASection />
     </div>
   );
