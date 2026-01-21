@@ -6,18 +6,6 @@ import {
   AccordionTrigger,
 } from "../ui/accordion";
 
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 1.2,
-      ease: [0.4, 0, 0.2, 1],
-    },
-  },
-};
-
 const FAQ = [
   {
     value: "item-1",
@@ -69,6 +57,38 @@ const FAQ = [
   },
 ];
 
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 1.2,
+      ease: [0.4, 0, 0.2, 1],
+    },
+  },
+};
+const faqContainerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+const faqItemVariants: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut",
+    },
+  },
+};
+
 const FAQSection: React.FC = () => {
   return (
     <section className="bg-white py-16">
@@ -89,20 +109,30 @@ const FAQSection: React.FC = () => {
             Your questions, <span>Answered</span>
           </h1>
         </motion.div>
-        <div className="px- mt-5 px-2 md:mt-10">
+
+        {/* FAQ List */}
+        <motion.div
+          className="mt-5 px-2 md:mt-10"
+          variants={faqContainerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
           <Accordion type="single" collapsible>
             {FAQ.map((faq, id) => (
-              <AccordionItem value={faq.value} key={id}>
-                <AccordionTrigger className="text-left text-lg md:text-2xl">
-                  {faq.trigger}
-                </AccordionTrigger>
-                <AccordionContent className="text-lg text-[#808080] md:text-2xl">
-                  {faq.content}
-                </AccordionContent>
-              </AccordionItem>
+              <motion.div key={id} variants={faqItemVariants}>
+                <AccordionItem value={faq.value}>
+                  <AccordionTrigger className="text-left text-lg md:text-2xl">
+                    {faq.trigger}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-lg text-[#808080] md:text-2xl">
+                    {faq.content}
+                  </AccordionContent>
+                </AccordionItem>
+              </motion.div>
             ))}
           </Accordion>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

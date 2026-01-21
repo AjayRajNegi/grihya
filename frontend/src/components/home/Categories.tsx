@@ -26,9 +26,9 @@ const featureVariants: Variants = {
 };
 
 type CategoriesProps = {
-  ImageUrl: String;
-  className: String;
-  url: String;
+  ImageUrl: string;
+  className: string;
+  url: string;
 };
 
 export function Categories({ ImageUrl, className, url }: CategoriesProps) {
@@ -98,7 +98,12 @@ export function Categories({ ImageUrl, className, url }: CategoriesProps) {
 
           <h3 className="mb-4 text-[#808080]">Lorem Ipsum Line Here</h3>
 
-          <button className="rounded-full bg-[#2DB8D1] px-7 py-3 text-base tracking-tighter text-white">
+          <button
+            onClick={() => {
+              router(`${url}`);
+            }}
+            className="cursor-pointer rounded-full bg-[#2DB8D1] px-7 py-3 text-base tracking-tighter text-white"
+          >
             View Properties
           </button>
         </motion.div>

@@ -106,7 +106,17 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
   );
 };
 
-export default function BlogSection({ header }: { header?: string }) {
+export default function BlogSection({
+  header,
+  title,
+  highlight,
+  description,
+}: {
+  header?: string;
+  title: string;
+  highlight: string;
+  description: string;
+}) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -175,17 +185,14 @@ export default function BlogSection({ header }: { header?: string }) {
           className="my-auto lg:w-[280px] lg:flex-shrink-0"
         >
           <h2 className="mb-4 text-3xl font-normal leading-tight text-gray-900 lg:text-4xl">
-            Top Articles on buying a{" "}
-            <span className="text-cyan-500">Open Plot</span>
+            {`${title}`} <span className="text-cyan-500">{`${highlight}`}</span>
           </h2>
           {header && (
             <h2 className="mb-4 text-3xl font-normal leading-tight text-gray-900 lg:text-4xl">
               {header}
             </h2>
           )}
-          <p className="text-base text-gray-600">
-            Editors' top picked blogs on Open Land Properties
-          </p>
+          <p className="text-base text-gray-600">{`${description}`}</p>
         </motion.div>
 
         {/* Right Side - Articles Grid */}
