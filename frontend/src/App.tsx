@@ -24,73 +24,76 @@ import { AuthProvider } from "./context/AuthContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Contact from "./pages/Contact";
+import LenisProvider from "./components/LenisProvider";
 
 export function App() {
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
 
   return (
-    <GoogleOAuthProvider clientId={clientId}>
-      <AuthProvider>
-        <BrowserRouter>
-          <ScrollToTop />
-          <div className="flex min-h-screen flex-col bg-gray-50">
-            <Routes>
-              <Route
-                path="/auth/forgot-password"
-                element={<ForgotPassword />}
-              />
-              <Route path="/reset-password" element={<ResetPasswordPage />} />
+    <LenisProvider>
+      <GoogleOAuthProvider clientId={clientId}>
+        <AuthProvider>
+          <BrowserRouter>
+            <ScrollToTop />
+            <div className="flex min-h-screen flex-col bg-gray-50">
+              <Routes>
+                <Route
+                  path="/auth/forgot-password"
+                  element={<ForgotPassword />}
+                />
+                <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-              <Route path="/verify-email" element={<VerifyEmailPage />} />
+                <Route path="/verify-email" element={<VerifyEmailPage />} />
 
-              <Route path="/account" element={<Account />} />
-              <Route path="/properties/:id/edit" element={<ListProperty />} />
-              <Route path="/terms" element={<TermsAndConditions />} />
-              <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/account" element={<Account />} />
+                <Route path="/properties/:id/edit" element={<ListProperty />} />
+                <Route path="/terms" element={<TermsAndConditions />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
 
-              <Route path="/agents" element={<Agents />} />
-              <Route
-                path="/agents/:id/properties"
-                element={<AgentProperties />}
-              />
+                <Route path="/agents" element={<Agents />} />
+                <Route
+                  path="/agents/:id/properties"
+                  element={<AgentProperties />}
+                />
 
-              <Route path="/chat-with-us" element={<ChatWithUs />} />
+                <Route path="/chat-with-us" element={<ChatWithUs />} />
 
-              <Route
-                path="*"
-                element={
-                  <>
-                    <Navbar />
-                    <main className="flex-grow bg-white">
-                      <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/about" element={<About />} />
-                        <Route
-                          path="/properties"
-                          element={<PropertyListing />}
-                        />
-                        <Route
-                          path="/properties/:id"
-                          element={<PropertyDetail />}
-                        />
-                        <Route
-                          path="/list-property"
-                          element={<ListProperty />}
-                        />
-                        <Route path="/blog" element={<AllBlogs />} />
-                        <Route path="/blog/:slug" element={<BlogDetail />} />
-                        <Route path="/contact" element={<Contact />} />
-                      </Routes>
-                    </main>
-                    <Footer />
-                  </>
-                }
-              />
-            </Routes>
-          </div>
-        </BrowserRouter>
-      </AuthProvider>
-    </GoogleOAuthProvider>
+                <Route
+                  path="*"
+                  element={
+                    <>
+                      <Navbar />
+                      <main className="flex-grow bg-white">
+                        <Routes>
+                          <Route path="/" element={<Home />} />
+                          <Route path="/about" element={<About />} />
+                          <Route
+                            path="/properties"
+                            element={<PropertyListing />}
+                          />
+                          <Route
+                            path="/properties/:id"
+                            element={<PropertyDetail />}
+                          />
+                          <Route
+                            path="/list-property"
+                            element={<ListProperty />}
+                          />
+                          <Route path="/blog" element={<AllBlogs />} />
+                          <Route path="/blog/:slug" element={<BlogDetail />} />
+                          <Route path="/contact" element={<Contact />} />
+                        </Routes>
+                      </main>
+                      <Footer />
+                    </>
+                  }
+                />
+              </Routes>
+            </div>
+          </BrowserRouter>
+        </AuthProvider>
+      </GoogleOAuthProvider>
+    </LenisProvider>
   );
 }
 

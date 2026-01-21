@@ -1,6 +1,7 @@
 import AmenitiesSection from "@/components/about/AmenitiesSections";
 import StatsComponent from "@/components/about/StatsComponent";
 import CTASection from "@/components/home/CTASection";
+import ValueSection from "@/components/home/ValueSection";
 import { motion, Variants } from "framer-motion";
 
 const itemVariants: Variants = {
@@ -93,7 +94,6 @@ export default function About() {
           />
         </motion.div>
       </div>
-
       {/* Statistics */}
       <section className="mb-12 px-5 md:px-12">
         <article className="my-16 grid grid-cols-2">
@@ -117,10 +117,10 @@ export default function About() {
           <StatsComponent />
         </article>
       </section>
-
+      {/* Value */}\
+      <ValueSection />
       {/* Amenities */}
       <AmenitiesSection />
-
       {/* CTA */}
       <CTASection />
     </div>

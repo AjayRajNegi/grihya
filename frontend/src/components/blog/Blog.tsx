@@ -63,46 +63,60 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
   const imgSrc = post.cover_image_url || "/placeholder.jpg";
   const blogHref = `/blog/${encodeURIComponent(post.slug)}`;
 
-  function getRandomCategory() {
-    const categories = ["Articles", "Resources", "Blog"];
-    const randomIndex = Math.floor(Math.random() * categories.length);
-    return categories[randomIndex];
-  }
-  const category = getRandomCategory();
+  const formatDate = (dateString: string | null | undefined) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
 
   return (
-    <article className="group flex flex-col gap-3 md:gap-5">
+    <Link
+      to={blogHref}
+      className="group flex items-center gap-4 rounded-2xl border-[0.5px] border-[#2DB8D1] bg-white transition-all duration-300 hover:shadow-lg"
+    >
       {/* Image */}
-      <Link
-        to={blogHref}
-        className="relative aspect-[4/3] overflow-hidden rounded-3xl"
-      >
+      <div className="relative h-[140px] w-[180px] flex-shrink-0 overflow-hidden rounded-xl">
         <img
           src={imgSrc}
           alt={post.title}
-          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           onError={(e) => {
             (e.currentTarget as HTMLImageElement).src = "/placeholder.jpg";
           }}
         />
-      </Link>
+      </div>
 
-      {/* Category */}
-      <span className="inline-flex w-fit rounded-full bg-[#EDF3FF] px-4 py-2 text-sm font-medium text-[#2DB8D1]">
-        {category}
-      </span>
+      {/* Content */}
+      <div className="flex flex-col justify-center gap-2">
+        {/* Date */}
+        <span className="text-sm text-gray-500">
+          {formatDate(post.published_at)}
+        </span>
 
-      {/* Title */}
-      <Link to={blogHref}>
-        <h3 className="text-xl font-[400] leading-snug tracking-tight text-gray-900 transition-colors hover:text-sky-600 md:text-2xl">
+        {/* Title */}
+        <h3 className="text-lg font-normal leading-snug text-gray-900 transition-colors group-hover:text-gray-700">
           {post.title}
         </h3>
-      </Link>
-    </article>
+      </div>
+    </Link>
   );
 };
 
-export default function BlogSection({ header }: { header: string }) {
+export default function BlogSection({
+  header,
+  title,
+  highlight,
+  description,
+}: {
+  header?: string;
+  title: string;
+  highlight: string;
+  description: string;
+}) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -133,6 +147,7 @@ export default function BlogSection({ header }: { header: string }) {
       },
     },
   };
+
   const containerVariants: Variants = {
     hidden: {},
     visible: {
@@ -159,50 +174,53 @@ export default function BlogSection({ header }: { header: string }) {
   };
 
   return (
-    <div className="mx-4 max-w-7xl rounded-3xl bg-white px-2 md:mx-auto md:px-6 lg:px-12">
-      {/* Header Section */}
-      <motion.div
-        variants={itemVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className="mx-auto"
-      >
-        <div className="mb-6 flex items-center gap-2">
-          <div className="h-2 w-2 rounded-sm bg-cyan-500"></div>
-          <span className="text-base font-medium text-gray-700">{header}</span>
-        </div>
-
-        <h1 className="mb-8 max-w-4xl text-4xl tracking-tighter text-gray-900 md:text-5xl">
-          Expert advice and market <br /> updates on real estate
-        </h1>
-      </motion.div>
-
-      {/* Grid */}
-      {loading ? (
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-[320px] animate-pulse rounded-3xl bg-gray-100"
-            />
-          ))}
-        </div>
-      ) : (
+    <div className="mx-auto max-w-7xl px-4 py-12 md:px-6 lg:px-12">
+      <div className="flex flex-col gap-8 lg:flex-row lg:gap-12">
+        {/* Left Side - Header */}
         <motion.div
-          variants={containerVariants}
+          variants={itemVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3"
+          className="my-auto lg:w-[280px] lg:flex-shrink-0"
         >
-          {posts.map((post) => (
-            <motion.div key={post.id} variants={cardVariants}>
-              <PostCard post={post} />
-            </motion.div>
-          ))}
+          <h2 className="mb-4 text-3xl font-normal leading-tight text-gray-900 lg:text-4xl">
+            {`${title}`} <span className="text-cyan-500">{`${highlight}`}</span>
+          </h2>
+          {header && (
+            <h2 className="mb-4 text-3xl font-normal leading-tight text-gray-900 lg:text-4xl">
+              {header}
+            </h2>
+          )}
+          <p className="text-base text-gray-600">{`${description}`}</p>
         </motion.div>
-      )}
+
+        {/* Right Side - Articles Grid */}
+        {loading ? (
+          <div className="grid flex-1 grid-cols-1 gap-4 lg:grid-cols-2">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div
+                key={i}
+                className="h-[160px] animate-pulse rounded-2xl bg-gray-100"
+              />
+            ))}
+          </div>
+        ) : (
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="grid flex-1 grid-cols-1 gap-4 lg:grid-cols-2"
+          >
+            {posts.map((post) => (
+              <motion.div key={post.id} variants={cardVariants}>
+                <PostCard post={post} />
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+      </div>
     </div>
   );
 }
