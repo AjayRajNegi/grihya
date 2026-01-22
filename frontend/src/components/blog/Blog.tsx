@@ -184,7 +184,7 @@ export default function BlogSection({
           viewport={{ once: true }}
           className="my-auto lg:w-[280px] lg:flex-shrink-0"
         >
-          <h2 className="mb-4 text-3xl font-normal leading-tight text-gray-900 lg:text-4xl">
+          <h2 className="mb-1 text-3xl font-normal leading-tight text-gray-900 md:mb-4 lg:text-4xl">
             {`${title}`} <span className="text-cyan-500">{`${highlight}`}</span>
           </h2>
           {header && (

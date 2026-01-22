@@ -91,7 +91,7 @@ const faqItemVariants: Variants = {
 
 const FAQSection: React.FC = () => {
   return (
-    <section className="bg-white py-16">
+    <section className="rounded-3xl bg-white py-8 md:py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
@@ -101,7 +101,7 @@ const FAQSection: React.FC = () => {
           viewport={{ once: true }}
           className="flex flex-col items-center justify-center px-4 md:mx-auto md:px-6 lg:px-12"
         >
-          <div className="mb-6 flex w-fit items-center gap-2 rounded-full bg-[#f2f7ff] px-4 py-2">
+          <div className="mb-2 flex w-fit items-center gap-2 rounded-full bg-[#f2f7ff] px-4 py-2 md:mb-6">
             <span className="text-base font-medium text-[#06B6D4]">FAQ</span>
           </div>
 
@@ -112,7 +112,7 @@ const FAQSection: React.FC = () => {
 
         {/* FAQ List */}
         <motion.div
-          className="mt-5 px-2 md:mt-10"
+          className="mt-3 md:mt-10 md:px-2"
           variants={faqContainerVariants}
           initial="hidden"
           whileInView="visible"

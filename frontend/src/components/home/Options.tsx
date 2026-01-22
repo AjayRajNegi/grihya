@@ -22,15 +22,15 @@ export function Options() {
   };
 
   return (
-    <section className="max-w-8xl relative mx-auto bg-[#FAFCFE] px-4 pt-[40px] md:px-0">
-      <div className="mx-auto w-[95%] overflow-hidden text-black md:w-[90%] lg:px-8">
+    <section className="max-w-8xl relative mx-auto bg-[#FAFCFE] px-4 pt-[30px] md:px-0">
+      <div className="mx-auto w-full overflow-hidden text-black md:w-[90%] lg:px-8">
         {/* Heading */}
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="text-center text-3xl font-normal md:text-4xl"
+          className="text-center text-3xl font-normal leading-6 md:text-4xl"
         >
           Get started with exploring real estate options
         </motion.h2>
@@ -40,7 +40,7 @@ export function Options() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="mt-5 grid gap-6 md:grid-cols-3 md:gap-10"
+          className="mt-4 grid gap-5 md:mt-5 md:grid-cols-3 md:gap-10"
         >
           {/* House */}
           <motion.div
@@ -54,7 +54,7 @@ export function Options() {
               onClick={() => router("/properties?type=house&page=1")}
             />
             <h6
-              className="mt-2 cursor-pointer text-2xl font-semibold text-[#2DB8D1]"
+              className="mt-1 cursor-pointer text-2xl font-semibold text-[#2DB8D1] md:mt-2"
               onClick={() => router("//properties?type=house&page=1")}
             >
               House
@@ -76,7 +76,7 @@ export function Options() {
               onClick={() => router("/properties?type=apartment&page=1")}
             />
             <h6
-              className="mt-2 cursor-pointer text-2xl font-semibold text-[#2DB8D1]"
+              className="mt-1 cursor-pointer text-2xl font-semibold text-[#2DB8D1] md:mt-2"
               onClick={() => router("/properties?type=apartment&page=1")}
             >
               Apartment
@@ -98,7 +98,7 @@ export function Options() {
               onClick={() => router("/properties?type=commercial&page=1")}
             />
             <h6
-              className="mt-2 cursor-pointer text-2xl font-semibold text-[#2DB8D1]"
+              className="mt-1 cursor-pointer text-2xl font-semibold text-[#2DB8D1] md:mt-2"
               onClick={() => router("/properties?type=commercial&page=1")}
             >
               Business Space

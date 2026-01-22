@@ -20,7 +20,7 @@ export const Navbar = () => {
 
   return (
     <nav className="w-full bg-[#FAFCFE]">
-      <div className="mx-auto max-w-7xl px-4 lg:px-12">
+      <div className="mx-auto max-w-7xl px-2 lg:px-12">
         <div className="-mb-[14px] flex h-16 items-center justify-between md:-mb-0 md:h-20">
           {/* Logo */}
           <div

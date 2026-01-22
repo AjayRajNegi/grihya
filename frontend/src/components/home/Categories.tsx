@@ -35,7 +35,7 @@ export function Categories({ ImageUrl, className, url }: CategoriesProps) {
   const router = useNavigate();
   return (
     <section
-      className={`mx-auto mt-12 flex max-w-7xl flex-col-reverse gap-4 px-6 md:px-12 ${className}`}
+      className={`mx-auto mt-12 flex max-w-7xl flex-col-reverse gap-4 px-4 md:px-12 ${className}`}
     >
       {/* Image */}
       <motion.div
@@ -85,24 +85,24 @@ export function Categories({ ImageUrl, className, url }: CategoriesProps) {
           viewport={{ once: true }}
           className="mx-auto"
         >
-          <div className="mb-3 flex items-center gap-2">
+          <div className="flex items-center gap-2 md:mb-3">
             <div className="h-2 w-2 rounded-sm bg-cyan-500"></div>
             <span className="text-base font-medium text-gray-700">
               Categories
             </span>
           </div>
 
-          <h1 className="mb-2 max-w-4xl text-4xl tracking-tighter text-gray-900 md:text-3xl">
+          <h1 className="mb-1 max-w-4xl text-4xl tracking-tighter text-gray-900 md:mb-1 md:text-3xl">
             The values that drive everything we do
           </h1>
 
-          <h3 className="mb-4 text-[#808080]">Lorem Ipsum Line Here</h3>
+          <h3 className="mb-2 text-[#808080] md:mb-4">Lorem Ipsum Line Here</h3>
 
           <button
             onClick={() => {
               router(`${url}`);
             }}
-            className="cursor-pointer rounded-full bg-[#2DB8D1] px-7 py-3 text-base tracking-tighter text-white"
+            className="cursor-pointer rounded-full bg-[#2DB8D1] px-5 py-2 text-base tracking-tighter text-white md:mx-7 md:py-3"
           >
             View Properties
           </button>
@@ -117,12 +117,17 @@ export function Categories({ ImageUrl, className, url }: CategoriesProps) {
           custom={0.2}
           viewport={{ once: true }}
         >
-          <img src="/images/home/Vision1.png" className="h-[70px]" />
+          <img
+            src="/images/home/Vision1.png"
+            className="h-[55px] md:h-[70px]"
+          />
           <div>
-            <h3 className="text-xl font-semibold text-[#2DB8D1]">
+            <h3 className="text-lg font-semibold text-[#2DB8D1] md:text-xl">
               Modern Villa
             </h3>
-            <p>Discover the luxury and comfort of modern villa living</p>
+            <p className="text-sm md:text-base">
+              Discover the luxury and comfort of modern villa living
+            </p>
           </div>
         </motion.div>
 
@@ -135,12 +140,17 @@ export function Categories({ ImageUrl, className, url }: CategoriesProps) {
           custom={0.35}
           viewport={{ once: true }}
         >
-          <img src="/images/home/Vision1.png" className="h-[70px]" />
+          <img
+            src="/images/home/Vision1.png"
+            className="h-[55px] md:h-[70px]"
+          />
           <div>
-            <h3 className="text-xl font-semibold text-[#2DB8D1]">
-              Secure Payment
+            <h3 className="text-lg font-semibold text-[#2DB8D1] md:text-xl">
+              Modern Villa
             </h3>
-            <p>Safe and easy payment process for all property deals</p>
+            <p className="text-sm md:text-base">
+              Discover the luxury and comfort of modern villa living
+            </p>
           </div>
         </motion.div>
       </div>

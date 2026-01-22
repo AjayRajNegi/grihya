@@ -4,7 +4,7 @@ export default function Hero() {
   const navigate = useNavigate();
 
   return (
-    <div className="max-w-8xl relative mx-auto bg-[#FAFCFE] px-4 pt-[20px] md:px-0 md:pt-[10px]">
+    <div className="max-w-8xl relative mx-auto bg-[#FAFCFE] px-1 pt-[15px] md:px-0 md:pt-[10px]">
       {/* MASKED SECTION */}
       <section
         className="invertedRadius relative mx-auto flex min-h-[70vh] w-[95%] items-center overflow-hidden text-white md:min-h-[85vh] md:w-[90%]"
@@ -60,7 +60,7 @@ export default function Hero() {
       </section>
 
       {/* REVIEWS */}
-      <div className="absolute bottom-0 right-[8%] flex flex-col items-center gap-1 text-[#0a1e3c] sm:bottom-3 sm:right-[3%] sm:flex-row sm:gap-4 md:right-[6%]">
+      <div className="absolute bottom-0 right-[5%] flex flex-col items-center gap-1 text-[#0a1e3c] sm:bottom-3 sm:right-[3%] sm:flex-row sm:gap-4 md:right-[6%]">
         <div className="flex -space-x-2">
           {[1, 2, 3, 4].map((i) => (
             <img

@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 import { motion, useScroll, useTransform, Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import BlogSection from "../blog/Blog";
 import FAQSection from "./FAQSection";
 
 const containerVariants: Variants = {
@@ -44,7 +43,7 @@ const CTASection: React.FC = () => {
   const scale = useTransform(scrollYProgress, [0, 1], [1.3, 1]);
 
   return (
-    <div className="mx-auto max-w-7xl overflow-hidden rounded-xl bg-white px-4 lg:px-0">
+    <div className="mx-auto max-w-7xl overflow-hidden rounded-xl bg-[#FAFCFE] px-4 lg:px-0">
       <FAQSection />
 
       {/* Hero Section */}

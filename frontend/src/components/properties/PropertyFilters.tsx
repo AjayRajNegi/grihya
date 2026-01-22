@@ -60,7 +60,7 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({
         )}
         {/* Sidebar */}
         <div
-          className={` ${isOpen ? "fixed right-0 top-0 h-full w-full max-w-xs" : ""} overflow-y-auto rounded-2xl border-[1px] border-gray-400 p-4 shadow-lg md:sticky md:top-24 md:h-auto md:p-6`}
+          className={` ${isOpen ? "fixed right-0 top-0 h-full w-full max-w-xs" : ""} overflow-y-auto rounded-2xl border-[1px] border-gray-400 bg-white p-4 shadow-lg md:sticky md:top-24 md:h-auto md:p-6`}
         >
           <div className="mb-6 flex items-center justify-between md:hidden">
             <h3 className="text-lg font-medium text-gray-900">Filters</h3>

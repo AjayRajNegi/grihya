@@ -47,19 +47,19 @@ const testimonials = [
 
 export function Testimonials() {
   return (
-    <section className="max-w-8xl relative mx-auto my-20 bg-[#FAFCFE] px-4 pt-[40px] md:px-0">
-      <div className="mx-auto flex w-[95%] flex-col text-black md:w-[90%] lg:flex-row">
+    <section className="max-w-8xl relative mx-auto my-10 bg-[#FAFCFE] px-4 pt-[40px] md:my-20 md:px-0">
+      <div className="mx-auto flex w-full flex-col text-black md:w-[90%] lg:flex-row">
         {/* Left container */}
         <section className="relative w-full lg:w-1/3">
           <div className="sticky top-32">
-            <div className="justify-left mb-2 flex items-center gap-2">
+            <div className="justify-left mb-1 flex items-center gap-2 md:mb-2">
               <div className="h-2 w-2 rounded-sm bg-cyan-500"></div>
               <span className="text-base font-medium text-gray-700">
                 Testimonials
               </span>
             </div>
 
-            <h1 className="mx-auto mb-2 max-w-4xl text-left text-xl font-[500] tracking-tighter text-gray-900 md:text-2xl">
+            <h1 className="mx-auto max-w-4xl text-left text-xl font-[500] tracking-tighter text-gray-900 md:mb-2 md:text-2xl">
               Trusted by Many, Loved by All
             </h1>
             <p className="text-lg">
@@ -67,11 +67,11 @@ export function Testimonials() {
             </p>
           </div>
         </section>
-        <section className="mt-5 grid w-full grid-cols-1 gap-4 md:mt-0 md:grid-cols-2 md:gap-6 lg:w-2/3">
+        <section className="mt-5 grid w-full grid-cols-1 gap-3 md:mt-0 md:grid-cols-2 md:gap-6 lg:w-2/3">
           {testimonials.map((item, id) => (
             <div
               key={id}
-              className="flex h-fit flex-col rounded-3xl border-[0.5px] border-black/10 bg-white p-8"
+              className="flex h-fit flex-col rounded-3xl border-[0.5px] border-black/30 bg-white p-8"
             >
               <p className="flex gap-2">
                 <Star fill="#2DB8D1" className="text-[#2DB8D1]" size={15} />
