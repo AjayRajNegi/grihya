@@ -98,6 +98,16 @@ export function FeaturedProperties({
           <PropertyCard key={property.id} property={property} />
         ))}
       </div>
+      <div>
+        <p
+          className="mx-auto w-fit cursor-pointer rounded-[10px] bg-[#2DB8D1] px-4 py-2 text-white"
+          onClick={() => {
+            router(`${url}`);
+          }}
+        >
+          Load More
+        </p>
+      </div>
     </section>
   );
 }

@@ -46,7 +46,7 @@ export default function FeatureSection() {
     },
   };
   return (
-    <div className="mx-4 mt-5 min-h-screen max-w-7xl rounded-3xl bg-gray-100 px-4 py-6 md:mx-auto md:px-12">
+    <div className="mx-4 mt-5 min-h-screen max-w-7xl rounded-3xl bg-gray-100 px-4 py-6 md:mx-auto md:mt-10 md:px-12">
       {/* Header Section */}
       <div className="mx-auto">
         <div className="flex items-center justify-center gap-2 md:mb-6">
