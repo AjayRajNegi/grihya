@@ -21,10 +21,10 @@ export async function createProperty(payload: CreatePropertyInput) {
 }
 
 export async function listProperties(
-  params?: Record<string, string | number | undefined>
+  params?: Record<string, string | number | undefined>,
 ) {
   const { data } = await api.get("/properties", { params });
-  return data; // Laravel paginate() response
+  return data;
 }
 
 export async function getProperty(id: string | number) {

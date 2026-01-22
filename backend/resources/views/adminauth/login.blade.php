@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Easy Lease - Admin Login</title>
+  <title>Grihya - Admin Login</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
   <style>
@@ -15,7 +15,7 @@
     .float-animation {
       animation: float 3s ease-in-out infinite;
     }
-    .bg-primary { background-color: #2AB09C; }
+    .bg-primary { background-color: #2DB8D1; }
     .bg-primary-dark { background-color: #1F8A7A; }
     .bg-primary-light { background-color: #4CC8B4; }
     .text-primary { color: #2AB09C; }
@@ -79,7 +79,7 @@
 
     <!-- Footer -->
     <p class="mt-6 text-center text-sm text-gray-500">
-      Powered by <span class="font-semibold text-primary">Easy Lease</span> &copy; 2025
+      Powered by <span class="font-semibold text-primary">Grihya</span> &copy; 2025
     </p>
   </div>
 </body>

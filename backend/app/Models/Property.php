@@ -31,8 +31,6 @@ class Property extends Model
         'formatted_address',
         'location_components',
         'location_tokens',
-
-        // NEW
         'available_immediately',
         'available_from_date',
         'ready_to_move',
@@ -51,7 +49,6 @@ class Property extends Model
         'amenities' => 'array',
         'images' => 'array',
         'location_components' => 'array',
-        // NEW
         'available_immediately' => 'boolean',
         'ready_to_move' => 'boolean',
         'available_from_date' => 'date',

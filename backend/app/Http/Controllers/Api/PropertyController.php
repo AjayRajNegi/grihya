@@ -31,7 +31,7 @@ class PropertyController extends Controller
             });
         }
 
-        if (!$request->user()) { // anonymous user
+        if (!$request->user()) { 
             $q->where('status', 'active');
         }
 
@@ -100,14 +100,12 @@ class PropertyController extends Controller
             foreach ($amenities as $amenity) $q->whereJsonContains('amenities', $amenity);
         }
 
-        // ADD THIS: filter by who listed the property (user.role)
         if ($listedBy = $request->query('listed_by')) {
             $q->whereHas('user', function ($w) use ($listedBy) {
                 $w->where('role', $listedBy); // 'owner' | 'builder' (adjust if your builder uses a different role)
             });
         }
 
-        // ADD: filter by specific lister (user)
         if ($userId = $request->query('user_id')) {
             $q->where('user_id', (int) $userId);
         }
@@ -117,7 +115,6 @@ class PropertyController extends Controller
         $hasCoords = $lat !== null && $lng !== null && $lat !== '' && $lng !== '';
         $radius = (int) ($request->query('radius') ?? 20000);
 
-        // Apply text narrowing ONLY in text-mode
         if (!$hasCoords) {
             if ($s = $request->query('q')) {
                 $s = mb_strtolower($s);
@@ -141,7 +138,7 @@ class PropertyController extends Controller
             }
         }
 
-        // Nearby mode: compute distance, filter by radius, sort by nearest
+       
         if ($hasCoords) {
             $latF = (float) $lat;
             $lngF = (float) $lng;
@@ -767,7 +764,7 @@ class PropertyController extends Controller
     private function geocodeAddress(string $query): ?array
     {
         try {
-            $resp = Http::withHeaders(['User-Agent' => 'EasyLease/1.0 (support@easylease.app)'])
+            $resp = Http::withHeaders(['User-Agent' => 'Grihya/1.0 (support@Grihya.app)'])
                 ->timeout(8)
                 ->get('https://nominatim.openstreetmap.org/search', [
                     'format' => 'jsonv2',

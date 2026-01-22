@@ -1,16 +1,13 @@
-// src/lib/api.ts
 const BASE = (
   import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api"
 ).replace(/\/$/, "");
 
-// Join the BASE and PATH safely
 function buildUrl(path: string): string {
   return `${BASE}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
-// Converts a params object into a query string
 function buildQuery(
-  params?: Record<string, string | number | boolean | null | undefined>
+  params?: Record<string, string | number | boolean | null | undefined>,
 ): string {
   if (!params) return "";
   const sp = new URLSearchParams();
@@ -31,13 +28,11 @@ class ApiError<T = any> extends Error {
   }
 }
 
-// Stores a global bearer token
 let bearerToken: string | null = null;
 export function setToken(token?: string) {
   bearerToken = token && token.length ? token : null;
 }
 
-// Optional settings for each API call
 type RequestConfig = {
   headers?: HeadersInit;
   params?: Record<string, string | number | boolean | null | undefined>;
@@ -56,21 +51,18 @@ type ApiResponse<T = any> = {
 async function request<T = any>(
   method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE",
   path: string,
-  config: RequestConfig = {}
+  config: RequestConfig = {},
 ): Promise<ApiResponse<T>> {
-  // BUild URL and query string
   const url = buildUrl(path) + buildQuery(config.params);
 
-  // Setup headers
   const headers: HeadersInit = {
     Accept: "application/json",
     ...(config.headers || {}),
   };
 
   if (bearerToken) {
-    (headers as Record<string, string>)[
-      "Authorization"
-    ] = `Bearer ${bearerToken}`;
+    (headers as Record<string, string>)["Authorization"] =
+      `Bearer ${bearerToken}`;
   }
 
   const isFormData =
@@ -81,7 +73,6 @@ async function request<T = any>(
     (headers as Record<string, string>)["Content-Type"] = "application/json";
   }
 
-  // Send the request
   const res = await fetch(url, {
     method,
     headers,
@@ -90,8 +81,8 @@ async function request<T = any>(
       ? isFormData
         ? (config.body as BodyInit)
         : typeof config.body === "string"
-        ? config.body
-        : JSON.stringify(config.body)
+          ? config.body
+          : JSON.stringify(config.body)
       : undefined,
     signal: config.signal,
   });
@@ -131,7 +122,6 @@ async function request<T = any>(
   };
 }
 
-// These wrap request() for each HTTP method
 export const api = {
   get<T = any>(path: string, config?: Omit<RequestConfig, "body">) {
     return request<T>("GET", path, config);
@@ -139,7 +129,7 @@ export const api = {
   post<T = any>(
     path: string,
     body?: any,
-    config?: Omit<RequestConfig, "body">
+    config?: Omit<RequestConfig, "body">,
   ) {
     return request<T>("POST", path, { ...config, body });
   },
@@ -149,7 +139,7 @@ export const api = {
   patch<T = any>(
     path: string,
     body?: any,
-    config?: Omit<RequestConfig, "body">
+    config?: Omit<RequestConfig, "body">,
   ) {
     return request<T>("PATCH", path, { ...config, body });
   },
@@ -158,10 +148,9 @@ export const api = {
   },
 };
 
-// Convenience helpers used elsewhere in your app
 export async function apiGet<T = any>(
   path: string,
-  init?: RequestConfig
+  init?: RequestConfig,
 ): Promise<T> {
   const { data } = await api.get<T>(path, init);
   return data;
@@ -170,7 +159,7 @@ export async function apiGet<T = any>(
 export async function apiPost<T = any, B = unknown>(
   path: string,
   body?: B,
-  init?: RequestConfig
+  init?: RequestConfig,
 ): Promise<T> {
   const { data } = await api.post<T>(path, body, init);
   return data;
