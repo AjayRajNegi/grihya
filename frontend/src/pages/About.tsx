@@ -1,5 +1,6 @@
 import AmenitiesSection from "@/components/about/AmenitiesSections";
 import StatsComponent from "@/components/about/StatsComponent";
+import AdvantagesSection from "@/components/home/AdvantagesSection";
 import CTASection from "@/components/home/CTASection";
 import ValueSection from "@/components/home/ValueSection";
 import { motion, Variants } from "framer-motion";
@@ -121,6 +122,8 @@ export default function About() {
       <ValueSection />
       {/* Amenities */}
       <AmenitiesSection />
+      {/* Advantages */}
+      <AdvantagesSection />
       {/* CTA */}
       <CTASection />
     </div>

@@ -13,12 +13,6 @@ import {
 import LocationAutocomplete, {
   PickedPlace,
 } from "../components/common/LocationAutocomplete";
-
-// Leaflet marker icon fix for Vite (prevents broken default marker icons)
-import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
-import { ArrowLeft } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -55,7 +49,6 @@ const ListProperty: React.FC = () => {
     furnishing: string;
     amenities: string[];
     existingImages?: string[];
-    // NEW
     immediatelyAvailable: "" | "yes" | "no";
     availableFromDate: string; // YYYY-MM-DD
     readyToMove: "" | "yes" | "no";
@@ -74,7 +67,6 @@ const ListProperty: React.FC = () => {
     furnishing: "",
     amenities: [],
     existingImages: [],
-    // New defaults
     immediatelyAvailable: "",
     availableFromDate: "",
     readyToMove: "",

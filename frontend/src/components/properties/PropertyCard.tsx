@@ -2,12 +2,32 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { BedIcon, BathIcon, SquareIcon, MapPinIcon } from "lucide-react";
 import { Property } from "../../data/mockData";
+import { motion, Variants } from "framer-motion";
+
 interface PropertyCardProps {
   property: Property;
 }
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 1.2,
+      ease: [0.4, 0, 0.2, 1],
+    },
+  },
+};
 const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
   return (
-    <div className="overflow-hidden rounded-2xl bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] transition-all hover:shadow-lg">
+    <motion.div
+      className="overflow-hidden rounded-2xl bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] transition-all hover:shadow-lg"
+      variants={itemVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+    >
       <Link to={`/properties/${property.id}`}>
         {/* Image */}
         <div className="relative h-56">
@@ -67,7 +87,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 export default PropertyCard;

@@ -56,7 +56,7 @@ const AdvantagesSection: React.FC = () => {
   }, [steps.length]);
 
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto mt-8 lg:mt-12">
+    <div className="mx-auto max-w-7xl p-4 md:p-8">
       {/* Header Section */}
       <motion.div
         variants={itemVariants}
@@ -65,41 +65,41 @@ const AdvantagesSection: React.FC = () => {
         viewport={{ once: true }}
         className="mx-auto flex flex-col items-center justify-center"
       >
-        <div className="flex items-center  gap-2 mb-6">
-          <div className="w-2 h-2 bg-cyan-500 rounded-sm"></div>
+        <div className="mb-6 flex items-center gap-2">
+          <div className="h-2 w-2 rounded-sm bg-cyan-500"></div>
           <span className="text-base font-medium text-gray-700">
             How it work
           </span>
         </div>
 
-        <h1 className="text-3xl lg:text-4xl text-center md:text-5xl tracking-tighter text-gray-900 mb-8 max-w-4xl">
+        <h1 className="mb-8 max-w-4xl text-center text-3xl tracking-tighter text-gray-900 md:text-5xl lg:text-4xl">
           Discover the <span className="text-[#2DB8D1]">advantages</span> and
           <br />
           exclusive benefits
         </h1>
       </motion.div>
-      <div className="flex flex-col-reverse lg:flex-row items-center gap-12 lg:px-12 py-6 md:py-8 lg:py-12">
+      <div className="flex flex-col-reverse items-center gap-12 py-6 md:py-8 lg:flex-row lg:px-12 lg:py-12">
         {/* Left side - Steps */}
         <div className="flex-1 space-y-8">
           {steps.map((step) => (
             <div
               key={step.id}
               onClick={() => setActiveStep(step.id)}
-              className={`cursor-pointer transition-all duration-700 ease-in-out pl-6 border-l-4 md:pt-2 flex flex-col justify-center ${
+              className={`flex cursor-pointer flex-col justify-center border-l-4 pl-6 transition-all duration-700 ease-in-out md:pt-2 ${
                 activeStep === step.id
                   ? "border-cyan-500"
                   : "border-transparent"
               }`}
             >
               <h2
-                className={`text-xl md:text-2xl font-light mb-4 transition-colors duration-700 ease-in-out tracking-tight ${
+                className={`mb-4 text-xl font-light tracking-tight transition-colors duration-700 ease-in-out md:text-2xl ${
                   activeStep === step.id ? "text-gray-900" : "text-gray-400"
                 }`}
               >
                 {step.title}
               </h2>
               <p
-                className={`text-base md:text-xl transition-colors duration-700 ease-in-out tracking-tight ${
+                className={`text-base tracking-tight transition-colors duration-700 ease-in-out md:text-xl ${
                   activeStep === step.id ? "text-gray-500" : "text-gray-400"
                 }`}
               >
@@ -111,13 +111,13 @@ const AdvantagesSection: React.FC = () => {
 
         {/* Right side - Image */}
         <div className="flex-1">
-          <div className="relative aspect-[4/3.5] h-[80vw] md:h-[70vw] lg:h-[450px] rounded-[30px] overflow-hidden shadow-2xl">
+          <div className="relative aspect-[4/3.5] h-[80vw] overflow-hidden rounded-[30px] shadow-2xl md:h-[70vw] lg:h-[450px]">
             {steps.map((step) => (
               <img
                 key={step.id}
                 src={step.image}
                 alt={step.title}
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out ${
+                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-in-out ${
                   activeStep === step.id ? "opacity-100" : "opacity-0"
                 }`}
               />

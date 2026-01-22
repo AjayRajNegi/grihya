@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import PropertyCard from "../components/properties/PropertyCard";
 import PropertyFilters from "../components/properties/PropertyFilters";
 import type { Property } from "../data/mockData";
@@ -62,7 +62,7 @@ const PropertyListing: React.FC = () => {
 
   const [properties, setProperties] = useState<Property[]>([]);
   const [sortBy, setSortBy] = useState("newest");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [viewMode] = useState<"grid" | "list">("grid");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -71,7 +71,6 @@ const PropertyListing: React.FC = () => {
   const [total, setTotal] = useState<number>(0);
   const [lastPage, setLastPage] = useState<number>(1);
 
-  // Read filters (including lat/lng/radius) from URL
   const filters = useMemo(() => {
     const latStr = searchParams.get("lat");
     const lngStr = searchParams.get("lng");
@@ -90,7 +89,6 @@ const PropertyListing: React.FC = () => {
       furnishing: searchParams.get("furnishing") || "",
       amenities: searchParams.getAll("amenities") || [],
 
-      // ADD THIS LINE
       ready_to_move: searchParams.get("ready_to_move") || "",
       listed_by: searchParams.get("listed_by") || "",
       minPrice: minPriceStr ? parseInt(minPriceStr, 10) : null,
@@ -99,14 +97,12 @@ const PropertyListing: React.FC = () => {
       preferred_tenants: searchParams.get("preferred_tenants") || "",
       available_immediately: searchParams.get("available_immediately") || "",
 
-      // nearby filters
       lat: latStr ? parseFloat(latStr) : null,
       lng: lngStr ? parseFloat(lngStr) : null,
       radius: radiusStr ? parseInt(radiusStr, 10) : null,
     };
   }, [searchParams]);
 
-  // Ask for geolocation on first load if lat/lng are not present in the URL
   useEffect(() => {
     const hasLat = searchParams.get("lat");
     const hasLng = searchParams.get("lng");
@@ -134,10 +130,8 @@ const PropertyListing: React.FC = () => {
       () => {},
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // run once
+  }, []);
 
-  // Map API property -> UI Property
   const toProperty = (p: ApiProperty): Property => ({
     id: String(p.id),
     title: p.title,

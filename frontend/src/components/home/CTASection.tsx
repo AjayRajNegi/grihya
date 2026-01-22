@@ -103,7 +103,7 @@ const CTASection: React.FC = () => {
                   variants={fadeUp}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.97 }}
-                  className="group mb-6 inline-flex items-center gap-2 rounded-[10px] bg-white px-4 py-3 text-lg font-light text-[#0E7873] transition hover:bg-gray-100"
+                  className="group mb-6 inline-flex items-center gap-2 rounded-[10px] bg-white px-4 py-3 text-lg font-light text-[#2DB8D1] transition hover:bg-gray-100"
                   onClick={() => navigate("/properties")}
                 >
                   Explore Properties
@@ -118,7 +118,7 @@ const CTASection: React.FC = () => {
                   {["Explore", "Inquire", "List", "Book"].map((item) => (
                     <motion.button
                       key={item}
-                      className="rounded-xl bg-[#E7F2F1] px-4 py-1 text-sm font-medium text-[#052A28] transition hover:bg-[#d9eceb]"
+                      className="rounded-xl bg-[#cfe1e4] px-4 py-1 text-sm font-medium text-[#052A28] transition hover:bg-[#9eced6]"
                     >
                       {item}
                     </motion.button>
