@@ -82,7 +82,7 @@ const WhyChooseUsSection: React.FC = () => {
         viewport={{ once: true }}
         className="px-4 md:mx-auto md:px-6 lg:px-12"
       >
-        <div className="mb-6 flex items-center gap-2">
+        <div className="mb-1 flex items-center gap-2 md:mb-6">
           <div className="h-2 w-2 rounded-sm bg-cyan-500"></div>
           <span className="text-base font-medium text-gray-700">
             Why choose us?

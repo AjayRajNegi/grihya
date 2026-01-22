@@ -71,7 +71,7 @@ export function FeaturedProperties({
           viewport={{ once: true }}
           className=""
         >
-          <div className="mb-3 flex items-center gap-2 lg:mb-6">
+          <div className="mb-1 flex items-center gap-2 md:mb-3 lg:mb-6">
             <div className="h-2 w-2 rounded-sm bg-cyan-500"></div>
             <span className="text-base font-medium text-gray-700">
               Properties

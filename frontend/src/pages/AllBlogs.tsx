@@ -137,7 +137,11 @@ export default function AllBlogs() {
       </div>
 
       {/* Blog Section */}
-      <BlogSection header="Other Blogs" />
+      <BlogSection
+        title="Top Articles on buying a"
+        highlight="House"
+        description="Editors' top picked blogs on House Related Properties"
+      />
 
       {/* CTA Section */}
       <section className="mx-auto mt-12 max-w-7xl px-6 md:px-12">

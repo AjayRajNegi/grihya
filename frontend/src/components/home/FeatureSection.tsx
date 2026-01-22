@@ -46,22 +46,22 @@ export default function FeatureSection() {
     },
   };
   return (
-    <div className="mx-4 mt-5 min-h-screen max-w-7xl rounded-3xl bg-gray-100 px-6 py-16 md:mx-auto md:px-12">
+    <div className="mx-4 mt-5 min-h-screen max-w-7xl rounded-3xl bg-gray-100 px-4 py-6 md:mx-auto md:px-12">
       {/* Header Section */}
       <div className="mx-auto">
-        <div className="mb-6 flex items-center justify-center gap-2">
+        <div className="flex items-center justify-center gap-2 md:mb-6">
           <div className="h-2 w-2 rounded-sm bg-cyan-500"></div>
           <span className="text-base font-medium text-gray-700">Features</span>
         </div>
 
-        <h1 className="mx-auto mb-8 max-w-4xl text-center text-4xl font-[500] tracking-tighter text-gray-900 md:text-5xl">
+        <h1 className="mx-auto max-w-4xl text-center text-4xl font-[500] tracking-tighter text-gray-900 md:text-5xl">
           Discover the advantages and <br />
           exclusive benefits
         </h1>
       </div>
 
       {/* Cards Section */}
-      <motion.div className="mx-auto mt-20 grid max-w-7xl grid-cols-1 gap-12 lg:grid-cols-3 lg:gap-16">
+      <motion.div className="mx-auto mt-10 grid max-w-7xl grid-cols-1 gap-6 md:mt-20 md:gap-12 lg:grid-cols-3 lg:gap-16">
         {cards.map((card, index) => (
           <motion.div
             key={index}
@@ -80,7 +80,7 @@ export default function FeatureSection() {
                 className="h-[50px] w-[50px]"
               />
             </div>
-            <h2 className="mb-4 mt-6 text-xl font-medium tracking-tight text-gray-900 md:text-2xl">
+            <h2 className="mb-1 mt-3 text-xl font-medium tracking-tight text-gray-900 md:mb-4 md:mt-6 md:text-2xl">
               {card.title}
             </h2>
             <p className="text-lg leading-normal text-gray-500">{card.text}</p>
