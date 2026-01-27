@@ -35,7 +35,7 @@ export function Categories({ ImageUrl, className, url }: CategoriesProps) {
   const router = useNavigate();
   return (
     <section
-      className={`mx-auto mt-12 flex max-w-7xl flex-col-reverse gap-4 px-4 md:px-12 ${className}`}
+      className={`mx-auto flex max-w-7xl flex-col-reverse gap-4 px-4 md:mt-12 md:px-12 ${className}`}
     >
       {/* Image */}
       <motion.div
