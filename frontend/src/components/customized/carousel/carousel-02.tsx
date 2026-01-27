@@ -6,7 +6,6 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { motion, Variants } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 
 const propertyOptions = [
   {

@@ -17,10 +17,42 @@ const Home = () => {
 
       {/* House */}
       <Categories
-        ImageUrl="/images/home/Advantages3.avif"
         className="md:flex-row-reverse"
-        url="/properties?type=house&page=1"
+        config={{
+          header: "Ready to buy a Commercial Place quick and easy?",
+          title: "Explore best Housing properties with Grihya",
+          desc: "Trusted residential solutions for buying, selling, and renting homes.",
+          image: {
+            url: "/images/home/Advantages3.avif",
+            title: "Residential Homes",
+            description:
+              "Experience elegance and comfort with our exclusive luxury villas.",
+          },
+          cta: {
+            text: "View Properties",
+            url: "/properties?type=house&page=1",
+          },
+          features: [
+            {
+              id: 1,
+              title: "Modern Villa",
+              description:
+                "Discover the luxury and comfort of modern villa living",
+              image: "/images/home/Vision1.png",
+              delay: 0.2,
+            },
+            {
+              id: 2,
+              title: "Expert Guidance",
+              description:
+                "Professional support from search to final possession",
+              image: "/images/home/Vision4.png",
+              delay: 0.35,
+            },
+          ],
+        }}
       />
+
       <BlogSection
         title="Top Articles on buying a"
         highlight="House"
@@ -35,11 +67,11 @@ const Home = () => {
       <FeatureSection />
 
       {/* Land */}
-      <Categories
+      {/* <Categories
         ImageUrl="/images/home/Advantages2.png"
         className="md:flex-row"
         url="/properties?type=land&page=1"
-      />
+      /> */}
       <BlogSection
         title="Top Articles on buying an Open Land"
         highlight="Open Land"
@@ -53,11 +85,11 @@ const Home = () => {
 
       <WhyChooseUsSection />
       {/* Commercial Property */}
-      <Categories
+      {/* <Categories
         ImageUrl="/images/home/Advantages1.png"
         className="md:flex-row-reverse"
         url="/properties?type=commercial&page=1"
-      />
+      /> */}
       <BlogSection
         title="Top Articles on buying an Open Land"
         highlight="Open Land"

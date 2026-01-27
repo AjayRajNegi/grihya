@@ -76,10 +76,10 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
   return (
     <Link
       to={blogHref}
-      className="group flex items-center gap-4 rounded-2xl border-[0.5px] border-[#2DB8D1] bg-white transition-all duration-300 hover:shadow-lg"
+      className="group flex items-center gap-4 rounded-2xl border-[0.5px] border-[#2DB8D1] bg-white pr-1 transition-all duration-300 hover:shadow-lg"
     >
       {/* Image */}
-      <div className="relative h-[140px] w-[180px] flex-shrink-0 overflow-hidden rounded-xl">
+      <div className="relative h-[120px] w-[160px] flex-shrink-0 overflow-hidden rounded-xl">
         <img
           src={imgSrc}
           alt={post.title}
@@ -174,8 +174,8 @@ export default function BlogSection({
   };
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12 md:px-6 lg:px-12">
-      <div className="flex flex-col gap-8 lg:flex-row lg:gap-12">
+    <div className="mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-12 lg:px-12">
+      <div className="flex flex-col gap-2 md:gap-8 lg:flex-row lg:gap-12">
         {/* Left Side - Header */}
         <motion.div
           variants={itemVariants}
@@ -211,7 +211,7 @@ export default function BlogSection({
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="grid flex-1 grid-cols-1 gap-4 lg:grid-cols-2"
+            className="grid flex-1 grid-cols-1 gap-2 md:gap-4 lg:grid-cols-2"
           >
             {posts.map((post) => (
               <motion.div key={post.id} variants={cardVariants}>
