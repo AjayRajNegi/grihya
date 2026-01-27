@@ -102,6 +102,7 @@ export function Categories({ config, className }: CategoriesProps) {
           style={{
             backgroundImage: `url(${config.image.url})`,
             backgroundSize: "cover",
+            backgroundPosition: "center",
           }}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -116,7 +117,7 @@ export function Categories({ config, className }: CategoriesProps) {
               }}
             >
               {/* Text container */}
-              <div className="w-1/2 translate-y-6 transform cursor-pointer transition-transform duration-300 ease-out group-hover:translate-y-0 md:w-[40%]">
+              <div className="w-[80%] translate-y-6 transform cursor-pointer transition-transform duration-300 ease-out group-hover:translate-y-0">
                 <h6 className="text-2xl font-semibold text-white">
                   {config.title}
                 </h6>
