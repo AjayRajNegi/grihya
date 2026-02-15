@@ -22,7 +22,7 @@ const itemVariants: Variants = {
 const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
   return (
     <motion.div
-      className="overflow-hidden rounded-2xl bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] transition-all hover:shadow-lg"
+      className="overflow-hidden rounded-3xl border-[1px] border-[#B7E5F2] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] transition-all hover:shadow-lg"
       variants={itemVariants}
       initial="hidden"
       whileInView="visible"
@@ -34,7 +34,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
           <img
             src={property.images[0]}
             alt={property.title}
-            className="h-full w-full object-cover"
+            className="h-full w-full rounded-3xl object-cover"
           />
 
           {/* For Sale / Rent Badge */}

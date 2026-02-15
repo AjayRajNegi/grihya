@@ -92,10 +92,14 @@ export function FeaturedProperties({
           All Properties
         </button>
       </div>
-
-      <div className="mx-5 my-5 grid grid-cols-1 gap-6 md:grid-cols-2 lg:mx-4 lg:grid-cols-3">
+      <div className="no-scrollbar mx-3 my-3 flex snap-x snap-mandatory flex-nowrap gap-4 overflow-x-auto px-2 py-2 md:grid md:grid-cols-2 md:gap-6 lg:mx-4 lg:grid-cols-3">
         {properties.slice(0, 6).map((property) => (
-          <PropertyCard key={property.id} property={property} />
+          <div
+            key={property.id}
+            className="w-full min-w-[85%] snap-start md:min-w-0"
+          >
+            <PropertyCard property={property} />
+          </div>
         ))}
       </div>
       <div>
