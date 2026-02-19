@@ -405,7 +405,7 @@ export default function BlogDetail() {
             />
             <div className="">
               <p className="fon-medium text-sm text-gray-600">written by:</p>
-              <p className="font-medium">{post.author || "Grihya Team"}</p>
+              <p className="font-medium">{"Grihya Team"}</p>
             </div>
           </div>
         </div>
