@@ -50,12 +50,6 @@ export function App() {
                 <Route path="/terms" element={<TermsAndConditions />} />
                 <Route path="/privacy" element={<PrivacyPolicy />} />
 
-                <Route path="/agents" element={<Agents />} />
-                <Route
-                  path="/agents/:id/properties"
-                  element={<AgentProperties />}
-                />
-
                 <Route path="/chat-with-us" element={<ChatWithUs />} />
 
                 <Route

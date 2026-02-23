@@ -343,24 +343,6 @@ const PropertyListing: React.FC = () => {
     <div className="min-h-screen bg-white">
       <PropertiesSearch />
       <div className="mx-auto max-w-7xl px-4 py-8">
-        {/* <div className="mb-6 flex items-center gap-2">
-          <button
-            type="button"
-            aria-label="Go back"
-            onClick={() => navigate(-1)}
-            className="-ml-1 inline-flex h-9 w-9 cursor-pointer items-center justify-center bg-transparent text-gray-800 hover:text-gray-900 active:scale-95"
-            title="Back"
-          >
-            <span className="text-2xl font-extrabold leading-none md:text-3xl">
-              <img src="/images/random/less_than_icon.png" alt="Back-Icon" />
-            </span>
-          </button>
-
-          <h1 className="text-2xl font-bold text-gray-900 md:text-3xl">
-            {nearbyMode ? "Properties near you" : "Property Listings"}
-          </h1>
-        </div> */}
-
         <div className="flex flex-col gap-6 md:flex-row">
           {/* Filters sidebar */}
           <div className="md:w-1/4">
@@ -396,30 +378,6 @@ const PropertyListing: React.FC = () => {
                   </SelectContent>
                 </Select>
               </div>
-
-              {/* <div className="flex items-center space-x-2">
-                <span className="text-gray-700">View:</span>
-                <button
-                  onClick={() => setViewMode("grid")}
-                  className={`rounded-md p-2 ${
-                    viewMode === "grid"
-                      ? "bg-[#CCF0E1FF] text-[#35B1C6]"
-                      : "text-gray-500 hover:bg-gray-100"
-                  }`}
-                >
-                  <GridIcon className="h-5 w-5" />
-                </button>
-                <button
-                  onClick={() => setViewMode("list")}
-                  className={`rounded-md p-2 ${
-                    viewMode === "list"
-                      ? "bg-[#CCF0E1FF] text-[#35B1C6]"
-                      : "text-gray-500 hover:bg-gray-100"
-                  }`}
-                >
-                  <ListIcon className="h-5 w-5" />
-                </button>
-              </div> */}
             </div>
 
             {/* Results count */}
