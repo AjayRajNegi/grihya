@@ -9,15 +9,15 @@ interface PropertyCardProps {
 }
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 1.2,
-      ease: [0.4, 0, 0.2, 1],
-    },
-  },
+  // hidden: { opacity: 0, y: 30 },
+  // visible: {
+  //   opacity: 1,
+  //   y: 0,
+  //   transition: {
+  //     duration: 1.2,
+  //     ease: [0.4, 0, 0.2, 1],
+  //   },
+  // },
 };
 const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
   return (

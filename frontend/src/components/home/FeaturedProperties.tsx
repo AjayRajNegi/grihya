@@ -27,7 +27,7 @@ interface Property {
   distanceMeters?: number;
 }
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 1, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
@@ -92,7 +92,7 @@ export function FeaturedProperties({
           All Properties
         </button>
       </div>
-      <div className="no-scrollbar mx-3 my-3 flex snap-x snap-mandatory flex-nowrap gap-4 overflow-x-auto px-2 py-2 md:grid md:grid-cols-2 md:gap-6 lg:mx-4 lg:grid-cols-3">
+      <div className="no-scrollbar mx-3 my-3 flex snap-x snap-mandatory flex-nowrap gap-4 overflow-x-auto px-2 py-2 pb-3 md:grid md:grid-cols-2 md:gap-6 lg:mx-4 lg:grid-cols-3">
         {properties.slice(0, 6).map((property) => (
           <div
             key={property.id}

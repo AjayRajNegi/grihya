@@ -43,13 +43,13 @@ const CTASection: React.FC = () => {
   const scale = useTransform(scrollYProgress, [0, 1], [1.3, 1]);
 
   return (
-    <div className="mx-auto max-w-7xl overflow-hidden rounded-xl bg-[#FAFCFE] px-4 lg:px-0">
+    <div className="mx-auto max-w-[1800px] overflow-hidden bg-[#FAFCFE]">
       <FAQSection />
 
       {/* Hero Section */}
       <div
         ref={heroRef}
-        className="relative mt-20 h-[70vh] overflow-hidden rounded-xl md:h-[80vh]"
+        className="relative mt-20 h-[70vh] overflow-hidden md:h-[80vh]"
       >
         {/* Background Image */}
         <motion.div
@@ -66,7 +66,7 @@ const CTASection: React.FC = () => {
 
         {/* Content Overlay */}
         <motion.div
-          className="relative z-10 flex h-full items-center overflow-hidden rounded-3xl"
+          className="relative z-10 flex h-full items-center overflow-hidden"
           initial="hidden"
           whileInView="visible"
           variants={containerVariants}
@@ -102,7 +102,7 @@ const CTASection: React.FC = () => {
                   variants={fadeUp}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.97 }}
-                  className="group mb-6 inline-flex items-center gap-2 rounded-[10px] bg-white px-4 py-3 text-lg font-light text-[#2DB8D1] transition hover:bg-gray-100"
+                  className="group mb-6 inline-flex items-center gap-2 rounded-[10px] bg-white px-4 py-3 text-lg font-light text-[#2DB8D1]"
                   onClick={() => navigate("/properties")}
                 >
                   Explore Properties

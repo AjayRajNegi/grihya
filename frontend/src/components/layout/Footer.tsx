@@ -31,9 +31,20 @@ const Footer: React.FC = () => {
     },
     tap: { scale: 0.95 },
   };
+  const quickLinks = [
+    { title: "Home", href: "/" },
+    { title: "About Us", href: "/about" },
+    { title: "Contact Us", href: "/contact" },
+    // { title: "Profile", href: "/account" },
+    { title: "Chat With Us", href: "/chat-with-us" },
+  ];
 
-  const quickLinks = ["Home", "About Us", "Our Agents", "Contact Us", "FAQ"];
-  const mainPages = ["Properties", "Blogs"];
+  const mainPages = [
+    { title: "Properties", href: "/properties" },
+    { title: "Blogs", href: "/blog" },
+    { title: "Terms and Conditions", href: "/terms" },
+    { title: "Privacy Policy", href: "/privacy" },
+  ];
   return (
     <footer className="bg-white">
       <motion.div
@@ -95,10 +106,10 @@ const Footer: React.FC = () => {
                   transition={{ type: "spring", stiffness: 300 }}
                 >
                   <a
-                    href="#"
+                    href={link.href}
                     className="text-base text-gray-600 transition-colors hover:text-gray-900"
                   >
-                    {link}
+                    {link.title}
                   </a>
                 </motion.li>
               ))}
@@ -118,10 +129,10 @@ const Footer: React.FC = () => {
                   transition={{ type: "spring", stiffness: 300 }}
                 >
                   <a
-                    href="#"
+                    href={link.href}
                     className="text-base text-gray-600 transition-colors hover:text-gray-900"
                   >
-                    {link}
+                    {link.title}
                   </a>
                 </motion.li>
               ))}
@@ -136,7 +147,7 @@ const Footer: React.FC = () => {
         >
           <p className="text-sm text-gray-600">Copyright @2024 Grihya</p>
           <div className="flex items-center gap-2 text-sm text-gray-600">
-            <span>Developed by Redsan</span>
+            <a href="www.redsan.in">Developed by Redsan</a>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
               <path d="M8 0L0 8h8v8l8-8H8V0z" />
             </svg>

@@ -7,10 +7,12 @@ import { Categories } from "@/components/home/Categories";
 import { Options } from "@/components/home/Options";
 import { Testimonials } from "./Testimonials";
 import { FeaturedProperties } from "@/components/home/FeaturedProperties";
+import { ScrollToTop } from "@/utils/import";
 
 const Home = () => {
   return (
     <div className="min-h-screen bg-[#FAFCFE]">
+      <ScrollToTop />
       <Hero />
       {/* Real Estate Options */}
       <Options />
@@ -175,8 +177,8 @@ const Home = () => {
         description="Editors' top picked blogs on Open Land Properties"
       />
       <FeaturedProperties
-        //type="commercial"
-        type="flat"
+        type="commercial"
+        //type="flat"
         url="/properties?type=commercial&page=1"
         desc="Ready to buy a Commercial Placequick and easy?"
       />
