@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, Variants } from "framer-motion";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Footer from "../components/layout/Footer";
 import { Card } from "@/components/ui/card";
 import { apiGet } from "../lib/api";
@@ -126,12 +126,20 @@ const fadeUp: Variants = {
 };
 
 export default function BlogDetail() {
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const { slug } = useParams<{ slug: string }>();
-
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [err, setErr] = useState<string>("");
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  }, [pathname]);
 
   useEffect(() => {
     let mounted = true;
@@ -322,20 +330,24 @@ export default function BlogDetail() {
 
   if (loading)
     return (
-      <div className="min-h-screen bg-[#F5F3F0]">
-        <div className="mx-auto max-w-3xl p-8">Loading…</div>
-        <Footer />
-      </div>
+      <>
+        <div className="min-h-screen bg-[#F5F3F0]">
+          <div className="mx-auto max-w-3xl p-8">Loading…</div>
+          <Footer />
+        </div>
+      </>
     );
 
   if (err || !post)
     return (
-      <div className="min-h-screen bg-[#F5F3F0]">
-        <div className="mx-auto max-w-3xl p-8 text-red-600">
-          Failed to load post. {err}
+      <>
+        <div className="min-h-screen bg-[#F5F3F0]">
+          <div className="mx-auto max-w-3xl p-8 text-red-600">
+            Failed to load post. {err}
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
+      </>
     );
 
   const heroBlock = post.content?.find(
@@ -355,94 +367,96 @@ export default function BlogDetail() {
   const category = getRandomCategory();
 
   return (
-    <div className="min-h-screen bg-white pt-12">
-      {/* Header Section */}
-      <div className="flex w-full flex-col items-start justify-center px-5 sm:max-w-5xl sm:px-4 md:mx-auto">
-        <div className="mb-6 flex w-fit items-center gap-2 rounded-full bg-[#0059FF] px-4 py-2">
-          <span className="text-base font-medium text-white">{category}</span>
+    <>
+      <div className="min-h-screen bg-white pt-12">
+        {/* Header Section */}
+        <div className="flex w-full flex-col items-start justify-center px-5 sm:max-w-5xl sm:px-4 md:mx-auto">
+          <div className="mb-6 flex w-fit items-center gap-2 rounded-full bg-[#0059FF] px-4 py-2">
+            <span className="text-base font-medium text-white">{category}</span>
+          </div>
+          <h1 className="w-full text-4xl font-medium tracking-tighter sm:w-[70%] sm:text-5xl">
+            {heroBlock?.data?.title || post.title}
+          </h1>
+          <p className="my-8 flex gap-3 text-black">
+            <Calendar size={20} /> {formatDate(post.published_at || "")}
+          </p>
         </div>
-        <h1 className="w-full text-4xl font-medium tracking-tighter sm:w-[70%] sm:text-5xl">
-          {heroBlock?.data?.title || post.title}
-        </h1>
-        <p className="my-8 flex gap-3 text-black">
-          <Calendar size={20} /> {formatDate(post.published_at || "")}
-        </p>
-      </div>
-      <Hero imageUrl={heroImage} />
+        <Hero imageUrl={heroImage} />
 
-      {/* Content container */}
-      <div className="mx-auto grid grid-cols-4 px-5 py-12 md:max-w-7xl md:px-12">
-        <div
-          className="col-span-4 mb-10 cursor-pointer text-xl font-medium sm:col-span-1 sm:mx-auto"
-          onClick={() => navigate(-1)}
-        >
-          <div className="justify flex items-center gap-2">
-            <ArrowLeft size={20} className="block sm:hidden" />
-            <ArrowLeft className="hidden sm:block" />
-            <p className="text-sm sm:text-base">Back to blogs</p>
+        {/* Content container */}
+        <div className="mx-auto grid grid-cols-4 px-5 py-12 md:max-w-7xl md:px-12">
+          <div
+            className="col-span-4 mb-10 cursor-pointer text-xl font-medium sm:col-span-1 sm:mx-auto"
+            onClick={() => navigate(-1)}
+          >
+            <div className="justify flex items-center gap-2">
+              <ArrowLeft size={20} className="block sm:hidden" />
+              <ArrowLeft className="hidden sm:block" />
+              <p className="text-sm sm:text-base">Back to blogs</p>
+            </div>
           </div>
-        </div>
-        <div className="col-span-4 sm:col-span-3">
-          <div className="w-full">
-            <Card>
-              <article className="prose prose-lg max-w-none">
-                {post.content
-                  ?.filter((b) => b.type !== "hero")
-                  .map((b, i) => renderBlock(b, i))}
-                {(!post.content || post.content.length === 0) && (
-                  <p className="text-slate-600">
-                    No content available for this article.
-                  </p>
-                )}
-              </article>
-            </Card>
-          </div>
-          <div className="col-span-4 h-[0.5px] w-full bg-gray-700" />
-          <div className="mt-6 flex items-center gap-4">
-            <img
-              src="/icon/AuthorImage.avif"
-              className="h-12 w-12 rounded-full object-cover"
-            />
-            <div className="">
-              <p className="fon-medium text-sm text-gray-600">written by:</p>
-              <p className="font-medium">{"Grihya Team"}</p>
+          <div className="col-span-4 sm:col-span-3">
+            <div className="w-full">
+              <Card>
+                <article className="prose prose-lg max-w-none p-4">
+                  {post.content
+                    ?.filter((b) => b.type !== "hero")
+                    .map((b, i) => renderBlock(b, i))}
+                  {(!post.content || post.content.length === 0) && (
+                    <p className="text-slate-600">
+                      No content available for this article.
+                    </p>
+                  )}
+                </article>
+              </Card>
+            </div>
+            <div className="col-span-4 h-[0.5px] w-full bg-gray-700" />
+            <div className="mt-6 flex items-center gap-4">
+              <img
+                src="/icon/AuthorImage.avif"
+                className="h-12 w-12 rounded-full object-cover"
+              />
+              <div className="">
+                <p className="fon-medium text-sm text-gray-600">written by:</p>
+                <p className="font-medium">{"Grihya Team"}</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* CTA Section */}
-      <section className="mx-auto max-w-7xl px-5 sm:px-12">
-        <motion.div
-          variants={containerVariants}
-          whileInView="visible"
-          initial="hidden"
-          viewport={{ once: true, amount: 0.4 }}
-          className="flex flex-col items-center justify-center gap-8 rounded-[30px] bg-[#2DB8D1] py-[100px] text-white"
-        >
-          <motion.h3
-            variants={fadeUp}
-            className="text-xl font-medium tracking-tighter md:text-2xl"
+        {/* CTA Section */}
+        <section className="mx-auto max-w-7xl px-5 sm:px-12">
+          <motion.div
+            variants={containerVariants}
+            whileInView="visible"
+            initial="hidden"
+            viewport={{ once: true, amount: 0.4 }}
+            className="flex flex-col items-center justify-center gap-8 rounded-[30px] bg-[#2DB8D1] py-[100px] text-white"
           >
-            Want to Book a Call?
-          </motion.h3>
-          <motion.h1
-            variants={fadeUp}
-            className="s mx-auto max-w-3xl text-center text-4xl font-medium tracking-tighter md:text-5xl"
-          >
-            Ready to make your step in real state? Book Now.
-          </motion.h1>
-          <motion.button
-            variants={fadeUp}
-            whileHover={{ scale: 1.08 }}
-            whileTap={{ scale: 0.95 }}
-            className="rounded-full bg-white px-5 py-3 text-sm tracking-tight text-black md:text-base"
-            onClick={() => navigate("/properties")}
-          >
-            View Properties
-          </motion.button>
-        </motion.div>
-      </section>
-    </div>
+            <motion.h3
+              variants={fadeUp}
+              className="text-xl font-medium tracking-tighter md:text-2xl"
+            >
+              Want to Book a Call?
+            </motion.h3>
+            <motion.h1
+              variants={fadeUp}
+              className="s mx-auto max-w-3xl text-center text-4xl font-medium tracking-tighter md:text-5xl"
+            >
+              Ready to make your step in real state? Book Now.
+            </motion.h1>
+            <motion.button
+              variants={fadeUp}
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.95 }}
+              className="rounded-full bg-white px-5 py-3 text-sm tracking-tight text-black md:text-base"
+              onClick={() => navigate("/properties")}
+            >
+              View Properties
+            </motion.button>
+          </motion.div>
+        </section>
+      </div>
+    </>
   );
 }

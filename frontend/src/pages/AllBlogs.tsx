@@ -2,6 +2,7 @@ import { motion, Variants } from "framer-motion";
 import { Calendar } from "lucide-react";
 import BlogSection from "../components/blog/Blog";
 import { useNavigate } from "react-router-dom";
+import { ScrollToTop } from "@/utils/import";
 
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -70,6 +71,7 @@ export default function AllBlogs() {
   }).format(currentDate);
   return (
     <>
+      <ScrollToTop />
       {/* Hero Section */}
       <div className="mx-auto my-8 max-w-7xl overflow-hidden bg-white">
         {/* Header Section */}
@@ -85,8 +87,7 @@ export default function AllBlogs() {
           </div>
 
           <h1 className="max-w-4xl text-center text-4xl tracking-tighter text-gray-900 md:text-5xl">
-            Read the most insightful bits here!! Read the most insightful bits
-            here!!
+            Read the most insightful bits here!!
           </h1>
         </motion.div>
 
