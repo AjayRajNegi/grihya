@@ -102,7 +102,7 @@ const CTASection: React.FC = () => {
                   variants={fadeUp}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.97 }}
-                  className="group mb-6 inline-flex items-center gap-2 rounded-[10px] bg-white px-4 py-3 text-lg font-light text-[#2DB8D1]"
+                  className="group mb-6 inline-flex items-center gap-2 rounded-[10px] bg-white px-4 py-3 text-lg font-[500] text-[#2DB8D1]"
                   onClick={() => navigate("/properties")}
                 >
                   Explore Properties

@@ -1,5 +1,4 @@
 import { motion, Variants } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 
 const cards = [
   {
@@ -25,8 +24,6 @@ const cards = [
 ];
 
 export default function ValueSection() {
-  const navigate = useNavigate();
-
   const itemVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
@@ -40,7 +37,7 @@ export default function ValueSection() {
   };
 
   return (
-    <div className="min-h-screen max-w-7xl px-6 md:px-12 bg-white py-16 mx-auto">
+    <div className="mx-auto min-h-screen max-w-7xl bg-white px-6 py-16 md:px-12">
       {/* Header Section */}
       <motion.div
         variants={itemVariants}
@@ -49,27 +46,27 @@ export default function ValueSection() {
         viewport={{ once: true }}
         className="mx-auto"
       >
-        <div className="flex items-center gap-2 mb-6">
-          <div className="w-2 h-2 bg-cyan-500 rounded-sm"></div>
+        <div className="flex items-center gap-2">
+          <div className="h-2 w-2 rounded-sm bg-cyan-500"></div>
           <span className="text-base font-medium text-gray-700">
             Our Vision
           </span>
         </div>
 
-        <h1 className="text-4xl md:text-5xl tracking-tighter text-gray-900 mb-8 max-w-4xl">
+        <h1 className="mb-8 max-w-4xl text-4xl tracking-tighter text-gray-900 md:text-5xl">
           The values that drive everything we do
         </h1>
 
-        <button
+        {/* <button
           className="bg-gray-900 text-white px-7 py-3 rounded-full text-base hover:bg-gray-800 transition-colors tracking-tighter"
           onClick={() => navigate("/about")}
         >
           Learn more
-        </button>
+        </button> */}
       </motion.div>
 
       {/* Cards Section */}
-      <motion.div className="max-w-7xl mx-auto mt-20 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+      <motion.div className="mx-auto mt-20 grid max-w-7xl grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
         {cards.map((card, index) => (
           <motion.div
             key={index}
@@ -84,10 +81,10 @@ export default function ValueSection() {
             <div>
               <img src={card.img} alt={card.title} />
             </div>
-            <h2 className="text-xl text-center md:text-left md:text-2xl tracking-tight text-gray-900 mb-2 mt-4 font-medium">
+            <h2 className="mb-2 mt-4 text-center text-xl font-medium tracking-tight text-gray-900 md:text-left md:text-2xl">
               {card.title}
             </h2>
-            <p className="text-gray-500 text-lg text-center md:text-left leading-normal">
+            <p className="text-center text-lg leading-normal text-gray-500 md:text-left">
               {card.text}
             </p>
           </motion.div>
