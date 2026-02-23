@@ -87,7 +87,7 @@ export default function AllBlogs() {
           </div>
 
           <h1 className="max-w-4xl text-center text-4xl tracking-tighter text-gray-900 md:text-5xl">
-            Read the most insightful bits here!!
+            Explore expert perspectives that inspire smarter decisions.
           </h1>
         </motion.div>
 

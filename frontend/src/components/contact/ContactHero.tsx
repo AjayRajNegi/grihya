@@ -87,10 +87,14 @@ export default function ContactHero() {
                 <p>
                   Hello There! Feel free to react out to us regarding any query.
                 </p>
-                <p className="mt-3 flex items-center justify-between rounded-[10px] bg-[#E4E9F2] p-2">
+                <a
+                  href="https://wa.me/+91843309283?text=Hello%20there!"
+                  target="_blank"
+                  className="mt-3 flex items-center justify-between rounded-[10px] bg-[#E4E9F2] p-2"
+                >
                   Call our front desk
                   <SmartphoneIcon className="text-[#35B1C6]" size={15} />
-                </p>
+                </a>
               </div>
             </PopoverContent>
           </Popover>

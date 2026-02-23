@@ -108,8 +108,9 @@ export default function About() {
             </h1>
             <div className="col-span-2 mt-6 md:col-span-1 md:mt-0">
               <p className="text-base md:text-xl">
-                Lorem Ipsum, dore idor ieuneva. Avene fa so ulima gopgh hermino
-                afata
+                Finding your dream home or selling your property shouldn&apos;t
+                be complicated. At Grihya, we combine local market expertise
+                with personalized service to guide you every step of the way.
               </p>
               <p
                 className="mt-6 w-fit cursor-pointer rounded-full bg-[#2DB8D1] px-5 py-3 font-medium text-white md:mt-4"
