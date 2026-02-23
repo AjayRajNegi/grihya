@@ -15,13 +15,13 @@ import {
   LogOut as LogOutIcon,
   Trash2 as TrashIcon,
   MoreVertical as MoreIcon,
-  ArrowLeftIcon,
 } from "lucide-react";
 import { Listbox } from "@headlessui/react";
 import ReactCountryFlag from "react-country-flag";
 import { Navbar } from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { motion, Variants } from "framer-motion";
+import { ScrollToTop } from "@/utils/import";
 
 type CountryOpt = { code: string; label: string; dial: string; flag: string };
 
@@ -636,6 +636,7 @@ const Account: React.FC = () => {
 
     return (
       <>
+        <ScrollToTop />
         <Navbar />
         <main className="bg-white">
           <div className="mx-auto max-w-6xl px-4 pt-14 sm:px-6 md:pb-8 lg:px-8">
