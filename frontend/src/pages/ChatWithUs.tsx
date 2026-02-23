@@ -68,7 +68,7 @@ const ChatWithUs: React.FC = () => {
     {
       temp_id: "greeting",
       from: "admin",
-      text: "Hi! 👋 How can we help today? You can ask about loans, listings, or anything else.",
+      text: "Hi! 👋 How can we help today?",
       ts: Date.now(),
     },
   ]);
