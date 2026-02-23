@@ -189,7 +189,7 @@ const InteriorServices: React.FC = () => {
     delay?: number;
   }) => (
     <div
-      className="animate-in flex items-center gap-4 rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm"
+      className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm animate-in"
       style={{ animationDelay: `${delay}ms` }}
     >
       <div className="rounded-md bg-[#CCF0E1] p-2.5 text-[#2AB09C]">
@@ -212,18 +212,18 @@ const InteriorServices: React.FC = () => {
     delay?: number;
   }) => (
     <div
-      className="animate-in mb-8 text-center"
+      className="mb-8 text-center animate-in"
       style={{ animationDelay: `${delay}ms` }}
     >
-      <h2 className="relative inline-block text-2xl md:text-3xl font-semibold text-slate-900 pb-1 tracking-tight">
+      <h2 className="relative inline-block pb-1 text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl">
         {title}
         <span
           aria-hidden
-          className="absolute left-1/2 -bottom-1 h-0.5 w-16 -translate-x-1/2 rounded-full bg-[#2AB09C]"
+          className="absolute -bottom-1 left-1/2 h-0.5 w-16 -translate-x-1/2 rounded-full bg-[#2AB09C]"
         />
       </h2>
       {subtitle && (
-        <p className="mt-2 text-[15px] leading-relaxed text-slate-600 max-w-2xl mx-auto">
+        <p className="mx-auto mt-2 max-w-2xl text-[15px] leading-relaxed text-slate-600">
           {subtitle}
         </p>
       )}
@@ -231,11 +231,11 @@ const InteriorServices: React.FC = () => {
   );
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="min-h-screen bg-gray-50">
       <Header />
       <AnimCSS />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
         <div className="space-y-14 md:space-y-20">
           {/* Page header */}
           <div className="animate-in" style={{ animationDelay: "60ms" }}>
@@ -244,18 +244,18 @@ const InteriorServices: React.FC = () => {
                 type="button"
                 aria-label="Go back"
                 onClick={() => navigate(-1)}
-                className="inline-flex h-9 w-9 -ml-1 items-center justify-center bg-transparent text-gray-800 hover:text-gray-900 active:scale-95 cursor-pointer"
+                className="-ml-1 inline-flex h-9 w-9 cursor-pointer items-center justify-center bg-transparent text-gray-800 hover:text-gray-900 active:scale-95"
                 title="Back"
               >
-                <span className="text-2xl md:text-3xl font-extrabold leading-none">
+                <span className="text-2xl font-extrabold leading-none md:text-3xl">
                   <img src="/less_than_icon.png" alt="Back-Icon" />
                 </span>
               </button>
-              <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
+              <h1 className="text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
                 Interior Services
               </h1>
             </div>
-            <p className="mt-3 text-[15px] leading-relaxed text-slate-700 max-w-3xl mx-9">
+            <p className="mx-9 mt-3 max-w-3xl text-[15px] leading-relaxed text-slate-700">
               End‑to‑end interior solutions: modular kitchens, wardrobes, living
               rooms, lighting, and complete home interiors — with transparent
               BOQ and reliable timelines.
@@ -263,7 +263,7 @@ const InteriorServices: React.FC = () => {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-3">
             <Stat
               value="250+ homes"
               label="Delivered across Bengaluru"
@@ -291,11 +291,11 @@ const InteriorServices: React.FC = () => {
               subtitle="Full‑stack interior solutions — modular to bespoke."
               delay={0}
             />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-3">
               {services.map(({ title, desc, icon: Icon }, i) => (
                 <div
                   key={title}
-                  className="animate-in group rounded-2xl bg-white border border-slate-200 p-6 md:p-7 shadow-sm transition hover:shadow-lg hover:-translate-y-0.5"
+                  className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition animate-in hover:-translate-y-0.5 hover:shadow-lg md:p-7"
                   style={{ animationDelay: `${100 + i * 70}ms` }}
                 >
                   <div className="flex items-start gap-4">
@@ -303,15 +303,15 @@ const InteriorServices: React.FC = () => {
                       <Icon className="h-5 w-5" />
                     </div>
                     <div>
-                      <h3 className="text-[15px] md:text-base font-semibold text-slate-900 text-center sm:text-left">
+                      <h3 className="text-center text-[15px] font-semibold text-slate-900 sm:text-left md:text-base">
                         {title}
                       </h3>
-                      <p className="mt-1.5 text-[14px] leading-relaxed text-slate-600 text-center sm:text-left">
+                      <p className="mt-1.5 text-center text-[14px] leading-relaxed text-slate-600 sm:text-left">
                         {desc}
                       </p>
                     </div>
                   </div>
-                  <div className="pointer-events-none mx-auto sm:mx-0 mt-5 h-0.5 w-12 rounded-full bg-[#E6F7F1] group-hover:bg-[#CCF0E1] transition" />
+                  <div className="pointer-events-none mx-auto mt-5 h-0.5 w-12 rounded-full bg-[#E6F7F1] transition group-hover:bg-[#CCF0E1] sm:mx-0" />
                 </div>
               ))}
             </div>
@@ -324,8 +324,8 @@ const InteriorServices: React.FC = () => {
               subtitle="A quick look at our kitchens, living rooms and wardrobes."
               delay={0}
             />
-            <div className="rounded-2xl bg-white border border-slate-200 p-5 md:p-6 shadow-sm">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-3">
                 {[
                   "image_1.jpg",
                   "image_2.jpg",
@@ -336,15 +336,15 @@ const InteriorServices: React.FC = () => {
                 ].map((src, i) => (
                   <div
                     key={i}
-                    className="animate-in relative group overflow-hidden rounded-xl will-change-transform"
+                    className="group relative overflow-hidden rounded-xl will-change-transform animate-in"
                     style={{ animationDelay: `${120 + i * 60}ms` }}
                   >
                     <img
                       src={src}
                       alt={`Project ${i + 1}`}
-                      className="w-full object-cover rounded-xl aspect-[4/3] transition-transform duration-500 group-hover:scale-[1.03]"
+                      className="aspect-[4/3] w-full rounded-xl object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                     />
-                    <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+                    <div className="duration-400 pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                   </div>
                 ))}
               </div>
@@ -358,11 +358,11 @@ const InteriorServices: React.FC = () => {
               subtitle="A transparent workflow from brief to handover."
               delay={0}
             />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
               {process.map(({ step, title, desc, icon: Icon }, i) => (
                 <div
                   key={step}
-                  className="animate-in rounded-2xl bg-white border border-slate-200 p-6 md:p-7 shadow-sm transition hover:shadow-lg hover:-translate-y-0.5"
+                  className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition animate-in hover:-translate-y-0.5 hover:shadow-lg md:p-7"
                   style={{ animationDelay: `${100 + i * 80}ms` }}
                 >
                   <div className="flex items-start gap-4">
@@ -370,13 +370,13 @@ const InteriorServices: React.FC = () => {
                       <Icon className="h-5 w-5" />
                     </div>
                     <div>
-                      <div className="text-xs font-semibold text-[#2AB09C] text-center md:text-left">
+                      <div className="text-center text-xs font-semibold text-[#2AB09C] md:text-left">
                         Step {step}
                       </div>
-                      <h3 className="mt-0.5 text-[15px] md:text-base font-semibold text-slate-900 text-center md:text-left">
+                      <h3 className="mt-0.5 text-center text-[15px] font-semibold text-slate-900 md:text-left md:text-base">
                         {title}
                       </h3>
-                      <p className="mt-1.5 text-[14px] leading-relaxed text-slate-600 text-center md:text-left">
+                      <p className="mt-1.5 text-center text-[14px] leading-relaxed text-slate-600 md:text-left">
                         {desc}
                       </p>
                     </div>
@@ -384,7 +384,7 @@ const InteriorServices: React.FC = () => {
                 </div>
               ))}
             </div>
-            <div className="mt-4 md:mt-5 flex items-center justify-center gap-3 text-xs text-slate-600">
+            <div className="mt-4 flex items-center justify-center gap-3 text-xs text-slate-600 md:mt-5">
               <Shield className="h-4 w-4 text-[#2AB09C]" />
               Transparent BOQ and documented timelines for every project.
             </div>
@@ -393,11 +393,11 @@ const InteriorServices: React.FC = () => {
           {/* Testimonials */}
           <section>
             <SectionHeader title="What clients say" delay={0} />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
               {testimonials.map((t, i) => (
                 <div
                   key={t.name}
-                  className="animate-in rounded-2xl border border-slate-200 bg-white p-6 md:p-7 shadow-sm transition hover:shadow-lg hover:-translate-y-0.5"
+                  className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition animate-in hover:-translate-y-0.5 hover:shadow-lg md:p-7"
                   style={{ animationDelay: `${100 + i * 100}ms` }}
                 >
                   <div className="flex items-center justify-between">
@@ -413,8 +413,8 @@ const InteriorServices: React.FC = () => {
                       ))}
                     </div>
                   </div>
-                  <div className="mt-3 text-[14px] leading-relaxed text-slate-700 flex gap-2">
-                    <Quote className="h-4 w-4 text-[#2AB09C] mt-0.5" />
+                  <div className="mt-3 flex gap-2 text-[14px] leading-relaxed text-slate-700">
+                    <Quote className="mt-0.5 h-4 w-4 text-[#2AB09C]" />
                     <p>{t.quote}</p>
                   </div>
                 </div>
@@ -423,30 +423,30 @@ const InteriorServices: React.FC = () => {
           </section>
 
           {/* FAQ (styled like your shared component) */}
-          <section className="py-12 md:py-14 bg-white rounded-2xl border border-gray-200 shadow-sm">
-            <div className="max-w-5xl mx-auto px-5 md:px-8">
+          <section className="rounded-2xl border border-gray-200 bg-white py-12 shadow-sm md:py-14">
+            <div className="mx-auto max-w-5xl px-5 md:px-8">
               <div className="mx-auto max-w-3xl">
-                <div className="flex items-center justify-center mb-4">
-                  <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-[#CCF0E1] text-[#2AB09C]">
+                <div className="mb-4 flex items-center justify-center">
+                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#CCF0E1] text-[#2AB09C]">
                     <HelpCircle className="h-6 w-6" />
                   </div>
                 </div>
 
-                <div className="text-center mb-10">
-                  <h2 className="relative inline-block text-2xl md:text-3xl font-bold text-gray-900 pb-1">
+                <div className="mb-10 text-center">
+                  <h2 className="relative inline-block pb-1 text-2xl font-bold text-gray-900 md:text-3xl">
                     Frequently Asked Questions
                     <span
                       aria-hidden
-                      className="absolute left-1/2 -bottom-2 h-1 w-24 md:w-28 -translate-x-1/2 rounded-full bg-[#2AB09C]"
+                      className="absolute -bottom-2 left-1/2 h-1 w-24 -translate-x-1/2 rounded-full bg-[#2AB09C] md:w-28"
                     />
                   </h2>
-                  <p className="text-gray-600 mt-5 max-w-2xl mx-auto">
+                  <p className="mx-auto mt-5 max-w-2xl text-gray-600">
                     Answers to common questions about our interior services,
                     timelines, designs, and warranties.
                   </p>
                 </div>
 
-                <div className="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white overflow-hidden">
+                <div className="divide-y divide-gray-200 overflow-hidden rounded-lg border border-gray-200 bg-white">
                   {faqs.map((item, idx) => {
                     const isOpen = faqOpen === idx;
                     const contentId = `faq-panel-${idx}`;
@@ -462,12 +462,11 @@ const InteriorServices: React.FC = () => {
                           aria-controls={contentId}
                           aria-expanded={isOpen}
                           onClick={() => setFaqOpen(isOpen ? null : idx)}
-                          className={`w-full flex items-center justify-between text-left px-5 md:px-6 py-4 md:py-5 focus:outline-none transition-colors
-                            ${
-                              isOpen ? "bg-[#CCF0E1]" : "bg-white"
-                            } hover:bg-gray-50`}
+                          className={`flex w-full items-center justify-between px-5 py-4 text-left transition-colors focus:outline-none md:px-6 md:py-5 ${
+                            isOpen ? "bg-[#CCF0E1]" : "bg-white"
+                          } hover:bg-gray-50`}
                         >
-                          <span className="font-medium text-gray-900 pr-4">
+                          <span className="pr-4 font-medium text-gray-900">
                             {item.q}
                           </span>
                           <ChevronDown
@@ -482,15 +481,14 @@ const InteriorServices: React.FC = () => {
                           role="region"
                           aria-labelledby={btnId}
                           aria-hidden={!isOpen}
-                          className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out
-                            ${
-                              isOpen
-                                ? "opacity-100"
-                                : "max-h-0 opacity-0 pointer-events-none"
-                            }`}
+                          className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out ${
+                            isOpen
+                              ? "opacity-100"
+                              : "pointer-events-none max-h-0 opacity-0"
+                          }`}
                           style={{ maxHeight: isOpen ? 1000 : 0 }}
                         >
-                          <div className="relative pl-5 md:pl-6 pr-5 md:pr-6 text-[14px] leading-relaxed text-gray-700 pb-6 pt-6">
+                          <div className="relative pb-6 pl-5 pr-5 pt-6 text-[14px] leading-relaxed text-gray-700 md:pl-6 md:pr-6">
                             <span
                               aria-hidden
                               className="absolute inset-y-0 left-0 w-0.5 bg-[#2AB09C]"
@@ -509,29 +507,29 @@ const InteriorServices: React.FC = () => {
           {/* Contact box */}
           <section>
             <div
-              className="animate-in rounded-2xl border border-[#BFE9DC] bg-white p-6 md:p-7 shadow-sm"
+              className="rounded-2xl border border-[#BFE9DC] bg-white p-6 shadow-sm animate-in md:p-7"
               style={{ animationDelay: "60ms" }}
             >
-              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
-                <div className="text-center md:text-left w-full md:w-auto">
-                  <h3 className="text-lg md:text-xl font-semibold text-slate-900">
+              <div className="flex flex-col items-start justify-between gap-5 md:flex-row md:items-center">
+                <div className="w-full text-center md:w-auto md:text-left">
+                  <h3 className="text-lg font-semibold text-slate-900 md:text-xl">
                     Ready to discuss your space?
                   </h3>
-                  <p className="text-[14px] leading-relaxed text-slate-700 mt-1.5">
+                  <p className="mt-1.5 text-[14px] leading-relaxed text-slate-700">
                     Book a quick consult. We’ll share concepts, timelines, and
                     costing.
                   </p>
                 </div>
-                <div className="flex gap-3 justify-center md:justify-end w-full md:w-auto">
+                <div className="flex w-full justify-center gap-3 md:w-auto md:justify-end">
                   <a
-                    href="mailto:interior@easylease.in?subject=Interior%20Services%20Enquiry"
-                    className="inline-flex items-center gap-2 rounded-md bg-[#2AB09C] px-4 py-2.5 text-white text-sm hover:opacity-95 transition"
+                    href="mailto:interior@grihya.in?subject=Interior%20Services%20Enquiry"
+                    className="inline-flex items-center gap-2 rounded-md bg-[#2AB09C] px-4 py-2.5 text-sm text-white transition hover:opacity-95"
                   >
                     <Mail className="h-4 w-4" /> Email us
                   </a>
                   <a
                     href="tel:+918448163874"
-                    className="inline-flex items-center gap-2 rounded-md border border-[#2AB09C] px-4 py-2.5 text-[#2AB09C] text-sm hover:bg-[#EAF8F4] transition"
+                    className="inline-flex items-center gap-2 rounded-md border border-[#2AB09C] px-4 py-2.5 text-sm text-[#2AB09C] transition hover:bg-[#EAF8F4]"
                   >
                     <Phone className="h-4 w-4" /> Call us
                   </a>

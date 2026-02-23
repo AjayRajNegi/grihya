@@ -29,7 +29,7 @@ const Card: React.FC<{
           <div className="text-sm font-semibold text-slate-900">{title}</div>
         )}
         {subtitle && (
-          <div className="text-xs text-slate-500 mt-0.5">{subtitle}</div>
+          <div className="mt-0.5 text-xs text-slate-500">{subtitle}</div>
         )}
       </div>
     )}
@@ -41,7 +41,7 @@ type Article = { title: string; to: string; tag?: string };
 
 const ALL_ARTICLES: Article[] = [
   {
-    title: "How to post your property on EasyLease",
+    title: "How to post your property on Grihya",
     to: "/list-property",
     tag: "Selling",
   },
@@ -85,7 +85,7 @@ const FAQ: React.FC = () => {
       a: (
         <p>
           You can chat with us via the Chat with Us page, or email
-          support@easylease.in. For urgent queries, call our helpline.
+          support@grihya.in. For urgent queries, call our helpline.
         </p>
       ),
     },
@@ -119,25 +119,25 @@ const FAQ: React.FC = () => {
   ];
 
   return (
-    <section className="py-12 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="bg-white py-12">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl">
-          <div className="flex items-center justify-center mb-4">
-            <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-[#CCF0E1] text-[#2AB09C]">
+          <div className="mb-4 flex items-center justify-center">
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#CCF0E1] text-[#2AB09C]">
               <HelpCircle className="h-6 w-6" />
             </div>
           </div>
-          <div className="text-center mb-8">
-            <h2 className="relative inline-block text-2xl md:text-3xl font-bold text-gray-900 pb-1">
+          <div className="mb-8 text-center">
+            <h2 className="relative inline-block pb-1 text-2xl font-bold text-gray-900 md:text-3xl">
               Frequently Asked Questions
               <span
                 aria-hidden
-                className="absolute left-1/2 -bottom-2 h-1 w-24 md:w-28 -translate-x-1/2 rounded-full bg-[#2AB09C]"
+                className="absolute -bottom-2 left-1/2 h-1 w-24 -translate-x-1/2 rounded-full bg-[#2AB09C] md:w-28"
               />
             </h2>
           </div>
 
-          <div className="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white overflow-hidden">
+          <div className="divide-y divide-gray-200 overflow-hidden rounded-lg border border-gray-200 bg-white">
             {items.map((item, idx) => {
               const isOpen = open === idx;
               const contentId = `hc-faq-panel-${idx}`;
@@ -149,10 +149,9 @@ const FAQ: React.FC = () => {
                     aria-controls={contentId}
                     aria-expanded={isOpen}
                     onClick={() => setOpen(isOpen ? null : idx)}
-                    className={`w-full flex items-center justify-between text-left px-4 sm:px-6 py-4 sm:py-5 focus:outline-none transition-colors
-                      ${isOpen ? "bg-gray-50" : "bg-white"} hover:bg-[#CCF0E1]`}
+                    className={`flex w-full items-center justify-between px-4 py-4 text-left transition-colors focus:outline-none sm:px-6 sm:py-5 ${isOpen ? "bg-gray-50" : "bg-white"} hover:bg-[#CCF0E1]`}
                   >
-                    <span className="font-medium text-gray-900 pr-4">
+                    <span className="pr-4 font-medium text-gray-900">
                       {item.q}
                     </span>
                     <ChevronDown
@@ -167,14 +166,13 @@ const FAQ: React.FC = () => {
                     role="region"
                     aria-labelledby={btnId}
                     aria-hidden={!isOpen}
-                    className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out
-                      ${
-                        isOpen
-                          ? "max-h-[1000px] opacity-100"
-                          : "max-h-0 opacity-0 pointer-events-none"
-                      }`}
+                    className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out ${
+                      isOpen
+                        ? "max-h-[1000px] opacity-100"
+                        : "pointer-events-none max-h-0 opacity-0"
+                    }`}
                   >
-                    <div className="relative pl-5 sm:pl-6 pr-4 text-gray-700 pb-6 pt-6">
+                    <div className="relative pb-6 pl-5 pr-4 pt-6 text-gray-700 sm:pl-6">
                       <span
                         aria-hidden
                         className="absolute inset-y-0 left-0 w-0.5 bg-[#2AB09C]"
@@ -187,7 +185,7 @@ const FAQ: React.FC = () => {
             })}
           </div>
 
-          <p className="text-xs text-slate-500 mt-4 text-center">
+          <p className="mt-4 text-center text-xs text-slate-500">
             Note: Response times may vary during weekends or holidays.
           </p>
         </div>
@@ -204,14 +202,14 @@ const HelpCenter: React.FC = () => {
     if (!t) return ALL_ARTICLES.slice(0, 6);
     return ALL_ARTICLES.filter((a) => a.title.toLowerCase().includes(t)).slice(
       0,
-      10
+      10,
     );
   }, [q]);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="min-h-screen bg-gray-50">
       <Header />
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+      <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         {/* Hero */}
         <div className="mb-6">
           <div className="mb-6 flex items-center gap-2">
@@ -219,14 +217,14 @@ const HelpCenter: React.FC = () => {
               type="button"
               aria-label="Go back"
               onClick={() => navigate(-1)}
-              className="inline-flex h-9 w-9 -ml-1 items-center justify-center bg-transparent text-gray-800 hover:text-gray-900 active:scale-95 cursor-pointer"
+              className="-ml-1 inline-flex h-9 w-9 cursor-pointer items-center justify-center bg-transparent text-gray-800 hover:text-gray-900 active:scale-95"
               title="Back"
             >
-              <span className="text-2xl md:text-3xl font-extrabold leading-none">
+              <span className="text-2xl font-extrabold leading-none md:text-3xl">
                 <img src="less_than_icon.png" alt="Back-Icon" />
               </span>
             </button>
-            <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
+            <h1 className="text-2xl font-bold text-slate-900 md:text-3xl">
               Help Center
             </h1>
           </div>
@@ -236,7 +234,7 @@ const HelpCenter: React.FC = () => {
         </div>
 
         {/* Search + quick links */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
           <Card title="Search help articles" className="lg:col-span-2">
             <div className="flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2">
               <Search className="h-4 w-4 text-slate-500" />
@@ -245,10 +243,10 @@ const HelpCenter: React.FC = () => {
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 placeholder="Search how-tos, calculators, and policies..."
-                className="w-full outline-none text-sm"
+                className="w-full text-sm outline-none"
               />
             </div>
-            <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
               {results.map((a, i) => (
                 <Link
                   key={i}
@@ -256,7 +254,7 @@ const HelpCenter: React.FC = () => {
                   className="group flex items-center justify-between rounded border border-slate-200 p-3 hover:bg-slate-50"
                 >
                   <span className="text-sm text-slate-800">{a.title}</span>
-                  <ChevronRight className="h-4 w-4 text-emerald-600 opacity-0 group-hover:opacity-100 transition" />
+                  <ChevronRight className="h-4 w-4 text-emerald-600 opacity-0 transition group-hover:opacity-100" />
                 </Link>
               ))}
             </div>
@@ -272,12 +270,12 @@ const HelpCenter: React.FC = () => {
                 <span className="text-sm text-slate-800">Chat with us</span>
               </Link>
               <a
-                href="mailto:support@easylease.in"
+                href="mailto:support@grihya.in"
                 className="flex items-center gap-2 rounded-md border border-slate-200 p-2 hover:bg-slate-50"
               >
                 <Mail className="h-4 w-4 text-emerald-600" />
                 <span className="text-sm text-slate-800">
-                  support@easylease.in
+                  support@grihya.in
                 </span>
               </a>
               <a
@@ -291,9 +289,9 @@ const HelpCenter: React.FC = () => {
           </Card>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card title="Buying & Selling">
-            <ul className="text-sm text-slate-700 space-y-1.5">
+            <ul className="space-y-1.5 text-sm text-slate-700">
               <li>
                 <Link to="/list-property" className="hover:underline">
                   Post property for sale
@@ -317,7 +315,7 @@ const HelpCenter: React.FC = () => {
             </ul>
           </Card>
           <Card title="Renting">
-            <ul className="text-sm text-slate-700 space-y-1.5">
+            <ul className="space-y-1.5 text-sm text-slate-700">
               <li>
                 <Link to="/properties?for=rent" className="hover:underline">
                   Find homes for rent
@@ -336,7 +334,7 @@ const HelpCenter: React.FC = () => {
             </ul>
           </Card>
           <Card title="Home Loans">
-            <ul className="text-sm text-slate-700 space-y-1.5">
+            <ul className="space-y-1.5 text-sm text-slate-700">
               <li>
                 <Link to="/home-loans/apply" className="hover:underline">
                   Apply Home Loan
@@ -361,7 +359,7 @@ const HelpCenter: React.FC = () => {
             </ul>
           </Card>
           <Card title="Account & Security">
-            <ul className="text-sm text-slate-700 space-y-1.5">
+            <ul className="space-y-1.5 text-sm text-slate-700">
               <li>
                 <Link to="/account" className="hover:underline">
                   Manage account

@@ -1,9 +1,14 @@
-import React, { useMemo, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Header from '../../components/layout/Header';
-import Footer from '../../components/layout/Footer';
-import { Link } from 'react-router-dom';
-import { ChevronDown, HelpCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useMemo, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Header from "../../components/layout/Header";
+import Footer from "../../components/layout/Footer";
+import { Link } from "react-router-dom";
+import {
+  ChevronDown,
+  HelpCircle,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 
 // -------------------- Math helpers --------------------
 function emi(P: number, annualRate: number, years: number): number {
@@ -14,7 +19,11 @@ function emi(P: number, annualRate: number, years: number): number {
 }
 
 // Given target EMI (A), monthly rate r, months n => principal P
-function principalFromEmi(A: number, annualRate: number, years: number): number {
+function principalFromEmi(
+  A: number,
+  annualRate: number,
+  years: number,
+): number {
   const r = annualRate / 12 / 100;
   const n = years * 12;
   if (r === 0) return A * n;
@@ -22,29 +31,40 @@ function principalFromEmi(A: number, annualRate: number, years: number): number 
   return (A * (pow - 1)) / (r * pow);
 }
 
-const INR = (n: number) => n.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+const INR = (n: number) =>
+  n.toLocaleString("en-IN", { maximumFractionDigits: 0 });
 const fmtINR = (n: number) => `₹ ${INR(Math.round(n))}`;
 
 // -------------------- UI bits --------------------
-const Kpi: React.FC<{ label: string; value: string; hint?: string }> = ({ label, value, hint }) => (
+const Kpi: React.FC<{ label: string; value: string; hint?: string }> = ({
+  label,
+  value,
+  hint,
+}) => (
   <div className="rounded-lg border border-slate-200 p-4">
     <div className="text-xs text-slate-600">{label}</div>
     <div className="text-lg font-semibold text-slate-900">{value}</div>
-    {hint && <div className="text-[11px] text-slate-500 mt-1">{hint}</div>}
+    {hint && <div className="mt-1 text-[11px] text-slate-500">{hint}</div>}
   </div>
 );
 
-const Card: React.FC<{ title?: string; subtitle?: string; children: React.ReactNode; className?: string }> = ({
-  title,
-  subtitle,
-  children,
-  className,
-}) => (
-  <div className={`rounded-xl border border-slate-200 bg-white p-5 shadow-sm ${className || ''}`}>
+const Card: React.FC<{
+  title?: string;
+  subtitle?: string;
+  children: React.ReactNode;
+  className?: string;
+}> = ({ title, subtitle, children, className }) => (
+  <div
+    className={`rounded-xl border border-slate-200 bg-white p-5 shadow-sm ${className || ""}`}
+  >
     {(title || subtitle) && (
       <div className="mb-3">
-        {title && <div className="text-sm font-semibold text-slate-900">{title}</div>}
-        {subtitle && <div className="text-xs text-slate-500 mt-0.5">{subtitle}</div>}
+        {title && (
+          <div className="text-sm font-semibold text-slate-900">{title}</div>
+        )}
+        {subtitle && (
+          <div className="mt-0.5 text-xs text-slate-500">{subtitle}</div>
+        )}
       </div>
     )}
     {children}
@@ -52,7 +72,10 @@ const Card: React.FC<{ title?: string; subtitle?: string; children: React.ReactN
 );
 
 // Donut for Capacity vs Obligations
-const CapacityDonut: React.FC<{ available: number; obligations: number }> = ({ available, obligations }) => {
+const CapacityDonut: React.FC<{ available: number; obligations: number }> = ({
+  available,
+  obligations,
+}) => {
   const total = Math.max(0, available + obligations);
   const aPct = total ? available / total : 0;
   const oPct = total ? obligations / total : 0;
@@ -69,7 +92,14 @@ const CapacityDonut: React.FC<{ available: number; obligations: number }> = ({ a
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
         <g transform={`rotate(-90 ${size / 2} ${size / 2})`}>
           {/* Track */}
-          <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#e5e7eb" strokeWidth={stroke} />
+          <circle
+            cx={size / 2}
+            cy={size / 2}
+            r={r}
+            fill="none"
+            stroke="#e5e7eb"
+            strokeWidth={stroke}
+          />
           {/* Obligations */}
           <circle
             cx={size / 2}
@@ -94,19 +124,28 @@ const CapacityDonut: React.FC<{ available: number; obligations: number }> = ({ a
             strokeDashoffset={-oLen}
           />
         </g>
-        <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="#0f172a">
-          {total ? `${Math.round(aPct * 100)}% Avail` : ' - '}
+        <text
+          x="50%"
+          y="50%"
+          textAnchor="middle"
+          dominantBaseline="middle"
+          fontSize="12"
+          fill="#0f172a"
+        >
+          {total ? `${Math.round(aPct * 100)}% Avail` : " - "}
         </text>
       </svg>
 
-      <div className="text-xs text-slate-700 space-y-1">
+      <div className="space-y-1 text-xs text-slate-700">
         <div className="flex items-center gap-2">
           <span className="inline-block h-2.5 w-2.5 rounded bg-emerald-500" />
-          Available EMI: <span className="font-medium">{fmtINR(available)}/mo</span>
+          Available EMI:{" "}
+          <span className="font-medium">{fmtINR(available)}/mo</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="inline-block h-2.5 w-2.5 rounded bg-amber-500" />
-          Ongoing EMIs: <span className="font-medium">{fmtINR(obligations)}/mo</span>
+          Ongoing EMIs:{" "}
+          <span className="font-medium">{fmtINR(obligations)}/mo</span>
         </div>
         <div className="text-slate-500">Total capacity: {fmtINR(total)}/mo</div>
       </div>
@@ -117,32 +156,32 @@ const CapacityDonut: React.FC<{ available: number; obligations: number }> = ({ a
 // CTA carousel data (same partners used in EMI page)
 const BANK_CARDS = [
   {
-    slug: 'hdfc',
-    name: 'HDFC Ltd',
-    tagline: 'Fast approvals • Flexible tenure',
-    range: '8.40% – 9.40%',
-    gradient: 'from-indigo-500 via-blue-600 to-blue-700',
+    slug: "hdfc",
+    name: "HDFC Ltd",
+    tagline: "Fast approvals • Flexible tenure",
+    range: "8.40% – 9.40%",
+    gradient: "from-indigo-500 via-blue-600 to-blue-700",
   },
   {
-    slug: 'bank-of-maharashtra',
-    name: 'Bank of Maharashtra',
-    tagline: 'Public sector trust • Competitive rates',
-    range: '8.35% – 9.35%',
-    gradient: 'from-emerald-500 via-emerald-600 to-teal-600',
+    slug: "bank-of-maharashtra",
+    name: "Bank of Maharashtra",
+    tagline: "Public sector trust • Competitive rates",
+    range: "8.35% – 9.35%",
+    gradient: "from-emerald-500 via-emerald-600 to-teal-600",
   },
   {
-    slug: 'nainital-bank',
-    name: 'Nainital Bank',
-    tagline: 'Regional strength • Personalized service',
-    range: '8.60% – 9.60%',
-    gradient: 'from-yellow-500 via-amber-500 to-orange-500',
+    slug: "nainital-bank",
+    name: "Nainital Bank",
+    tagline: "Regional strength • Personalized service",
+    range: "8.60% – 9.60%",
+    gradient: "from-yellow-500 via-amber-500 to-orange-500",
   },
   {
-    slug: 'icici',
-    name: 'ICICI Bank',
-    tagline: 'Digital first • Quick processing',
-    range: '8.50% – 9.50%',
-    gradient: 'from-rose-500 via-pink-500 to-orange-500',
+    slug: "icici",
+    name: "ICICI Bank",
+    tagline: "Digital first • Quick processing",
+    range: "8.50% – 9.50%",
+    gradient: "from-rose-500 via-pink-500 to-orange-500",
   },
 ];
 
@@ -152,46 +191,54 @@ const CtaCarousel: React.FC = () => {
 
   useEffect(() => {
     if (paused) return;
-    const id = setInterval(() => setIdx((i) => (i + 1) % BANK_CARDS.length), 2000);
+    const id = setInterval(
+      () => setIdx((i) => (i + 1) % BANK_CARDS.length),
+      2000,
+    );
     return () => clearInterval(id);
   }, [paused]);
 
   const next = () => setIdx((i) => (i + 1) % BANK_CARDS.length);
-  const prev = () => setIdx((i) => (i - 1 + BANK_CARDS.length) % BANK_CARDS.length);
+  const prev = () =>
+    setIdx((i) => (i - 1 + BANK_CARDS.length) % BANK_CARDS.length);
   const card = BANK_CARDS[idx];
 
   return (
     <div
-      className="relative rounded-xl overflow-hidden shadow-lg ring-1 ring-black/10"
+      className="relative overflow-hidden rounded-xl shadow-lg ring-1 ring-black/10"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <div className={`bg-gradient-to-br ${card.gradient} p-4 sm:p-5 text-white min-h-[140px] flex flex-col justify-between`}>
+      <div
+        className={`bg-gradient-to-br ${card.gradient} flex min-h-[140px] flex-col justify-between p-4 text-white sm:p-5`}
+      >
         <div className="flex items-center justify-between">
-          <div className="text-sm font-semibold opacity-90">Partner spotlight</div>
-          <div className="text-[11px] bg-white/15 px-2 py-0.5 rounded-full">
+          <div className="text-sm font-semibold opacity-90">
+            Partner spotlight
+          </div>
+          <div className="rounded-full bg-white/15 px-2 py-0.5 text-[11px]">
             {idx + 1} / {BANK_CARDS.length}
           </div>
         </div>
 
         <div className="mt-2">
-          <div className="text-xl font-bold leading-tight text-center">{card.name}</div>
-          <div className="text-xs opacity-90 text-center">{card.tagline}</div>
-          <div className="mt-2 text-sm text-center">
-            Indicative rates: <span className="font-semibold">{card.range}</span>
+          <div className="text-center text-xl font-bold leading-tight">
+            {card.name}
+          </div>
+          <div className="text-center text-xs opacity-90">{card.tagline}</div>
+          <div className="mt-2 text-center text-sm">
+            Indicative rates:{" "}
+            <span className="font-semibold">{card.range}</span>
           </div>
         </div>
 
-        <div className="mt-3 flex items-center gap-2 justify-center">
+        <div className="mt-3 flex items-center justify-center gap-2">
           <Link
             to={`/home-loans/partners/${card.slug}`}
-            className="inline-flex items-center rounded-md bg-white/90 px-3 py-1.5 text-sm font-medium text-slate-900 hover:bg-white transition shadow-sm"
+            className="inline-flex items-center rounded-md bg-white/90 px-3 py-1.5 text-sm font-medium text-slate-900 shadow-sm transition hover:bg-white"
           >
             Check Loan Details
           </Link>
-          {/* <Link to="/home-loans/apply" className="text-xs underline underline-offset-2 decoration-white/60 hover:decoration-white">
-            Apply via EasyLease →
-          </Link> */}
         </div>
       </div>
 
@@ -200,7 +247,7 @@ const CtaCarousel: React.FC = () => {
         type="button"
         aria-label="Previous"
         onClick={prev}
-        className="absolute left-2 top-1/2 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow hover:bg-white"
+        className="absolute left-2 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow hover:bg-white"
       >
         <ChevronLeft className="h-4 w-4" />
       </button>
@@ -208,19 +255,22 @@ const CtaCarousel: React.FC = () => {
         type="button"
         aria-label="Next"
         onClick={next}
-        className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow hover:bg-white"
+        className="absolute right-2 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow hover:bg-white"
       >
         <ChevronRight className="h-4 w-4" />
       </button>
 
       {/* Dots */}
-      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+      <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1.5">
         {BANK_CARDS.map((_, i) => (
           <button
             key={i}
             aria-label={`Go to ${i + 1}`}
             onClick={() => setIdx(i)}
-            className={['h-1.5 rounded-full transition-all', idx === i ? 'w-5 bg-white' : 'w-2 bg-white/60 hover:bg-white/80'].join(' ')}
+            className={[
+              "h-1.5 rounded-full transition-all",
+              idx === i ? "w-5 bg-white" : "w-2 bg-white/60 hover:bg-white/80",
+            ].join(" ")}
           />
         ))}
       </div>
@@ -230,25 +280,31 @@ const CtaCarousel: React.FC = () => {
 
 // FAQ accordion (home-style)
 type FaqItem = { q: string; a: React.ReactNode };
-const FAQ: React.FC<{ items: FaqItem[]; idPrefix?: string }> = ({ items, idPrefix = 'elig' }) => {
+const FAQ: React.FC<{ items: FaqItem[]; idPrefix?: string }> = ({
+  items,
+  idPrefix = "elig",
+}) => {
   const [open, setOpen] = useState<number | null>(null);
   return (
-    <section className="py-12 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="bg-white py-12">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl">
-          <div className="flex items-center justify-center mb-4">
-            <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-[#CCF0E1] text-[#2AB09C]">
+          <div className="mb-4 flex items-center justify-center">
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#CCF0E1] text-[#2AB09C]">
               <HelpCircle className="h-6 w-6" />
             </div>
           </div>
-          <div className="text-center mb-8">
-            <h2 className="relative inline-block text-2xl md:text-3xl font-bold text-gray-900 pb-1">
+          <div className="mb-8 text-center">
+            <h2 className="relative inline-block pb-1 text-2xl font-bold text-gray-900 md:text-3xl">
               Frequently Asked Questions
-              <span aria-hidden className="absolute left-1/2 -bottom-2 h-1 w-24 md:w-28 -translate-x-1/2 rounded-full bg-[#2AB09C]" />
+              <span
+                aria-hidden
+                className="absolute -bottom-2 left-1/2 h-1 w-24 -translate-x-1/2 rounded-full bg-[#2AB09C] md:w-28"
+              />
             </h2>
           </div>
 
-          <div className="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white overflow-hidden">
+          <div className="divide-y divide-gray-200 overflow-hidden rounded-lg border border-gray-200 bg-white">
             {items.map((item, idx) => {
               const isOpen = open === idx;
               const contentId = `${idPrefix}-faq-panel-${idx}`;
@@ -260,11 +316,14 @@ const FAQ: React.FC<{ items: FaqItem[]; idPrefix?: string }> = ({ items, idPrefi
                     aria-controls={contentId}
                     aria-expanded={isOpen}
                     onClick={() => setOpen(isOpen ? null : idx)}
-                    className={`w-full flex items-center justify-between text-left px-4 sm:px-6 py-4 sm:py-5 focus:outline-none transition-colors
-                      ${isOpen ? 'bg-[#CCF0E1]' : 'bg-white'} hover:bg-gray-50`}
+                    className={`flex w-full items-center justify-between px-4 py-4 text-left transition-colors focus:outline-none sm:px-6 sm:py-5 ${isOpen ? "bg-[#CCF0E1]" : "bg-white"} hover:bg-gray-50`}
                   >
-                    <span className="font-medium text-gray-900 pr-4">{item.q}</span>
-                    <ChevronDown className={`h-5 w-5 text-[#2AB09C] transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+                    <span className="pr-4 font-medium text-gray-900">
+                      {item.q}
+                    </span>
+                    <ChevronDown
+                      className={`h-5 w-5 text-[#2AB09C] transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                    />
                   </button>
 
                   <div
@@ -272,11 +331,13 @@ const FAQ: React.FC<{ items: FaqItem[]; idPrefix?: string }> = ({ items, idPrefi
                     role="region"
                     aria-labelledby={btnId}
                     aria-hidden={!isOpen}
-                    className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out
-                      ${isOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}
+                    className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out ${isOpen ? "max-h-[1000px] opacity-100" : "pointer-events-none max-h-0 opacity-0"}`}
                   >
-                    <div className="relative pl-5 sm:pl-6 pr-4 text-gray-700 pb-6 pt-6">
-                      <span aria-hidden className="absolute inset-y-0 left-0 w-0.5 bg-[#2AB09C]" />
+                    <div className="relative pb-6 pl-5 pr-4 pt-6 text-gray-700 sm:pl-6">
+                      <span
+                        aria-hidden
+                        className="absolute inset-y-0 left-0 w-0.5 bg-[#2AB09C]"
+                      />
                       {item.a}
                     </div>
                   </div>
@@ -284,7 +345,6 @@ const FAQ: React.FC<{ items: FaqItem[]; idPrefix?: string }> = ({ items, idPrefi
               );
             })}
           </div>
-
         </div>
       </div>
     </section>
@@ -303,9 +363,18 @@ const EligibilityCalculator: React.FC = () => {
   const navigate = useNavigate();
 
   // Computations
-  const assumedCapacity = useMemo(() => (foir / 100) * monthlyIncome, [foir, monthlyIncome]);
-  const eligibleEmi = useMemo(() => Math.max(0, assumedCapacity - existingEmi), [assumedCapacity, existingEmi]);
-  const eligiblePrincipal = useMemo(() => Math.round(principalFromEmi(eligibleEmi, rate, years)), [eligibleEmi, rate, years]);
+  const assumedCapacity = useMemo(
+    () => (foir / 100) * monthlyIncome,
+    [foir, monthlyIncome],
+  );
+  const eligibleEmi = useMemo(
+    () => Math.max(0, assumedCapacity - existingEmi),
+    [assumedCapacity, existingEmi],
+  );
+  const eligiblePrincipal = useMemo(
+    () => Math.round(principalFromEmi(eligibleEmi, rate, years)),
+    [eligibleEmi, rate, years],
+  );
 
   // Donut data
   const available = eligibleEmi;
@@ -315,34 +384,39 @@ const EligibilityCalculator: React.FC = () => {
   // FAQ content
   const faqs: FaqItem[] = [
     {
-      q: 'What is FOIR and how do you use it?',
+      q: "What is FOIR and how do you use it?",
       a: (
         <p>
-          FOIR (Fixed Obligations to Income Ratio) is the share of your monthly income available for EMIs after accounting
-          for existing obligations. We default to 40%, which many lenders use, but you can adjust it under Advanced.
+          FOIR (Fixed Obligations to Income Ratio) is the share of your monthly
+          income available for EMIs after accounting for existing obligations.
+          We default to 40%, which many lenders use, but you can adjust it under
+          Advanced.
         </p>
       ),
     },
     {
-      q: 'Do I need to include property value?',
+      q: "Do I need to include property value?",
       a: (
         <p>
-          Not here. This tool estimates the maximum loan your income can support. Final sanction also depends on LTV (loan-to-value),
-          typically up to 90% of property value. Without property value, the result is the income-based maximum.
+          Not here. This tool estimates the maximum loan your income can
+          support. Final sanction also depends on LTV (loan-to-value), typically
+          up to 90% of property value. Without property value, the result is the
+          income-based maximum.
         </p>
       ),
     },
     {
-      q: 'Why is my eligible EMI different from example EMI?',
+      q: "Why is my eligible EMI different from example EMI?",
       a: (
         <p>
-          Eligible EMI is your capacity (FOIR × income − obligations). Example EMI shows the EMI on the eligible loan at your chosen
-          rate and tenure. They should be close; small differences can arise due to rounding.
+          Eligible EMI is your capacity (FOIR × income − obligations). Example
+          EMI shows the EMI on the eligible loan at your chosen rate and tenure.
+          They should be close; small differences can arise due to rounding.
         </p>
       ),
     },
     {
-      q: 'What affects home loan eligibility the most?',
+      q: "What affects home loan eligibility the most?",
       a: (
         <ul className="list-disc pl-5">
           <li>Net monthly income and FOIR policy</li>
@@ -355,9 +429,9 @@ const EligibilityCalculator: React.FC = () => {
   ];
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="min-h-screen bg-gray-50">
       <Header />
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+      <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         {/* Hero */}
         <div className="mb-6">
           <div className="mb-6 flex items-center gap-2">
@@ -365,62 +439,87 @@ const EligibilityCalculator: React.FC = () => {
               type="button"
               aria-label="Go back"
               onClick={() => navigate(-1)}
-              className="inline-flex h-9 w-9 -ml-1 items-center justify-center bg-transparent text-gray-800 hover:text-gray-900 active:scale-95 cursor-pointer"
+              className="-ml-1 inline-flex h-9 w-9 cursor-pointer items-center justify-center bg-transparent text-gray-800 hover:text-gray-900 active:scale-95"
               title="Back"
             >
-              <span className="text-2xl md:text-3xl font-extrabold leading-none"><img src="/less_than_icon.png" alt="Back-Icon" /></span>
+              <span className="text-2xl font-extrabold leading-none md:text-3xl">
+                <img src="/less_than_icon.png" alt="Back-Icon" />
+              </span>
             </button>
-            <h1 className="text-2xl md:text-3xl font-bold text-slate-900">Home Loan Eligibility Calculator</h1>
+            <h1 className="text-2xl font-bold text-slate-900 md:text-3xl">
+              Home Loan Eligibility Calculator
+            </h1>
           </div>
           <p className="mt-2 text-slate-600">
-            Estimate your maximum eligible loan from your income, obligations, tenure, and rate. Adjust FOIR under Advanced if needed.
+            Estimate your maximum eligible loan from your income, obligations,
+            tenure, and rate. Adjust FOIR under Advanced if needed.
           </p>
         </div>
 
         {/* Form + KPIs + visuals */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-8">
+        <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
           {/* Left: Inputs + Advanced */}
           <Card title="Enter your details" className="lg:col-span-2">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <label className="block">
-                <span className="text-xs font-medium text-slate-700">Net monthly income (₹)</span>
+                <span className="text-xs font-medium text-slate-700">
+                  Net monthly income (₹)
+                </span>
                 <input
                   type="number"
                   className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
                   value={monthlyIncome}
-                  onChange={(e) => setMonthlyIncome(Math.max(0, parseInt(e.target.value || '0', 10)))}
+                  onChange={(e) =>
+                    setMonthlyIncome(
+                      Math.max(0, parseInt(e.target.value || "0", 10)),
+                    )
+                  }
                   min={0}
                 />
               </label>
               <label className="block">
-                <span className="text-xs font-medium text-slate-700">Ongoing EMIs (₹/mo)</span>
+                <span className="text-xs font-medium text-slate-700">
+                  Ongoing EMIs (₹/mo)
+                </span>
                 <input
                   type="number"
                   className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
                   value={existingEmi}
-                  onChange={(e) => setExistingEmi(Math.max(0, parseInt(e.target.value || '0', 10)))}
+                  onChange={(e) =>
+                    setExistingEmi(
+                      Math.max(0, parseInt(e.target.value || "0", 10)),
+                    )
+                  }
                   min={0}
                 />
               </label>
               <label className="block">
-                <span className="text-xs font-medium text-slate-700">Loan tenure (years)</span>
+                <span className="text-xs font-medium text-slate-700">
+                  Loan tenure (years)
+                </span>
                 <input
                   type="number"
                   className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
                   value={years}
-                  onChange={(e) => setYears(Math.max(1, parseInt(e.target.value || '1', 10)))}
+                  onChange={(e) =>
+                    setYears(Math.max(1, parseInt(e.target.value || "1", 10)))
+                  }
                   min={1}
                   max={35}
                 />
               </label>
               <label className="block">
-                <span className="text-xs font-medium text-slate-700">Interest rate (p.a.)</span>
+                <span className="text-xs font-medium text-slate-700">
+                  Interest rate (p.a.)
+                </span>
                 <input
                   type="number"
                   step={0.1}
                   className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
                   value={rate}
-                  onChange={(e) => setRate(Math.max(0, parseFloat(e.target.value || '0')))}
+                  onChange={(e) =>
+                    setRate(Math.max(0, parseFloat(e.target.value || "0")))
+                  }
                 />
               </label>
             </div>
@@ -432,12 +531,14 @@ const EligibilityCalculator: React.FC = () => {
                 onClick={() => setAdvanced((v) => !v)}
                 className="text-xs font-medium text-emerald-700 underline underline-offset-2"
               >
-                {advanced ? 'Hide' : 'Show'} Advanced (FOIR)
+                {advanced ? "Hide" : "Show"} Advanced (FOIR)
               </button>
               {advanced && (
-                <div className="mt-3 grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3 items-center">
+                <div className="mt-3 grid grid-cols-1 items-center gap-3 sm:grid-cols-[1fr_auto]">
                   <div>
-                    <label className="block text-xs font-medium text-slate-700">FOIR (% of income for EMIs)</label>
+                    <label className="block text-xs font-medium text-slate-700">
+                      FOIR (% of income for EMIs)
+                    </label>
                     <input
                       type="range"
                       className="mt-2 w-full accent-emerald-600"
@@ -445,27 +546,45 @@ const EligibilityCalculator: React.FC = () => {
                       max={65}
                       step={1}
                       value={foir}
-                      onChange={(e) => setFoir(parseInt(e.target.value || '40', 10))}
+                      onChange={(e) =>
+                        setFoir(parseInt(e.target.value || "40", 10))
+                      }
                     />
                   </div>
-                  <div className="text-sm font-semibold text-slate-900">{foir}%</div>
+                  <div className="text-sm font-semibold text-slate-900">
+                    {foir}%
+                  </div>
                 </div>
               )}
               {!advanced && (
-                <div className="mt-2 text-[11px] text-slate-500">Assuming FOIR = 40% (typical for many lenders)</div>
+                <div className="mt-2 text-[11px] text-slate-500">
+                  Assuming FOIR = 40% (typical for many lenders)
+                </div>
               )}
             </div>
 
             {/* Visuals: Capacity donut and stacked bar */}
-            <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+            <div className="mt-5 grid grid-cols-1 items-center gap-4 md:grid-cols-2">
               <CapacityDonut available={available} obligations={obligations} />
               <div>
-                <div className="text-xs font-medium text-slate-700 mb-1">Capacity usage</div>
-                <div className="h-3 w-full rounded bg-slate-100 overflow-hidden">
-                  <div className="h-3 bg-amber-500" style={{ width: `${totalCapacity ? (obligations / totalCapacity) * 100 : 0}%` }} />
-                  <div className="h-3 bg-emerald-500" style={{ width: `${totalCapacity ? (available / totalCapacity) * 100 : 0}%` }} />
+                <div className="mb-1 text-xs font-medium text-slate-700">
+                  Capacity usage
                 </div>
-                <div className="mt-2 text-xs text-slate-700 flex justify-between">
+                <div className="h-3 w-full overflow-hidden rounded bg-slate-100">
+                  <div
+                    className="h-3 bg-amber-500"
+                    style={{
+                      width: `${totalCapacity ? (obligations / totalCapacity) * 100 : 0}%`,
+                    }}
+                  />
+                  <div
+                    className="h-3 bg-emerald-500"
+                    style={{
+                      width: `${totalCapacity ? (available / totalCapacity) * 100 : 0}%`,
+                    }}
+                  />
+                </div>
+                <div className="mt-2 flex justify-between text-xs text-slate-700">
                   <span>Total capacity: {fmtINR(totalCapacity)}/mo</span>
                   <span>Available now: {fmtINR(available)}/mo</span>
                 </div>
@@ -478,8 +597,15 @@ const EligibilityCalculator: React.FC = () => {
             <Card title="Quick summary">
               <div className="grid grid-cols-1 gap-3">
                 <Kpi label="Eligible EMI" value={`${fmtINR(eligibleEmi)}/mo`} />
-                <Kpi label="Eligible loan amount" value={fmtINR(eligiblePrincipal)} hint={`@ ${rate}% for ${years} years`} />
-                <Kpi label="Example EMI at rate" value={`${fmtINR(emi(eligiblePrincipal, rate, years))}/mo`} />
+                <Kpi
+                  label="Eligible loan amount"
+                  value={fmtINR(eligiblePrincipal)}
+                  hint={`@ ${rate}% for ${years} years`}
+                />
+                <Kpi
+                  label="Example EMI at rate"
+                  value={`${fmtINR(emi(eligiblePrincipal, rate, years))}/mo`}
+                />
               </div>
             </Card>
 
@@ -490,48 +616,60 @@ const EligibilityCalculator: React.FC = () => {
         </div>
 
         {/* Checklist */}
-        <Card title="Home Loan Eligibility Criteria  -  Checklist" subtitle="Typical benchmarks (may vary by lender)">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+        <Card
+          title="Home Loan Eligibility Criteria  -  Checklist"
+          subtitle="Typical benchmarks (may vary by lender)"
+        >
+          <div className="grid grid-cols-1 gap-4 text-sm md:grid-cols-3">
             <div className="rounded-lg border border-slate-200 p-4">
               <div className="font-medium text-slate-900">Age</div>
-              <div className="text-slate-700 mt-1">18–70 years</div>
+              <div className="mt-1 text-slate-700">18–70 years</div>
             </div>
             <div className="rounded-lg border border-slate-200 p-4">
               <div className="font-medium text-slate-900">Credit score</div>
-              <div className="text-slate-700 mt-1">650+ considered good</div>
+              <div className="mt-1 text-slate-700">650+ considered good</div>
             </div>
             <div className="rounded-lg border border-slate-200 p-4">
               <div className="font-medium text-slate-900">Monthly income</div>
-              <div className="text-slate-700 mt-1">Min. ₹ 25,000</div>
+              <div className="mt-1 text-slate-700">Min. ₹ 25,000</div>
             </div>
             <div className="rounded-lg border border-slate-200 p-4">
               <div className="font-medium text-slate-900">Nationality</div>
-              <div className="text-slate-700 mt-1">Indian residents, NRIs, PIOs</div>
+              <div className="mt-1 text-slate-700">
+                Indian residents, NRIs, PIOs
+              </div>
             </div>
             <div className="rounded-lg border border-slate-200 p-4 md:col-span-2">
-              <div className="font-medium text-slate-900">Loan-to-Value (LTV)</div>
-              <div className="text-slate-700 mt-1">Up to 90% of property value</div>
-              <div className="text-xs text-slate-500 mt-1">
-                Note: Final sanction will be the lower of income-based eligibility and LTV-based maximum.
+              <div className="font-medium text-slate-900">
+                Loan-to-Value (LTV)
+              </div>
+              <div className="mt-1 text-slate-700">
+                Up to 90% of property value
+              </div>
+              <div className="mt-1 text-xs text-slate-500">
+                Note: Final sanction will be the lower of income-based
+                eligibility and LTV-based maximum.
               </div>
             </div>
           </div>
         </Card>
 
         {/* How-to + Key Factors */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+        <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
           <Card title="How to calculate home loan eligibility online">
-            <ol className="list-decimal pl-5 text-sm text-slate-700 space-y-1.5">
+            <ol className="list-decimal space-y-1.5 pl-5 text-sm text-slate-700">
               <li>Enter net monthly income and ongoing EMIs.</li>
               <li>Choose tenure and expected interest rate.</li>
-              <li>(Optional) Adjust FOIR under Advanced to match your lender.</li>
+              <li>
+                (Optional) Adjust FOIR under Advanced to match your lender.
+              </li>
               <li>Review eligible EMI and eligible loan amount.</li>
               <li>Compare offers from lenders and apply.</li>
             </ol>
           </Card>
 
           <Card title="Key factors affecting eligibility">
-            <ul className="list-disc pl-5 text-sm text-slate-700 space-y-1.5">
+            <ul className="list-disc space-y-1.5 pl-5 text-sm text-slate-700">
               <li>Income level, stability, and employer profile.</li>
               <li>FOIR policy and existing debt obligations.</li>
               <li>Credit score and repayment history.</li>
@@ -543,10 +681,10 @@ const EligibilityCalculator: React.FC = () => {
 
         {/* Bank-wise criteria (illustrative) */}
         <Card title="Bank-wise home loan eligibility criteria (illustrative)">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+          <div className="grid grid-cols-1 gap-4 text-sm md:grid-cols-4">
             <div className="rounded-lg border border-slate-200 p-4">
               <div className="font-medium text-slate-900">HDFC Ltd</div>
-              <ul className="mt-1 list-disc pl-5 text-slate-700 space-y-1">
+              <ul className="mt-1 list-disc space-y-1 pl-5 text-slate-700">
                 <li>FOIR: ~40–55%</li>
                 <li>Min income: ₹ 25k</li>
                 <li>Credit score: 650+</li>
@@ -555,8 +693,10 @@ const EligibilityCalculator: React.FC = () => {
             </div>
 
             <div className="rounded-lg border border-slate-200 p-4">
-              <div className="font-medium text-slate-900">Bank of Maharashtra</div>
-              <ul className="mt-1 list-disc pl-5 text-slate-700 space-y-1">
+              <div className="font-medium text-slate-900">
+                Bank of Maharashtra
+              </div>
+              <ul className="mt-1 list-disc space-y-1 pl-5 text-slate-700">
                 <li>FOIR: ~40–50%</li>
                 <li>Min income: ₹ 25k</li>
                 <li>Credit score: 650+</li>
@@ -566,7 +706,7 @@ const EligibilityCalculator: React.FC = () => {
 
             <div className="rounded-lg border border-slate-200 p-4">
               <div className="font-medium text-slate-900">Nainital Bank</div>
-              <ul className="mt-1 list-disc pl-5 text-slate-700 space-y-1">
+              <ul className="mt-1 list-disc space-y-1 pl-5 text-slate-700">
                 <li>FOIR: ~40–55%</li>
                 <li>Min income: ₹ 25k</li>
                 <li>Credit score: 650+</li>
@@ -576,7 +716,7 @@ const EligibilityCalculator: React.FC = () => {
 
             <div className="rounded-lg border border-slate-200 p-4">
               <div className="font-medium text-slate-900">ICICI Bank</div>
-              <ul className="mt-1 list-disc pl-5 text-slate-700 space-y-1">
+              <ul className="mt-1 list-disc space-y-1 pl-5 text-slate-700">
                 <li>FOIR: ~40–55%</li>
                 <li>Min income: ₹ 25k</li>
                 <li>Credit score: 650+</li>
@@ -584,14 +724,17 @@ const EligibilityCalculator: React.FC = () => {
               </ul>
             </div>
           </div>
-          <div className="text-[11px] text-slate-500 mt-2">Actual lender policies may vary and change over time.</div>
+          <div className="mt-2 text-[11px] text-slate-500">
+            Actual lender policies may vary and change over time.
+          </div>
         </Card>
 
         {/* FAQ */}
         <FAQ items={faqs} idPrefix="elig" />
 
         <p className="text-xs text-slate-500">
-          Disclaimer: This tool is illustrative. Final eligibility is subject to lender policies, document verification, and credit assessment.
+          Disclaimer: This tool is illustrative. Final eligibility is subject to
+          lender policies, document verification, and credit assessment.
         </p>
       </main>
       <Footer />

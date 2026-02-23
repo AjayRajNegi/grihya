@@ -15,31 +15,6 @@ use Illuminate\Support\Facades\Storage;
 Route::get('/', function () {
     return view('adminauth.login');
 });
-Route::get('/test-mail', function () {
-    $to = request('to', 'ajayrajnegi111@gmail.com');
-    try {
-        Mail::raw('This is a test email from Grihya (Resend).', function ($message) use ($to) {
-            $message->to($to)->subject('Test Email from Grihya');
-        });
-        Log::info('Test email sent successfully', ['to' => $to, 'mailer' => config('mail.default')]);
-        return response()->json([
-            'success' => true,
-            'message' => 'Test email sent! Check inbox and spam.',
-            'to' => $to,
-            'mailer' => config('mail.default'),
-            'from' => config('mail.from'),
-        ]);
-    } catch (\Throwable $e) {
-        Log::error('Test mail failed', ['to' => $to, 'error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
-        return response()->json([
-            'success' => false,
-            'message' => 'Mail failed: ' . $e->getMessage(),
-            'to' => $to,
-            'mailer' => config('mail.default'),
-        ], 500);
-    }
-});
-
 Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])
     ->name('verification.verify')
     ->middleware(['signed', 'throttle:6,1']);

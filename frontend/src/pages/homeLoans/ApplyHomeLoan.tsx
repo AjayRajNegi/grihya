@@ -35,7 +35,7 @@ const Kpi: React.FC<{ label: string; value: string; hint?: string }> = ({
   <div className="rounded-lg border border-slate-200 p-4">
     <div className="text-xs text-slate-600">{label}</div>
     <div className="text-lg font-semibold text-slate-900">{value}</div>
-    {hint && <div className="text-[11px] text-slate-500 mt-1">{hint}</div>}
+    {hint && <div className="mt-1 text-[11px] text-slate-500">{hint}</div>}
   </div>
 );
 
@@ -56,7 +56,7 @@ const Card: React.FC<{
           <div className="text-sm font-semibold text-slate-900">{title}</div>
         )}
         {subtitle && (
-          <div className="text-xs text-slate-500 mt-0.5">{subtitle}</div>
+          <div className="mt-0.5 text-xs text-slate-500">{subtitle}</div>
         )}
       </div>
     )}
@@ -71,7 +71,7 @@ const LtvBar: React.FC<{ ltvPct: number }> = ({ ltvPct }) => {
     pct <= 75 ? "bg-emerald-500" : pct <= 90 ? "bg-amber-500" : "bg-rose-500";
   return (
     <div>
-      <div className="text-xs text-slate-700 mb-1 flex items-center gap-1.5">
+      <div className="mb-1 flex items-center gap-1.5 text-xs text-slate-700">
         LTV (Loan-to-Value)
         <Info className="h-3.5 w-3.5 text-slate-500">
           <title>
@@ -80,7 +80,7 @@ const LtvBar: React.FC<{ ltvPct: number }> = ({ ltvPct }) => {
           </title>
         </Info>
       </div>
-      <div className="h-3 w-full rounded bg-slate-100 overflow-hidden">
+      <div className="h-3 w-full overflow-hidden rounded bg-slate-100">
         <div className={`h-3 ${color}`} style={{ width: `${pct}%` }} />
       </div>
       <div className="mt-1 flex justify-between text-[11px] text-slate-600">
@@ -131,7 +131,7 @@ const CtaCarousel: React.FC = () => {
     if (paused) return;
     const id = setInterval(
       () => setIdx((i) => (i + 1) % BANK_CARDS.length),
-      2000
+      2000,
     );
     return () => clearInterval(id);
   }, [paused]);
@@ -143,37 +143,37 @@ const CtaCarousel: React.FC = () => {
 
   return (
     <div
-      className="relative rounded-xl overflow-hidden shadow-lg ring-1 ring-black/10"
+      className="relative overflow-hidden rounded-xl shadow-lg ring-1 ring-black/10"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
       <div
-        className={`bg-gradient-to-br ${card.gradient} p-4 sm:p-5 text-white min-h-[140px] flex flex-col justify-between`}
+        className={`bg-gradient-to-br ${card.gradient} flex min-h-[140px] flex-col justify-between p-4 text-white sm:p-5`}
       >
         <div className="flex items-center justify-between">
           <div className="text-sm font-semibold opacity-90">
             Partner spotlight
           </div>
-          <div className="text-[11px] bg-white/15 px-2 py-0.5 rounded-full">
+          <div className="rounded-full bg-white/15 px-2 py-0.5 text-[11px]">
             {idx + 1} / {BANK_CARDS.length}
           </div>
         </div>
 
         <div className="mt-2">
-          <div className="text-xl font-bold leading-tight text-center">
+          <div className="text-center text-xl font-bold leading-tight">
             {card.name}
           </div>
-          <div className="text-xs opacity-90 text-center">{card.tagline}</div>
-          <div className="mt-2 text-sm text-center">
+          <div className="text-center text-xs opacity-90">{card.tagline}</div>
+          <div className="mt-2 text-center text-sm">
             Indicative rates:{" "}
             <span className="font-semibold">{card.range}</span>
           </div>
         </div>
 
-        <div className="mt-3 flex items-center gap-2 justify-center">
+        <div className="mt-3 flex items-center justify-center gap-2">
           <Link
             to={`/home-loans/partners/${card.slug}`}
-            className="inline-flex items-center rounded-md bg-white/90 px-3 py-1.5 text-sm font-medium text-slate-900 hover:bg-white transition shadow-sm"
+            className="inline-flex items-center rounded-md bg-white/90 px-3 py-1.5 text-sm font-medium text-slate-900 shadow-sm transition hover:bg-white"
           >
             Check Loan Details
           </Link>
@@ -185,7 +185,7 @@ const CtaCarousel: React.FC = () => {
         type="button"
         aria-label="Previous"
         onClick={prev}
-        className="absolute left-2 top-1/2 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow hover:bg-white"
+        className="absolute left-2 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow hover:bg-white"
       >
         <ChevronLeft className="h-4 w-4" />
       </button>
@@ -193,13 +193,13 @@ const CtaCarousel: React.FC = () => {
         type="button"
         aria-label="Next"
         onClick={next}
-        className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow hover:bg-white"
+        className="absolute right-2 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow hover:bg-white"
       >
         <ChevronRight className="h-4 w-4" />
       </button>
 
       {/* Dots */}
-      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+      <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1.5">
         {BANK_CARDS.map((_, i) => (
           <button
             key={i}
@@ -224,25 +224,25 @@ const FAQ: React.FC<{ items: FaqItem[]; idPrefix?: string }> = ({
 }) => {
   const [open, setOpen] = useState<number | null>(null);
   return (
-    <section className="py-12 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="bg-white py-12">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl">
-          <div className="flex items-center justify-center mb-4">
-            <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-[#CCF0E1] text-[#2AB09C]">
+          <div className="mb-4 flex items-center justify-center">
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#CCF0E1] text-[#2AB09C]">
               <HelpCircle className="h-6 w-6" />
             </div>
           </div>
-          <div className="text-center mb-8">
-            <h2 className="relative inline-block text-2xl md:text-3xl font-bold text-gray-900 pb-1">
+          <div className="mb-8 text-center">
+            <h2 className="relative inline-block pb-1 text-2xl font-bold text-gray-900 md:text-3xl">
               Frequently Asked Questions
               <span
                 aria-hidden
-                className="absolute left-1/2 -bottom-2 h-1 w-24 md:w-28 -translate-x-1/2 rounded-full bg-[#2AB09C]"
+                className="absolute -bottom-2 left-1/2 h-1 w-24 -translate-x-1/2 rounded-full bg-[#2AB09C] md:w-28"
               />
             </h2>
           </div>
 
-          <div className="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white overflow-hidden">
+          <div className="divide-y divide-gray-200 overflow-hidden rounded-lg border border-gray-200 bg-white">
             {items.map((item, idx) => {
               const isOpen = open === idx;
               const contentId = `${idPrefix}-faq-panel-${idx}`;
@@ -254,10 +254,9 @@ const FAQ: React.FC<{ items: FaqItem[]; idPrefix?: string }> = ({
                     aria-controls={contentId}
                     aria-expanded={isOpen}
                     onClick={() => setOpen(isOpen ? null : idx)}
-                    className={`w-full flex items-center justify-between text-left px-4 sm:px-6 py-4 sm:py-5 focus:outline-none transition-colors
-                      ${isOpen ? "bg-[#CCF0E1]" : "bg-white"} hover:bg-gray-50`}
+                    className={`flex w-full items-center justify-between px-4 py-4 text-left transition-colors focus:outline-none sm:px-6 sm:py-5 ${isOpen ? "bg-[#CCF0E1]" : "bg-white"} hover:bg-gray-50`}
                   >
-                    <span className="font-medium text-gray-900 pr-4">
+                    <span className="pr-4 font-medium text-gray-900">
                       {item.q}
                     </span>
                     <ChevronDown
@@ -272,14 +271,13 @@ const FAQ: React.FC<{ items: FaqItem[]; idPrefix?: string }> = ({
                     role="region"
                     aria-labelledby={btnId}
                     aria-hidden={!isOpen}
-                    className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out
-                      ${
-                        isOpen
-                          ? "max-h-[1000px] opacity-100"
-                          : "max-h-0 opacity-0 pointer-events-none"
-                      }`}
+                    className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out ${
+                      isOpen
+                        ? "max-h-[1000px] opacity-100"
+                        : "pointer-events-none max-h-0 opacity-0"
+                    }`}
                   >
-                    <div className="relative pl-5 sm:pl-6 pr-4 text-gray-700 pb-6 pt-6">
+                    <div className="relative pb-6 pl-5 pr-4 pt-6 text-gray-700 sm:pl-6">
                       <span
                         aria-hidden
                         className="absolute inset-y-0 left-0 w-0.5 bg-[#2AB09C]"
@@ -335,11 +333,11 @@ const ApplyHomeLoan: React.FC = () => {
   // Derived
   const ltvPct = useMemo(
     () => (propertyValue > 0 ? (loanAmount / propertyValue) * 100 : 0),
-    [loanAmount, propertyValue]
+    [loanAmount, propertyValue],
   );
   const estEmi = useMemo(
     () => Math.round(emi(loanAmount, rate, tenureYears)),
-    [loanAmount, rate, tenureYears]
+    [loanAmount, rate, tenureYears],
   );
   const pfEst = useMemo(() => Math.round(loanAmount * 0.005), [loanAmount]); // ~0.5% processing fee (illustrative)
 
@@ -476,15 +474,15 @@ const ApplyHomeLoan: React.FC = () => {
   ];
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="min-h-screen bg-gray-50">
       <Header />
 
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+      <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         {!submitted ? (
           <>
             {/* Hero */}
             <div className="mb-6">
-              <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
+              <h1 className="text-2xl font-bold text-slate-900 md:text-3xl">
                 Apply Home Loan
               </h1>
               <p className="mt-2 text-slate-600">
@@ -500,9 +498,9 @@ const ApplyHomeLoan: React.FC = () => {
               className="grid grid-cols-1 gap-6 lg:grid-cols-3"
             >
               {/* Left: Contact and Loan details */}
-              <div className="lg:col-span-2 space-y-6">
+              <div className="space-y-6 lg:col-span-2">
                 <Card title="Contact details">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <label className="block">
                       <span className="text-xs font-medium text-slate-700">
                         Full name
@@ -571,7 +569,7 @@ const ApplyHomeLoan: React.FC = () => {
                 </Card>
 
                 <Card title="Loan details">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <label className="block">
                       <span className="text-xs font-medium text-slate-700">
                         Property value (₹)
@@ -581,7 +579,7 @@ const ApplyHomeLoan: React.FC = () => {
                         value={propertyValue}
                         onChange={(e) =>
                           setPropertyValue(
-                            Math.max(0, parseInt(e.target.value || "0", 10))
+                            Math.max(0, parseInt(e.target.value || "0", 10)),
                           )
                         }
                         className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
@@ -601,7 +599,7 @@ const ApplyHomeLoan: React.FC = () => {
                         value={loanAmount}
                         onChange={(e) =>
                           setLoanAmount(
-                            Math.max(0, parseInt(e.target.value || "0", 10))
+                            Math.max(0, parseInt(e.target.value || "0", 10)),
                           )
                         }
                         className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
@@ -621,7 +619,7 @@ const ApplyHomeLoan: React.FC = () => {
                         value={tenureYears}
                         onChange={(e) =>
                           setTenureYears(
-                            Math.max(1, parseInt(e.target.value || "1", 10))
+                            Math.max(1, parseInt(e.target.value || "1", 10)),
                           )
                         }
                         className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
@@ -643,7 +641,7 @@ const ApplyHomeLoan: React.FC = () => {
                         value={rate}
                         onChange={(e) =>
                           setRate(
-                            Math.max(0, parseFloat(e.target.value || "0"))
+                            Math.max(0, parseFloat(e.target.value || "0")),
                           )
                         }
                         className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
@@ -689,7 +687,7 @@ const ApplyHomeLoan: React.FC = () => {
                         value={monthlyIncome}
                         onChange={(e) =>
                           setMonthlyIncome(
-                            Math.max(0, parseInt(e.target.value || "0", 10))
+                            Math.max(0, parseInt(e.target.value || "0", 10)),
                           )
                         }
                         className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
@@ -708,7 +706,7 @@ const ApplyHomeLoan: React.FC = () => {
                         value={existingEmi}
                         onChange={(e) =>
                           setExistingEmi(
-                            Math.max(0, parseInt(e.target.value || "0", 10))
+                            Math.max(0, parseInt(e.target.value || "0", 10)),
                           )
                         }
                         className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
@@ -748,10 +746,10 @@ const ApplyHomeLoan: React.FC = () => {
                               {b === "any"
                                 ? "Any"
                                 : b === "bank-of-maharashtra"
-                                ? "Bank of Maharashtra"
-                                : b === "nainital-bank"
-                                ? "Nainital Bank"
-                                : b.toUpperCase()}
+                                  ? "Bank of Maharashtra"
+                                  : b === "nainital-bank"
+                                    ? "Nainital Bank"
+                                    : b.toUpperCase()}
                             </span>
                           </label>
                         ))}
@@ -762,7 +760,7 @@ const ApplyHomeLoan: React.FC = () => {
                     </label>
                   </div>
 
-                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
                     <Kpi
                       label="Estimated EMI"
                       value={fmtINR(estEmi)}
@@ -813,7 +811,7 @@ const ApplyHomeLoan: React.FC = () => {
                     disabled={submitting}
                     className={`rounded-md px-4 py-2 text-white ${
                       submitting
-                        ? "bg-emerald-400 cursor-not-allowed"
+                        ? "cursor-not-allowed bg-emerald-400"
                         : "bg-emerald-600 hover:bg-emerald-700"
                     }`}
                   >
@@ -869,7 +867,7 @@ const ApplyHomeLoan: React.FC = () => {
                 </Card>
 
                 <Card title="How it works">
-                  <ol className="list-decimal pl-5 text-sm text-slate-700 space-y-1.5">
+                  <ol className="list-decimal space-y-1.5 pl-5 text-sm text-slate-700">
                     <li>Submit your application (1–2 min).</li>
                     <li>Verification call & document list.</li>
                     <li>Offer comparisons from partner banks.</li>
@@ -878,7 +876,7 @@ const ApplyHomeLoan: React.FC = () => {
                 </Card>
 
                 <Card title="Documents checklist (illustrative)">
-                  <ul className="list-disc pl-5 text-sm text-slate-700 space-y-1">
+                  <ul className="list-disc space-y-1 pl-5 text-sm text-slate-700">
                     <li>KYC: PAN, Aadhaar</li>
                     <li>Income: Salary slips/ITR, bank statements</li>
                     <li>Property: Agreement, title, NOC as applicable</li>
@@ -894,16 +892,16 @@ const ApplyHomeLoan: React.FC = () => {
                 title="Home Loan Eligibility  -  Quick checklist"
                 subtitle="Typical benchmarks (vary by lender)"
               >
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div className="grid grid-cols-1 gap-4 text-sm md:grid-cols-3">
                   <div className="rounded-lg border border-slate-200 p-4">
                     <div className="font-medium text-slate-900">Age</div>
-                    <div className="text-slate-700 mt-1">18–70 years</div>
+                    <div className="mt-1 text-slate-700">18–70 years</div>
                   </div>
                   <div className="rounded-lg border border-slate-200 p-4">
                     <div className="font-medium text-slate-900">
                       Credit score
                     </div>
-                    <div className="text-slate-700 mt-1">
+                    <div className="mt-1 text-slate-700">
                       650+ considered good
                     </div>
                   </div>
@@ -911,13 +909,13 @@ const ApplyHomeLoan: React.FC = () => {
                     <div className="font-medium text-slate-900">
                       Monthly income
                     </div>
-                    <div className="text-slate-700 mt-1">Min. ₹ 25,000</div>
+                    <div className="mt-1 text-slate-700">Min. ₹ 25,000</div>
                   </div>
                   <div className="rounded-lg border border-slate-200 p-4">
                     <div className="font-medium text-slate-900">
                       Nationality
                     </div>
-                    <div className="text-slate-700 mt-1">
+                    <div className="mt-1 text-slate-700">
                       Indian residents, NRIs, PIOs
                     </div>
                   </div>
@@ -925,10 +923,10 @@ const ApplyHomeLoan: React.FC = () => {
                     <div className="font-medium text-slate-900">
                       Loan-to-Value (LTV)
                     </div>
-                    <div className="text-slate-700 mt-1">
+                    <div className="mt-1 text-slate-700">
                       Up to 90% of property value
                     </div>
-                    <div className="text-xs text-slate-500 mt-1">
+                    <div className="mt-1 text-xs text-slate-500">
                       Note: Final sanction will be the lower of income‑based
                       eligibility and LTV‑based maximum.
                     </div>
@@ -943,7 +941,7 @@ const ApplyHomeLoan: React.FC = () => {
                 title="Understand the terms"
                 subtitle="Short explanations of common terms"
               >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-700">
+                <div className="grid grid-cols-1 gap-4 text-sm text-slate-700 md:grid-cols-2">
                   <div className="rounded-lg border border-slate-200 p-4">
                     <div className="font-medium text-slate-900">
                       LTV (Loan‑to‑Value)
@@ -1055,10 +1053,10 @@ const ApplyHomeLoan: React.FC = () => {
           </>
         ) : (
           // Success state
-          <div className="max-w-2xl mx-auto">
+          <div className="mx-auto max-w-2xl">
             <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-6 text-emerald-900">
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-6 w-6 text-emerald-600 mt-0.5" />
+                <CheckCircle2 className="mt-0.5 h-6 w-6 text-emerald-600" />
                 <div>
                   <h2 className="text-xl font-semibold">
                     Thanks, {fullName || "there"}!
@@ -1068,13 +1066,13 @@ const ApplyHomeLoan: React.FC = () => {
                     you shortly at {phone || "your number"} and{" "}
                     {email || "your email"}.
                   </p>
-                  <ul className="mt-3 list-disc pl-5 text-sm space-y-1">
+                  <ul className="mt-3 list-disc space-y-1 pl-5 text-sm">
                     <li>Keep your KYC and income documents handy.</li>
                     <li>
                       We’ll share offers from HDFC, Bank of Maharashtra,
                       Nainital Bank, ICICI and more.
                     </li>
-                    <li>No charges for applying via EasyLease.</li>
+                    <li>No charges for applying via Grihya.</li>
                   </ul>
                   <div className="mt-4 flex flex-wrap gap-2">
                     <Link
@@ -1096,7 +1094,7 @@ const ApplyHomeLoan: React.FC = () => {
 
             <div className="mt-8">
               <Card title="What happens next?">
-                <ol className="list-decimal pl-5 text-sm text-slate-700 space-y-1.5">
+                <ol className="list-decimal space-y-1.5 pl-5 text-sm text-slate-700">
                   <li>Verification call within business hours.</li>
                   <li>Document checklist and pickup.</li>
                   <li>Offer comparison and selection.</li>

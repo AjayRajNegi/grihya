@@ -56,7 +56,7 @@ class PostResource extends JsonResource
             'slug'             => $this->slug,
             'title'            => $this->title,
             'excerpt'          => $this->excerpt,
-            'author'           => optional($this->author)->name ?? 'EasyLease Team',
+            'author'           => optional($this->author)->name ?? 'Grihya Team',
             'published_at'     => optional($this->published_at)->toIso8601String(),
             'likes_count'      => (int) $this->likes_count,
             'shares_count'     => (int) $this->shares_count,

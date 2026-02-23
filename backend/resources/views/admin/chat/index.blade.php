@@ -308,7 +308,7 @@
                         statusSel.disabled = false;
                         statusSaved.classList.remove('hidden');
                         setTimeout(() => statusSaved.classList.add('hidden'), 1200);
-                        await loadConversations(); // refresh unread + status chips
+                        await loadConversations(); 
                     } catch (e) {
                         console.warn('Failed to update status', e);
                         statusSel.disabled = false;
@@ -343,7 +343,7 @@
                             ts: e.created_at
                         });
                         scrollToBottom();
-                        // Selected convo: if user sent, mark as read and refresh list (unread should drop to 0)
+                     
                         if (e.sender === 'user') {
                             await markRead(it.token);
                             await loadConversations();
@@ -355,11 +355,11 @@
             }
 
             await loadMessages(it.token);
-            await markRead(it.token); // sets unread_count = 0 for selected convo
-            await loadConversations(); // reflect unread changes immediately
+            await markRead(it.token); 
+            await loadConversations(); 
         }
 
-        // Optional: realtime global refresh for unread on other conversations
+        
         if (EchoInstance) {
             try {
                 // Backend should broadcast user messages to this channel with payload incl. conversation token
@@ -428,7 +428,7 @@
             }
         }
 
-        // UI helpers
+        
         function appendMsg({
             from,
             text,
@@ -503,9 +503,9 @@
         filterEl?.addEventListener('change', () => loadConversations());
         searchBox?.addEventListener('input', () => loadConversations());
 
-        // Boot
+        
         loadConversations();
-        setInterval(loadConversations, 5000); // keeps unread badges fresh
+        setInterval(loadConversations, 5000); 
     })();
 </script>
 @endsection

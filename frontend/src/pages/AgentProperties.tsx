@@ -75,16 +75,16 @@ const toProperty = (p: ApiProperty): Property => ({
 
 // Geocode text -> coords (Nominatim)
 async function geocodeText(
-  query: string
+  query: string,
 ): Promise<{ lat: number; lng: number } | null> {
   try {
     const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(
-      query
+      query,
     )}&limit=1&accept-language=en-IN`;
     const res = await fetch(url, {
       headers: {
         // Some browsers ignore UA header; Nominatim is usually fine for light usage
-        "User-Agent": "EasyLease/1.0 (web)",
+        "User-Agent": "Grihya/1.0 (web)",
       } as any,
     });
     const data = await res.json();
@@ -214,31 +214,31 @@ const AgentProperties: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="min-h-screen bg-gray-50">
       <Header />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="mb-6 flex items-center gap-2">
           <div className="mb-6 flex items-center gap-3">
             <button
               type="button"
               aria-label="Go back"
               onClick={() => navigate(-1)}
-              className="inline-flex h-9 w-9 -ml-1 items-center justify-center bg-transparent text-gray-800 hover:text-gray-900 active:scale-95 cursor-pointer"
+              className="-ml-1 inline-flex h-9 w-9 cursor-pointer items-center justify-center bg-transparent text-gray-800 hover:text-gray-900 active:scale-95"
               title="Back"
             >
-              <span className="text-2xl md:text-3xl font-extrabold leading-none">
+              <span className="text-2xl font-extrabold leading-none md:text-3xl">
                 <img src="/less_than_icon.png" alt="Back-Icon" />
               </span>
             </button>
 
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-gray-900 md:text-3xl">
               Agent’s Properties
             </h1>
           </div>
         </div>
 
         {/* Filter bar */}
-        <div className="bg-white p-4 rounded-lg shadow-sm mb-6 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+        <div className="mb-6 flex flex-col gap-3 rounded-lg bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
           <div className="text-slate-700">
             Search by location
             <span className="ml-2 text-xs text-slate-500">
@@ -247,26 +247,26 @@ const AgentProperties: React.FC = () => {
           </div>
           <div className="flex items-center gap-2">
             <div className="relative">
-              <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && applyFilter()}
                 placeholder="City, area or landmark"
-                className="pl-9 pr-3 py-2 rounded-md border border-slate-300 bg-white text-sm focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 w-[min(75vw,280px)]"
+                className="w-[min(75vw,280px)] rounded-md border border-slate-300 bg-white py-2 pl-9 pr-3 text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
               />
             </div>
             <button
               onClick={applyFilter}
-              className="px-3 py-2 text-sm rounded-md bg-[#2AB09C] text-white hover:bg-emerald-700"
+              className="rounded-md bg-[#2AB09C] px-3 py-2 text-sm text-white hover:bg-emerald-700"
             >
               Apply
             </button>
             {(locationFilter || (latStr && lngStr)) && (
               <button
                 onClick={clearFilter}
-                className="px-3 py-2 text-sm rounded-md border border-slate-300 hover:bg-slate-100"
+                className="rounded-md border border-slate-300 px-3 py-2 text-sm hover:bg-slate-100"
               >
                 Clear
               </button>
@@ -276,27 +276,27 @@ const AgentProperties: React.FC = () => {
 
         {/* States */}
         {err && (
-          <div className="mb-4 rounded bg-red-50 text-red-700 p-3">{err}</div>
+          <div className="mb-4 rounded bg-red-50 p-3 text-red-700">{err}</div>
         )}
 
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }).map((_, i) => (
               <div
                 key={i}
-                className="rounded-lg bg-white shadow-sm animate-pulse h-64"
+                className="h-64 animate-pulse rounded-lg bg-white shadow-sm"
               />
             ))}
           </div>
         ) : properties.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-sm p-8 text-center">
-            <h3 className="text-xl font-semibold text-gray-700 mb-2">
+          <div className="rounded-lg bg-white p-8 text-center shadow-sm">
+            <h3 className="mb-2 text-xl font-semibold text-gray-700">
               No properties found
             </h3>
             <p className="text-gray-600">Try changing the location filter.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {properties.map((p) => (
               <PropertyCard key={p.id} property={p} />
             ))}

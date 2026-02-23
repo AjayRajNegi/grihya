@@ -127,7 +127,7 @@ const PropertiesSearch: React.FC<PropertiesSearchProps> = ({
     try {
       const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&zoom=12&accept-language=en-IN&addressdetails=1`;
       const res = await fetch(url, {
-        headers: { "User-Agent": "EasyLease/1.0 (support@easylease.app)" },
+        headers: { "User-Agent": "Grihya/1.0 (support@grihya.app)" },
       });
       const data = await res.json();
       const addr = data?.address || {};
@@ -260,7 +260,7 @@ const PropertiesSearch: React.FC<PropertiesSearchProps> = ({
         } else {
           const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&zoom=17&accept-language=en-IN&addressdetails=1`;
           const res = await fetch(url, {
-            headers: { "User-Agent": "EasyLease/1.0 (support@easylease.app)" },
+            headers: { "User-Agent": "Grihya/1.0 (support@grihya.app)" },
           });
           const data = await res.json();
           const addr = data?.address || {};
