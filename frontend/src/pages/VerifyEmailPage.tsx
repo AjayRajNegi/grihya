@@ -37,7 +37,7 @@ export default function VerifyEmailPage() {
   const [verified, setVerified] = useState(false);
   const timerRef = useRef<number | null>(null);
 
-  const API_BASE = import.meta.env.VITE_API_URL || "http://grihya.in/api";
+  const API_BASE = import.meta.env.VITE_API_URL || "http://admin.grihya.in/api";
   useEffect(() => {
     function onStorage(e: StorageEvent) {
       if (e.key === "verified_event" && e.newValue) {

@@ -58,7 +58,7 @@ L.Marker.prototype.options.icon = DefaultIcon;
 const API_URL =
   import.meta.env.VITE_API_URL ||
   import.meta.env.VITE_API_BASE_URL ||
-  "http://grihya.in/api";
+  "http://admin.grihya.in/api";
 
 // Derive backend origin for absolutizing relative image paths
 const API_ORIGIN = API_URL.replace(/\/api\/?$/, "");

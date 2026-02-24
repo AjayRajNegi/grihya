@@ -65,7 +65,6 @@ class AuthController extends Controller
         $emailCanonical = $this->normalizeEmail($email);
         $phone = $this->normalizePhone($data['phone']);
 
-        // NEW: quick check against banned_accounts
         if (Schema::hasTable('banned_accounts')) {
             $emailBanned = DB::table('banned_accounts')
                 ->where(function ($q) use ($email, $emailCanonical) {
@@ -79,7 +78,6 @@ class AuthController extends Controller
             $phoneBanned = DB::table('banned_accounts')
                 ->where(function ($q) use ($phone) {
                     $q->where('phone', $phone);
-                    // Optional: if you store normalized E.164 in another column
                     if (Schema::hasColumn('banned_accounts', 'phone_e164')) {
                         $q->orWhere('phone_e164', $phone);
                     }
@@ -95,7 +93,6 @@ class AuthController extends Controller
             }
         }
 
-        // Block only if final users table has this email/phone
         $emailTakenInUsers = User::where('email', $email)
             ->orWhere(function ($q) use ($emailCanonical) {
                 if (Schema::hasColumn('users', 'email_canonical')) {
@@ -112,7 +109,6 @@ class AuthController extends Controller
             return response()->json(['message' => 'This mobile number is already registered.'], 422);
         }
 
-        // Overwrite any previous pending for the same email (so user can reuse email if they lost the link)
         PendingRegistration::where('email_canonical', $emailCanonical)->delete();
         $city = isset($data['city']) ? $this->normalizeCity($data['city']) : null;
         $tokenPlain = Str::random(64);

@@ -29,7 +29,7 @@ Route::prefix('auth')->group(function () {
 
     Route::get('/pending/resend/{id}', [AuthController::class, 'pendingResend'])
         ->name('pending.resend')
-        ->middleware(['signed', 'throttle:3,10']); // up to 3 resends in 10 minutes
+        ->middleware(['signed', 'throttle:3,10']); 
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);

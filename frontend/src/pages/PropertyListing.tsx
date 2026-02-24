@@ -21,7 +21,7 @@ import CTASection from "@/components/home/CTASection";
 const API_URL =
   import.meta.env.VITE_API_URL ||
   import.meta.env.VITE_API_BASE_URL ||
-  "http://grihya/api";
+  "http://admin.grihya.in/api";
 
 type ApiUser = {
   name?: string | null;

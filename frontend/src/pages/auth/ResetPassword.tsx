@@ -5,7 +5,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 const API_URL =
   import.meta.env.VITE_API_URL ||
   import.meta.env.VITE_API_BASE_URL ||
-  "http://grihya/api";
+  "http://grihya.in/api";
 
 export default function ResetPasswordPage() {
   const [search] = useSearchParams();

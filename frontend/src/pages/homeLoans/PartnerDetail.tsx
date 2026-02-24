@@ -13,7 +13,7 @@ import {
 const API_URL =
   import.meta.env.VITE_API_URL ||
   import.meta.env.VITE_API_BASE_URL ||
-  "http://grihya/api";
+  "http://admin.grihya.in/api";
 
 // -------------------- Helpers --------------------
 function emi(P: number, annualRate: number, years: number): number {
@@ -34,7 +34,7 @@ const Kpi: React.FC<{ label: string; value: string; hint?: string }> = ({
   <div className="rounded-lg border border-slate-200 p-4">
     <div className="text-xs text-slate-600">{label}</div>
     <div className="text-lg font-semibold text-slate-900">{value}</div>
-    {hint && <div className="text-[11px] text-slate-500 mt-1">{hint}</div>}
+    {hint && <div className="mt-1 text-[11px] text-slate-500">{hint}</div>}
   </div>
 );
 
@@ -55,7 +55,7 @@ const Card: React.FC<{
           <div className="text-sm font-semibold text-slate-900">{title}</div>
         )}
         {subtitle && (
-          <div className="text-xs text-slate-500 mt-0.5">{subtitle}</div>
+          <div className="mt-0.5 text-xs text-slate-500">{subtitle}</div>
         )}
       </div>
     )}
@@ -196,24 +196,24 @@ const FAQ: React.FC<{ items: FaqItem[]; idPrefix?: string }> = ({
 }) => {
   const [open, setOpen] = useState<number | null>(null);
   return (
-    <section className="py-12 bg-white rounded-xl border border-slate-200 px-4 sm:px-6 mt-8">
+    <section className="mt-8 rounded-xl border border-slate-200 bg-white px-4 py-12 sm:px-6">
       <div className="mx-auto max-w-3xl">
-        <div className="flex items-center justify-center mb-4">
-          <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-[#CCF0E1] text-[#2AB09C]">
+        <div className="mb-4 flex items-center justify-center">
+          <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#CCF0E1] text-[#2AB09C]">
             <HelpCircle className="h-6 w-6" />
           </div>
         </div>
-        <div className="text-center mb-6">
-          <h2 className="relative inline-block text-2xl md:text-3xl font-bold text-gray-900 pb-1">
+        <div className="mb-6 text-center">
+          <h2 className="relative inline-block pb-1 text-2xl font-bold text-gray-900 md:text-3xl">
             Frequently Asked Questions
             <span
               aria-hidden
-              className="absolute left-1/2 -bottom-2 h-1 w-24 md:w-28 -translate-x-1/2 rounded-full bg-[#2AB09C]"
+              className="absolute -bottom-2 left-1/2 h-1 w-24 -translate-x-1/2 rounded-full bg-[#2AB09C] md:w-28"
             />
           </h2>
         </div>
 
-        <div className="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white overflow-hidden">
+        <div className="divide-y divide-gray-200 overflow-hidden rounded-lg border border-gray-200 bg-white">
           {items.map((item, idx) => {
             const isOpen = open === idx;
             const contentId = `${idPrefix}-faq-panel-${idx}`;
@@ -225,10 +225,9 @@ const FAQ: React.FC<{ items: FaqItem[]; idPrefix?: string }> = ({
                   aria-controls={contentId}
                   aria-expanded={isOpen}
                   onClick={() => setOpen(isOpen ? null : idx)}
-                  className={`w-full flex items-center justify-between text-left px-4 sm:px-6 py-4 sm:py-5 focus:outline-none transition-colors
-                    ${isOpen ? "bg-[#CCF0E1]" : "bg-white"} hover:bg-gray-50`}
+                  className={`flex w-full items-center justify-between px-4 py-4 text-left transition-colors focus:outline-none sm:px-6 sm:py-5 ${isOpen ? "bg-[#CCF0E1]" : "bg-white"} hover:bg-gray-50`}
                 >
-                  <span className="font-medium text-gray-900 pr-4">
+                  <span className="pr-4 font-medium text-gray-900">
                     {item.q}
                   </span>
                   <ChevronDown
@@ -243,14 +242,13 @@ const FAQ: React.FC<{ items: FaqItem[]; idPrefix?: string }> = ({
                   role="region"
                   aria-labelledby={btnId}
                   aria-hidden={!isOpen}
-                  className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out
-                    ${
-                      isOpen
-                        ? "max-h-[1000px] opacity-100"
-                        : "max-h-0 opacity-0 pointer-events-none"
-                    }`}
+                  className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out ${
+                    isOpen
+                      ? "max-h-[1000px] opacity-100"
+                      : "pointer-events-none max-h-0 opacity-0"
+                  }`}
                 >
-                  <div className="relative pl-5 sm:pl-6 pr-4 text-gray-700 pb-6 pt-6">
+                  <div className="relative pb-6 pl-5 pr-4 pt-6 text-gray-700 sm:pl-6">
                     <span
                       aria-hidden
                       className="absolute inset-y-0 left-0 w-0.5 bg-[#2AB09C]"
@@ -319,7 +317,7 @@ const CtaCarousel: React.FC<{
     if (paused || safeItems.length <= 1) return;
     const id = setInterval(
       () => setIdx((i) => (i + 1) % safeItems.length),
-      3000
+      3000,
     );
     return () => clearInterval(id);
   }, [paused, safeItems.length]);
@@ -330,28 +328,28 @@ const CtaCarousel: React.FC<{
 
   return (
     <div
-      className="relative rounded-xl overflow-hidden shadow-lg ring-1 ring-black/10"
+      className="relative overflow-hidden rounded-xl shadow-lg ring-1 ring-black/10"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
       <div
-        className={`bg-gradient-to-br ${gradient} p-4 sm:p-5 text-white min-h-[160px] flex flex-col justify-between`}
+        className={`bg-gradient-to-br ${gradient} flex min-h-[160px] flex-col justify-between p-4 text-white sm:p-5`}
       >
         <div className="flex items-center justify-between">
           <div className="text-sm font-semibold opacity-90">
             Partner spotlight
           </div>
-          <div className="text-[11px] bg-white/15 px-2 py-0.5 rounded-full">
+          <div className="rounded-full bg-white/15 px-2 py-0.5 text-[11px]">
             {clampedIdx + 1} / {safeItems.length}
           </div>
         </div>
 
         <div className="mt-2">
-          <div className="text-xl font-bold leading-tight text-center">
+          <div className="text-center text-xl font-bold leading-tight">
             {partners[active.slug]?.name || active.name}
           </div>
-          <div className="text-xs opacity-90 text-center">{tagline}</div>
-          <div className="mt-2 text-sm text-center">
+          <div className="text-center text-xs opacity-90">{tagline}</div>
+          <div className="mt-2 text-center text-sm">
             Indicative rates:{" "}
             <span className="font-semibold">
               {partners[active.slug]?.range || active.range}
@@ -359,10 +357,10 @@ const CtaCarousel: React.FC<{
           </div>
         </div>
 
-        <div className="mt-3 flex items-center gap-2 justify-center">
+        <div className="mt-3 flex items-center justify-center gap-2">
           <Link
             to={`/home-loans/partners/${active.slug}`}
-            className="inline-flex items-center rounded-md bg-white/90 px-3 py-1.5 text-sm font-medium text-slate-900 hover:bg-white transition shadow-sm"
+            className="inline-flex items-center rounded-md bg-white/90 px-3 py-1.5 text-sm font-medium text-slate-900 shadow-sm transition hover:bg-white"
           >
             Check Loan Details
           </Link>
@@ -376,7 +374,7 @@ const CtaCarousel: React.FC<{
             type="button"
             aria-label="Previous"
             onClick={prev}
-            className="absolute left-2 top-1/2 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow hover:bg-white"
+            className="absolute left-2 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow hover:bg-white"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
@@ -384,13 +382,13 @@ const CtaCarousel: React.FC<{
             type="button"
             aria-label="Next"
             onClick={next}
-            className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow hover:bg-white"
+            className="absolute right-2 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow hover:bg-white"
           >
             <ChevronRight className="h-4 w-4" />
           </button>
 
           {/* Dots */}
-          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+          <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1.5">
             {safeItems.map((_, i) => (
               <button
                 key={i}
@@ -453,7 +451,7 @@ const CompareOffers: React.FC<{
 
   const sorted = useMemo(() => {
     const filtered = rows.filter((r) =>
-      r.name.toLowerCase().includes(query.toLowerCase())
+      r.name.toLowerCase().includes(query.toLowerCase()),
     );
     const dir = sortDir === "asc" ? 1 : -1;
     const cmp = (a: (typeof rows)[number], b: (typeof rows)[number]) => {
@@ -481,19 +479,19 @@ const CompareOffers: React.FC<{
         sortKey === "emi"
           ? "EMI"
           : sortKey === "rate"
-          ? "Typical rate"
-          : sortKey === "ltv"
-          ? "Max LTV"
-          : "Name"
+            ? "Typical rate"
+            : sortKey === "ltv"
+              ? "Max LTV"
+              : "Name"
       } (${sortDir}) • EMI based on ₹${(sampleAmount / 1e5).toFixed(
-        1
+        1,
       )}L for ${sampleYears} yrs`}
       className="mt-2"
     >
       {/* Controls */}
-      <div className="flex flex-col lg:flex-row gap-3 lg:items-center lg:justify-between mb-4">
+      <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-wrap items-center gap-2">
-          <div className="inline-flex rounded-md border border-slate-200 overflow-hidden">
+          <div className="inline-flex overflow-hidden rounded-md border border-slate-200">
             {[
               { key: "emi", label: "EMI" },
               { key: "rate", label: "Rate" },
@@ -517,7 +515,7 @@ const CompareOffers: React.FC<{
               );
             })}
           </div>
-          <div className="inline-flex rounded-md border border-slate-200 overflow-hidden ml-1">
+          <div className="ml-1 inline-flex overflow-hidden rounded-md border border-slate-200">
             {(["cards", "table"] as ViewMode[]).map((v) => {
               const active = view === v;
               return (
@@ -542,7 +540,7 @@ const CompareOffers: React.FC<{
           <input
             type="text"
             placeholder="Search banks..."
-            className="w-full lg:w-64 rounded-md border border-slate-300 px-3 py-1.5 text-sm"
+            className="w-full rounded-md border border-slate-300 px-3 py-1.5 text-sm lg:w-64"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
@@ -551,13 +549,13 @@ const CompareOffers: React.FC<{
 
       {/* Cards view (default): relaxed, airy */}
       {view === "cards" && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {sorted.map((r) => {
             const isActive = r.slug === selectedSlug;
             return (
               <div
                 key={r.slug}
-                className={`rounded-xl border p-4 hover:shadow-sm transition ${
+                className={`rounded-xl border p-4 transition hover:shadow-sm ${
                   isActive
                     ? "border-emerald-300 bg-emerald-50/40"
                     : "border-slate-200 bg-white"
@@ -566,7 +564,7 @@ const CompareOffers: React.FC<{
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <div className="font-semibold text-slate-900">{r.name}</div>
-                    <div className="text-[11px] text-slate-500 mt-0.5">
+                    <div className="mt-0.5 text-[11px] text-slate-500">
                       Typical: {r.range}
                     </div>
                   </div>
@@ -574,7 +572,7 @@ const CompareOffers: React.FC<{
                 </div>
 
                 <div className="mt-3">
-                  <div className="text-xs font-medium text-slate-700 mb-1">
+                  <div className="mb-1 text-xs font-medium text-slate-700">
                     Interest band vs market
                   </div>
                   <RateRangeBar
@@ -609,7 +607,7 @@ const CompareOffers: React.FC<{
                     <div className="font-medium text-slate-900">Max LTV</div>
                     <div className="mt-0.5">{r.maxLtv}</div>
                   </div>
-                  <div className="rounded border border-slate-200 p-2 col-span-2">
+                  <div className="col-span-2 rounded border border-slate-200 p-2">
                     <div className="font-medium text-slate-900">Prepayment</div>
                     <div className="mt-0.5">{r.prepayment}</div>
                   </div>
@@ -622,9 +620,9 @@ const CompareOffers: React.FC<{
 
       {/* Table view (simplified to reduce clutter) */}
       {view === "table" && (
-        <div className="overflow-x-auto rounded-lg border border-slate-200 mt-1">
+        <div className="mt-1 overflow-x-auto rounded-lg border border-slate-200">
           <table className="min-w-full text-sm">
-            <thead className="bg-slate-50 sticky top-0 z-10">
+            <thead className="sticky top-0 z-10 bg-slate-50">
               <tr>
                 <th className="px-3 py-2 text-left font-medium">Bank</th>
                 <th className="px-3 py-2 text-left font-medium">Interest</th>
@@ -640,7 +638,7 @@ const CompareOffers: React.FC<{
                   <tr
                     key={r.slug}
                     className={`odd:bg-white even:bg-slate-50 ${
-                      isActive ? "ring-1 ring-emerald-200 bg-emerald-50/40" : ""
+                      isActive ? "bg-emerald-50/40 ring-1 ring-emerald-200" : ""
                     }`}
                   >
                     <td className="px-3 py-2">
@@ -652,7 +650,7 @@ const CompareOffers: React.FC<{
                         Prepayment: {r.prepayment}
                       </div>
                     </td>
-                    <td className="px-3 py-2 w-[260px] align-top">
+                    <td className="w-[260px] px-3 py-2 align-top">
                       <RateRangeBar
                         min={r.minRate}
                         max={r.maxRate}
@@ -661,7 +659,7 @@ const CompareOffers: React.FC<{
                       />
                     </td>
                     <td className="px-3 py-2 align-top">{r.maxLtv}</td>
-                    <td className="px-3 py-2 text-right font-semibold align-top">
+                    <td className="px-3 py-2 text-right align-top font-semibold">
                       {fmtINR(r.emi)}
                     </td>
                     <td className="px-3 py-2 text-right align-top">
@@ -680,7 +678,7 @@ const CompareOffers: React.FC<{
         </div>
       )}
 
-      <div className="text-[11px] text-slate-500 mt-3">
+      <div className="mt-3 text-[11px] text-slate-500">
         Note: Policies/fees can change; confirm with the lender.
       </div>
     </Card>
@@ -715,7 +713,7 @@ const PartnerDetail: React.FC = () => {
   const [qYears, setQYears] = useState(20);
   const qEmi = useMemo(
     () => Math.round(emi(qAmount, qRate, qYears)),
-    [qAmount, qRate, qYears]
+    [qAmount, qRate, qYears],
   );
 
   // Comparison list of other partners
@@ -803,9 +801,9 @@ const PartnerDetail: React.FC = () => {
 
   if (!partner) {
     return (
-      <div className="bg-gray-50 min-h-screen">
+      <div className="min-h-screen bg-gray-50">
         <Header />
-        <main className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-10">
+        <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
           <div className="rounded-xl border border-rose-200 bg-rose-50 p-5 text-rose-800">
             Unknown partner.{" "}
             <Link to="/" className="text-rose-700 underline">
@@ -849,16 +847,16 @@ const PartnerDetail: React.FC = () => {
   ];
 
   const globalMinRate = Math.min(
-    ...Object.values(PARTNERS).map((p) => p.minRate)
+    ...Object.values(PARTNERS).map((p) => p.minRate),
   );
   const globalMaxRate = Math.max(
-    ...Object.values(PARTNERS).map((p) => p.maxRate)
+    ...Object.values(PARTNERS).map((p) => p.maxRate),
   );
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="min-h-screen bg-gray-50">
       <Header />
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+      <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         {/* Hero */}
         <div className="mb-6">
           <div className="mb-6 flex items-center gap-2">
@@ -866,15 +864,15 @@ const PartnerDetail: React.FC = () => {
               type="button"
               aria-label="Go back"
               onClick={() => navigate(-1)}
-              className="inline-flex h-9 w-9 -ml-1 items-center justify-center bg-transparent text-gray-800 hover:text-gray-900 active:scale-95 cursor-pointer"
+              className="-ml-1 inline-flex h-9 w-9 cursor-pointer items-center justify-center bg-transparent text-gray-800 hover:text-gray-900 active:scale-95"
               title="Back"
             >
-              <span className="text-2xl md:text-3xl font-extrabold leading-none">
+              <span className="text-2xl font-extrabold leading-none md:text-3xl">
                 <img src="/less_than_icon.png" alt="Back-Icon" />
               </span>
             </button>
 
-            <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
+            <h1 className="text-2xl font-bold text-slate-900 md:text-3xl">
               {partner.name} - Home Loans
             </h1>
           </div>
@@ -884,15 +882,15 @@ const PartnerDetail: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
-          <div className="lg:col-span-2 space-y-6">
+        <div className="mb-10 grid grid-cols-1 gap-6 lg:grid-cols-3">
+          <div className="space-y-6 lg:col-span-2">
             <Card title="Overview of the bank">
               <div className="grid grid-cols-1 gap-6">
                 <div>
-                  <div className="text-sm font-semibold text-slate-900 mb-2">
+                  <div className="mb-2 text-sm font-semibold text-slate-900">
                     Quick EMI preview
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                     <label className="block">
                       <span className="text-xs font-medium text-slate-700">
                         Amount (₹)
@@ -904,7 +902,7 @@ const PartnerDetail: React.FC = () => {
                         min={0}
                         onChange={(e) =>
                           setQAmount(
-                            Math.max(0, parseInt(e.target.value || "0", 10))
+                            Math.max(0, parseInt(e.target.value || "0", 10)),
                           )
                         }
                       />
@@ -920,7 +918,7 @@ const PartnerDetail: React.FC = () => {
                         value={qRate}
                         onChange={(e) =>
                           setQRate(
-                            Math.max(0, parseFloat(e.target.value || "0"))
+                            Math.max(0, parseFloat(e.target.value || "0")),
                           )
                         }
                       />
@@ -938,7 +936,7 @@ const PartnerDetail: React.FC = () => {
                         value={qYears}
                         onChange={(e) =>
                           setQYears(
-                            Math.max(1, parseInt(e.target.value || "1", 10))
+                            Math.max(1, parseInt(e.target.value || "1", 10)),
                           )
                         }
                         min={1}
@@ -946,7 +944,7 @@ const PartnerDetail: React.FC = () => {
                       />
                     </label>
                   </div>
-                  <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
                     <Kpi label="Monthly EMI" value={fmtINR(qEmi)} />
                     <Kpi
                       label="Approx. Interest"
@@ -959,7 +957,7 @@ const PartnerDetail: React.FC = () => {
                     />
                   </div>
                   <div className="mt-4">
-                    <div className="text-xs font-medium text-slate-700 mb-1">
+                    <div className="mb-1 text-xs font-medium text-slate-700">
                       Interest band vs market
                     </div>
                     <RateRangeBar
@@ -972,7 +970,7 @@ const PartnerDetail: React.FC = () => {
                 </div>
 
                 <div>
-                  <div className="text-sm font-semibold text-slate-900 mb-2">
+                  <div className="mb-2 text-sm font-semibold text-slate-900">
                     Features & charges
                   </div>
                   <ul className="space-y-3 text-sm text-slate-700">
@@ -984,7 +982,7 @@ const PartnerDetail: React.FC = () => {
                         Typical band {partner.range}. Floating (repo-linked) in
                         most cases; fixed options may exist.
                       </div>
-                      <div className="text-[11px] text-slate-500 mt-1">
+                      <div className="mt-1 text-[11px] text-slate-500">
                         Benefit: Lower rates during easing cycles.
                       </div>
                     </li>
@@ -996,7 +994,7 @@ const PartnerDetail: React.FC = () => {
                         {partner.snapshot.processingFee}. Often negotiable
                         during bank campaigns.
                       </div>
-                      <div className="text-[11px] text-slate-500 mt-1">
+                      <div className="mt-1 text-[11px] text-slate-500">
                         Benefit: Watch for limited-time fee waivers.
                       </div>
                     </li>
@@ -1008,7 +1006,7 @@ const PartnerDetail: React.FC = () => {
                         {partner.snapshot.prepayment}. Floating-rate loans often
                         allow part-prepay with minimal/no charges.
                       </div>
-                      <div className="text-[11px] text-slate-500 mt-1">
+                      <div className="mt-1 text-[11px] text-slate-500">
                         Benefit: Reduce interest outgo by prepaying whenever
                         possible.
                       </div>
@@ -1021,7 +1019,7 @@ const PartnerDetail: React.FC = () => {
                         {partner.snapshot.legalTech ||
                           "Legal & technical charges as per case"}
                       </div>
-                      <div className="text-[11px] text-slate-500 mt-1">
+                      <div className="mt-1 text-[11px] text-slate-500">
                         Tip: Keep property docs ready for faster turnaround.
                       </div>
                     </li>
@@ -1031,7 +1029,7 @@ const PartnerDetail: React.FC = () => {
             </Card>
 
             <Card title="Key documents required">
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-slate-700">
+              <ul className="grid grid-cols-1 gap-3 text-sm text-slate-700 md:grid-cols-2">
                 <li className="rounded border border-slate-200 p-3">
                   KYC (PAN, Aadhaar)
                 </li>
@@ -1128,7 +1126,7 @@ const PartnerDetail: React.FC = () => {
                         min={0}
                         onChange={(e) =>
                           setPLoanAmt(
-                            Math.max(0, parseInt(e.target.value || "0", 10))
+                            Math.max(0, parseInt(e.target.value || "0", 10)),
                           )
                         }
                         required
@@ -1144,7 +1142,7 @@ const PartnerDetail: React.FC = () => {
                         value={pTenure}
                         onChange={(e) =>
                           setPTenure(
-                            Math.max(1, parseInt(e.target.value || "1", 10))
+                            Math.max(1, parseInt(e.target.value || "1", 10)),
                           )
                         }
                         min={1}
@@ -1165,7 +1163,7 @@ const PartnerDetail: React.FC = () => {
                         min={0}
                         onChange={(e) =>
                           setPIncome(
-                            Math.max(0, parseInt(e.target.value || "0", 10))
+                            Math.max(0, parseInt(e.target.value || "0", 10)),
                           )
                         }
                       />
@@ -1181,7 +1179,7 @@ const PartnerDetail: React.FC = () => {
                         min={0}
                         onChange={(e) =>
                           setPEmiObl(
-                            Math.max(0, parseInt(e.target.value || "0", 10))
+                            Math.max(0, parseInt(e.target.value || "0", 10)),
                           )
                         }
                       />
@@ -1208,7 +1206,7 @@ const PartnerDetail: React.FC = () => {
                       disabled={submitting}
                       className={`rounded-md px-4 py-2 text-white ${
                         submitting
-                          ? "bg-emerald-400 cursor-not-allowed"
+                          ? "cursor-not-allowed bg-emerald-400"
                           : "bg-emerald-600 hover:bg-emerald-700"
                       }`}
                     >
@@ -1219,25 +1217,25 @@ const PartnerDetail: React.FC = () => {
               ) : (
                 <div className="rounded-md border border-emerald-200 bg-emerald-50 p-4 text-emerald-800">
                   <div className="flex items-start gap-2">
-                    <CheckCircle2 className="h-5 w-5 text-emerald-600 mt-0.5" />
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 text-emerald-600" />
                     <div>
                       <div className="font-semibold">
                         Thanks! We’ve received your request.
                       </div>
-                      <div className="text-xs mt-1">
+                      <div className="mt-1 text-xs">
                         Our specialist will contact you shortly with curated
                         options.
                       </div>
                       <div className="mt-3 flex flex-wrap gap-2">
                         <Link
                           to="/home-loans/emi-calculator"
-                          className="rounded-md bg-white px-3 py-1.5 text-xs text-emerald-700 border border-emerald-600 hover:bg-emerald-50"
+                          className="rounded-md border border-emerald-600 bg-white px-3 py-1.5 text-xs text-emerald-700 hover:bg-emerald-50"
                         >
                           Try EMI Calculator
                         </Link>
                         <Link
                           to="/home-loans/eligibility-calculator"
-                          className="rounded-md bg-white px-3 py-1.5 text-xs text-emerald-700 border border-emerald-600 hover:bg-emerald-50"
+                          className="rounded-md border border-emerald-600 bg-white px-3 py-1.5 text-xs text-emerald-700 hover:bg-emerald-50"
                         >
                           Check Eligibility
                         </Link>
@@ -1259,9 +1257,9 @@ const PartnerDetail: React.FC = () => {
         />
 
         {/* Guide + Carousel */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+        <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
           <Card title="Complete guide to home loans">
-            <ol className="list-decimal pl-5 text-sm text-slate-700 space-y-1.5">
+            <ol className="list-decimal space-y-1.5 pl-5 text-sm text-slate-700">
               <li>
                 Assess budget: EMI comfort, down payment, and emergency fund.
               </li>
