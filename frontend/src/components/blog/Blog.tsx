@@ -124,7 +124,7 @@ export default function BlogSection({
     let mounted = true;
     (async () => {
       try {
-        const res = await apiGet<Post[] | ApiPaginated<Post>>("/posts?limit=3");
+        const res = await apiGet<Post[] | ApiPaginated<Post>>("/posts?limit=4");
         const list = isPaginated<Post>(res) ? res.data : res;
         if (mounted) setPosts(list || []);
       } finally {

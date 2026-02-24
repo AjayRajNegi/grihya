@@ -17,7 +17,7 @@ type SignupProps = { onSwitch: () => void };
 const API_URL =
   import.meta.env.VITE_API_URL ||
   import.meta.env.VITE_API_BASE_URL ||
-  "http://backend.grihya.in/api";
+  "http://admin.grihya.in/api";
 
 function genStrongPassword(len = 16) {
   const chars =

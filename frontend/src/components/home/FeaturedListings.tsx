@@ -7,7 +7,7 @@ import type { Property } from "../../data/mockData"; // type-only import
 const API_URL =
   import.meta.env.VITE_API_URL ||
   import.meta.env.VITE_API_BASE_URL ||
-  "http://backend.grihya/api";
+  "http://admin.grihya.in/api";
 
 // API origin for absolutizing relative image paths (e.g., /storage/...)
 const API_ORIGIN = API_URL.replace(/\/api\/?$/, "");
@@ -118,14 +118,14 @@ const FeaturedListings: React.FC<FeaturedListingsProps> = ({
   const heading = coords ? "Properties near you" : "Fetching your location…";
 
   return (
-    <section className="py-16 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 pb-4 flex justify-center">
-          <h2 className="relative inline-block text-center text-2xl md:text-3xl font-bold text-gray-900">
+    <section className="bg-gray-50 py-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-8 flex justify-center pb-4">
+          <h2 className="relative inline-block text-center text-2xl font-bold text-gray-900 md:text-3xl">
             {heading}
             <span
               aria-hidden
-              className="absolute left-1/2 -bottom-2 h-1 w-24 md:w-28 -translate-x-1/2 rounded-full bg-[#2AB09C]"
+              className="absolute -bottom-2 left-1/2 h-1 w-24 -translate-x-1/2 rounded-full bg-[#2AB09C] md:w-28"
             />
           </h2>
         </div>
@@ -137,11 +137,11 @@ const FeaturedListings: React.FC<FeaturedListingsProps> = ({
         )}
 
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }).map((_, i) => (
               <div
                 key={i}
-                className="h-64 bg-white rounded-lg shadow-sm animate-pulse"
+                className="h-64 animate-pulse rounded-lg bg-white shadow-sm"
               />
             ))}
           </div>
@@ -152,7 +152,7 @@ const FeaturedListings: React.FC<FeaturedListingsProps> = ({
             No properties found near your location.
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {items.map((property) => (
               <PropertyCard key={property.id} property={property} />
             ))}
@@ -167,7 +167,7 @@ const FeaturedListings: React.FC<FeaturedListingsProps> = ({
                 ? `/properties?lat=${coords.lat}&lng=${coords.lng}&radius=${radiusMeters}`
                 : "/properties"
             }
-            className="inline-flex items-center text-[#2AB09C] hover:text-[#1C7E70FF] font-medium"
+            className="inline-flex items-center font-medium text-[#2AB09C] hover:text-[#1C7E70FF]"
           >
             View All
             <ArrowRightIcon className="ml-1 h-4 w-4" />

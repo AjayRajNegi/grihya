@@ -3,7 +3,7 @@ import { Readable } from "stream";
 import { mkdir, writeFile } from "fs/promises";
 
 const HOST = "https://grihya"; // your frontend domain
-const API = "https://backend.grihya/api"; // your backend API base
+const API = "https://admin.grihya.in/api"; // your backend API base
 
 async function getJSON(url) {
   try {
@@ -34,7 +34,7 @@ async function main() {
     "/properties",
   ];
   staticRoutes.forEach((p) =>
-    links.push({ url: p, changefreq: "weekly", priority: 0.7 })
+    links.push({ url: p, changefreq: "weekly", priority: 0.7 }),
   );
 
   let blogs = await getJSON(`${API}/sitemap/blogs`);
@@ -70,12 +70,12 @@ async function main() {
   console.log(
     `Links -> static: ${staticRoutes.length + 1}, blogs: ${
       blogs.length
-    }, properties: ${props.length}`
+    }, properties: ${props.length}`,
   );
 
   // 5) Build XML and write to dist/sitemap.xml
   const xml = await streamToPromise(
-    Readable.from(links).pipe(new SitemapStream({ hostname: HOST }))
+    Readable.from(links).pipe(new SitemapStream({ hostname: HOST })),
   );
   await writeFile("./dist/sitemap.xml", xml.toString(), "utf8");
   console.log("sitemap.xml generated in dist/");

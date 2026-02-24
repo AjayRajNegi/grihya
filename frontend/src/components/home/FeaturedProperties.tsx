@@ -51,8 +51,11 @@ export function FeaturedProperties({
   const [properties, setProperties] = useState<Property[]>([]);
 
   const fetchProperties = async () => {
+    // const response = await fetch(
+    //   `http://127.0.0.1:8000/api/properties?type=${type}`,
+    // );
     const response = await fetch(
-      `http://127.0.0.1:8000/api/properties?type=${type}`,
+      `https://admin.grihya.in/api/properties?type=${type}`,
     );
     const data = await response.json();
     setProperties(data.data);

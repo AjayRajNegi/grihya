@@ -8,7 +8,7 @@ import PropertyCard from "../components/properties/PropertyCard";
 const API_URL =
   import.meta.env.VITE_API_URL ||
   import.meta.env.VITE_API_BASE_URL ||
-  "http://backend.grihya/api";
+  "http://admin.grihya.in/api";
 
 type ApiUser = {
   name?: string | null;
