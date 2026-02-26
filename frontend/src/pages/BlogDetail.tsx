@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { apiGet } from "../lib/api";
 import { formatDate } from "../utils/format";
 import { ArrowLeft, Calendar } from "lucide-react";
+import { ScrollToTop } from "@/utils/import";
 
 type Variant = "info" | "success" | "warning" | "danger";
 type HeadingBlock = { type: "heading"; data: { text: string; level?: number } };
@@ -78,15 +79,6 @@ function absolutize(u?: string | null): string {
   if (/^(?:[a-z][a-z0-9+.+-]*:)?\/\//i.test(u) || u.startsWith("data:"))
     return u;
   return `${API_ORIGIN}/${u.replace(/^\/+/, "")}`;
-}
-
-function normalizeAssetUrl(u?: string | null): string {
-  if (!u) return "";
-  if (/^(?:[a-z][a-z0-9+.+-]*:)?\/\//i.test(u) || u.startsWith("data:"))
-    return u;
-  const trimmed = u.replace(/^\/+/, "");
-  if (trimmed.startsWith("storage/")) return absolutize(trimmed);
-  return absolutize(`storage/${trimmed}`);
 }
 
 function unwrap<T>(r: any): T {
@@ -350,6 +342,18 @@ export default function BlogDetail() {
       </>
     );
 
+  const normalizeAssetUrl = (url: string | null | undefined): string => {
+    if (!url) return "/placeholder.jpg";
+
+    if (url.includes("/public/storage/")) return url;
+
+    if (url.includes("/storage/")) {
+      return url.replace("/storage/", "/public/storage/");
+    }
+
+    return url;
+  };
+
   const heroBlock = post.content?.find(
     (b): b is HeroBlock => b.type === "hero",
   );
@@ -368,6 +372,7 @@ export default function BlogDetail() {
 
   return (
     <>
+      <ScrollToTop />
       <div className="min-h-screen bg-white pt-12">
         {/* Header Section */}
         <div className="flex w-full flex-col items-start justify-center px-5 sm:max-w-5xl sm:px-4 md:mx-auto">

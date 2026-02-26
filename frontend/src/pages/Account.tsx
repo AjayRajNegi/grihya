@@ -34,12 +34,13 @@ const API_URL =
   import.meta.env.VITE_API_BASE_URL ||
   "http://admin.grihya.in/api";
 
-const API_ORIGIN = API_URL.replace(/\/api\/?$/, "");
-const absolutize = (u?: string | null) => {
-  if (!u) return "";
-  if (/^(?:[a-z][a-z0-9+.-]*:)?\/\//i.test(u) || u.startsWith("data:"))
-    return u;
-  return `${API_ORIGIN}/${u.replace(/^\/+/, "")}`;
+const absolutize = (url: string) => {
+  if (!url) return "";
+  if (url.includes("/public/storage/")) return url;
+  if (url.includes("/storage/")) {
+    return url.replace("/storage/", "/public/storage/");
+  }
+  return url;
 };
 
 type ApiProperty = {
@@ -1122,6 +1123,7 @@ const Account: React.FC = () => {
                         const img =
                           absolutize(p.images?.[0] || "") ||
                           "https://via.placeholder.com/600x400?text=No+Image";
+                        console.log(img);
                         const ts = new Date(p.created_at);
                         const isDeleting = deletingId === String(p.id);
 
@@ -1409,27 +1411,6 @@ const Account: React.FC = () => {
           {mode === "login" ? (
             <>
               <div>
-                {/* Benefits (left) */}
-                {/* <div
-                  className="col-span-1 flex h-full flex-col justify-between rounded-3xl p-4 shadow-md"
-                  style={{
-                    backgroundImage: `url('/images/about/Hero1.png')`,
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "cover",
-                  }}
-                >
-                  <p className="glow text-4xl font-medium text-white">
-                    Discover Real Estate from <br /> your own Ease!
-                  </p>
-                  <div>
-                    <p className="glow text-right text-4xl font-medium text-white">
-                      Grihya Estate <br /> Your real estate partner !
-                    </p>
-                  </div>
-                </div> */}
-
-                {/* Login form (right) */}
-
                 <div className="mx-auto max-w-[500px] rounded-3xl border bg-white p-6 shadow-md sm:p-8">
                   <LoginForm onSwitch={() => setMode("signup")} />
                 </div>

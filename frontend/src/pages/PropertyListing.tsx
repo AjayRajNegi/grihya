@@ -339,6 +339,10 @@ const PropertyListing: React.FC = () => {
 
   const nearbyMode = filters.lat != null && filters.lng != null;
 
+  if (properties) {
+    console.log(properties[0]);
+  }
+
   return (
     <div className="min-h-screen bg-white">
       <PropertiesSearch />

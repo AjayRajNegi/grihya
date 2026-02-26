@@ -107,6 +107,7 @@
   </div>
 
   <!-- Latest Properties -->
+   <!-- Hello -->
   <div class="bg-white rounded-xl shadow">
     <div class="p-5 border-b flex items-center justify-between">
       <div class="font-semibold">Latest Properties</div>
@@ -117,9 +118,11 @@
       @php
       $imgs = $property->images ?? [];
       $thumb = $imgs[0] ?? null;
-      $thumbUrl = $thumb
-      ? (preg_match('/^https?:/i', $thumb) ? $thumb : asset('storage/' . ltrim($thumb, '/')))
-      : 'https://via.placeholder.com/400x250?text=Property';
+    $thumbUrl = $thumb
+    ? (preg_match('/^https?:/i', $thumb)
+        ? str_replace('/storage/', '/public/storage/', $thumb)
+        : asset('public/storage/' . ltrim($thumb, '/')))
+    : 'https://via.placeholder.com/400x250?text=Property';
       @endphp
       <a href="{{ route('property.detail', $property->id) }}" class="border rounded-lg overflow-hidden hover:shadow-lg transition bg-white block">
         <img src="{{ $thumbUrl }}" alt="property" class="w-full h-32 object-cover">

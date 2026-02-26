@@ -12,9 +12,15 @@
 // Build full URLs for all images (supports absolute and storage paths)
 $rawImages = $images ?? ($property->images ?? []);
 $imgUrls = [];
+
 foreach ($rawImages as $img) {
-$imgUrls[] = preg_match('/^https?:/i', $img) ? $img : asset('storage/' . ltrim($img, '/'));
+    if (preg_match('/^https?:/i', $img)) {
+        $imgUrls[] = str_replace('/storage/', '/public/storage/', $img);
+    } else {
+        $imgUrls[] = asset('public/storage/' . ltrim($img, '/'));
+    }
 }
+
 $heroUrl = $imgUrls[0] ?? 'https://via.placeholder.com/1200x600?text=Property';
 @endphp
 

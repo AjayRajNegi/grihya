@@ -32,7 +32,11 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
         {/* Image */}
         <div className="relative h-56">
           <img
-            src={property.images[0]}
+            src={
+              property.images?.[0]
+                ? property.images[0].replace("/storage/", "/public/storage/")
+                : "https://via.placeholder.com/600x400?text=No+Image"
+            }
             alt={property.title}
             className="h-full w-full rounded-3xl object-cover"
           />

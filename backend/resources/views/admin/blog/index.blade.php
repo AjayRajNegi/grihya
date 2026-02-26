@@ -44,8 +44,11 @@
 <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
     @forelse($blogs as $blog)
     <div class="bg-white rounded-xl shadow overflow-hidden flex flex-col h-full">
-        <img src="{{ $blog->cover_url }}" alt="cover"
-            class="w-full h-40 object-cover">
+        <!-- <img src="{{ $blog->cover_url }}" alt="cover"
+            class="w-full h-40 object-cover"> -->
+        <img src="{{ str_replace('/storage/', '/public/storage/', $blog->cover_url) }}" 
+         alt="cover"
+         class="w-full h-40 object-cover">
         <div class="p-4 flex-1 flex flex-col">
             <div class="flex items-start justify-between gap-2">
                 <h3 class="font-semibold line-clamp-2">{{ $blog->title }}</h3>
@@ -68,9 +71,9 @@
                     Edit
                 </a>
 
-                <a href="{{ route('admin.blogs.comments', $blog) }}" class="inline-flex items-center px-3 py-1.5 rounded bg-slate-100 text-slate-700 text-sm hover:bg-slate-200">
+                <!-- <a href="{{ route('admin.blogs.comments', $blog) }}" class="inline-flex items-center px-3 py-1.5 rounded bg-slate-100 text-slate-700 text-sm hover:bg-slate-200">
                     Check Comments
-                </a>
+                </a> -->
 
                 <form action="{{ route('admin.blogs.destroy', $blog) }}" method="POST"
                     onsubmit="return confirm('Delete this blog? This cannot be undone.');">

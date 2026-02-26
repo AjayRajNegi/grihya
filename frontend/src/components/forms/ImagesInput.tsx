@@ -135,6 +135,14 @@ const ImagesInput: React.FC<ImagesInputProps> = ({
       onChange(nextFiles, existingImages);
     }
   };
+  const absolutize = (url: string) => {
+    if (!url) return "";
+    if (url.includes("/public/storage/")) return url;
+    if (url.includes("/storage/")) {
+      return url.replace("/storage/", "/public/storage/");
+    }
+    return url;
+  };
 
   return (
     <div className="space-y-3">
@@ -176,7 +184,7 @@ const ImagesInput: React.FC<ImagesInputProps> = ({
             >
               {p.url ? (
                 <img
-                  src={p.url}
+                  src={absolutize(p.url)}
                   className="h-28 w-full object-cover"
                   alt={`image-${idx}`}
                   onError={(e) => {

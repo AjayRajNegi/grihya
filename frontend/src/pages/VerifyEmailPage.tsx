@@ -44,7 +44,7 @@ export default function VerifyEmailPage() {
         try {
           const evt = JSON.parse(e.newValue);
           if (evt && (evt.kind === "signup" || evt.kind === "email_change")) {
-            window.location.replace("/login");
+            window.location.replace("/account");
           }
         } catch {}
       }
@@ -85,7 +85,7 @@ export default function VerifyEmailPage() {
             );
           } catch {}
 
-          window.location.replace("/login");
+          window.location.replace("/account");
           return;
         }
 
@@ -103,7 +103,7 @@ export default function VerifyEmailPage() {
           );
         } catch {}
 
-        window.location.replace("/login");
+        window.location.replace("/account");
       } catch (e: any) {
         setErr(e.message || "Verification failed");
         setInfo("");
@@ -146,7 +146,7 @@ export default function VerifyEmailPage() {
 
   useEffect(() => {
     if (!tokenParam && (!email || !resendUrl))
-      navigate("/login", { replace: true });
+      navigate("/account", { replace: true });
   }, [email, resendUrl, tokenParam, navigate]);
 
   return (

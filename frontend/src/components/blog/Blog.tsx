@@ -60,7 +60,10 @@ function isPaginated<T>(v: unknown): v is ApiPaginated<T> {
 }
 
 const PostCard: React.FC<{ post: Post }> = ({ post }) => {
-  const imgSrc = post.cover_image_url || "/placeholder.jpg";
+  const imgSrc = post.cover_image_url
+    ? post.cover_image_url.replace("/storage/", "/public/storage/")
+    : "/placeholder.jpg";
+  console.log("imgSrc", imgSrc);
   const blogHref = `/blog/${encodeURIComponent(post.slug)}`;
 
   const formatDate = (dateString: string | null | undefined) => {

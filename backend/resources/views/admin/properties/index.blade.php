@@ -123,9 +123,14 @@
       @php
       $imgs = $prop->images ?? [];
       $thumb = $imgs[0] ?? null;
-      $thumbUrl = $thumb
+      <!-- $thumbUrl = $thumb
       ? (preg_match('/^https?:/i', $thumb) ? $thumb : asset('storage/' . ltrim($thumb, '/')))
-      : 'https://via.placeholder.com/120x80?text=IMG';
+      : 'https://via.placeholder.com/120x80?text=IMG'; -->
+      $thumbUrl = $thumb
+    ? (preg_match('/^https?:/i', $thumb)
+        ? str_replace('/storage/', '/public/storage/', $thumb)
+        : asset('public/storage/' . ltrim($thumb, '/')))
+    : 'https://via.placeholder.com/400x250?text=Property';
       @endphp
       <tr class="hover:bg-gray-50 cursor-pointer"
         tabindex="0"

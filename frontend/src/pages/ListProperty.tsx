@@ -311,16 +311,16 @@ const ListProperty: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleImageChange = (
-    files: File[],
-    existingImages: string[],
-    error?: string,
-  ) => {
-    setImageError(error || "");
-    setImageFiles(files);
-    setFormData((prev) => ({ ...prev, existingImages }));
-    if (submitError) setSubmitError("");
-  };
+  // const handleImageChange = (
+  //   files: File[],
+  //   existingImages: string[],
+  //   error?: string,
+  // ) => {
+  //   setImageError(error || "");
+  //   setImageFiles(files);
+  //   setFormData((prev) => ({ ...prev, existingImages }));
+  //   if (submitError) setSubmitError("");
+  // };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -627,6 +627,10 @@ const ListProperty: React.FC = () => {
         </div>
       </div>
     );
+  }
+
+  if (imageFiles) {
+    console.log("ImageFiles", imageFiles);
   }
 
   return (
@@ -1070,7 +1074,7 @@ const ListProperty: React.FC = () => {
                             type="button"
                             onClick={() => setMapOpen(true)}
                             title="Pick on map"
-                            className="absolute right-2 rounded bg-white pt-1 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#2DB8D1] md:top-2"
+                            className="absolute right-2 top-2 rounded bg-white pt-1 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#2DB8D1]"
                             aria-label="Pick location on map"
                           >
                             <svg

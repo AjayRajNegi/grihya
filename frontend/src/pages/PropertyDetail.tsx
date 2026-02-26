@@ -287,7 +287,7 @@ const PropertyDetail: React.FC = () => {
   if (loading) {
     return (
       <>
-        <ScrollToTop />{" "}
+        <ScrollToTop />
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="animate-pulse">
             <div className="mb-6 h-64 rounded-lg bg-gray-300"></div>
@@ -331,8 +331,10 @@ const PropertyDetail: React.FC = () => {
   }
 
   const galleryImages = property.images?.length
-    ? property.images
+    ? property.images.map((img) => img.replace("/storage/", "/public/storage/"))
     : ["https://via.placeholder.com/1200x800?text=No+Image"];
+
+  console.log(galleryImages);
 
   const getAmenityIcon = (amenity: string) => {
     const a = (amenity || "").toLowerCase().trim();
