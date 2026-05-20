@@ -63,6 +63,10 @@ Route::prefix('admin')->group(function () {
             ->name('property.detail');
         Route::delete('/properties/{property}', [AdminDashboardController::class, 'destroy'])
             ->name('properties.destroy');
+        Route::post('/properties/{property}/approve', [AdminDashboardController::class, 'approve'])
+            ->name('admin.properties.approve');
+        Route::post('/properties/{property}/reject', [AdminDashboardController::class, 'reject'])
+            ->name('admin.properties.reject');
     });
 });
 

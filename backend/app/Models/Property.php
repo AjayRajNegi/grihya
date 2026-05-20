@@ -36,7 +36,11 @@ class Property extends Model
         'ready_to_move',
         'possession_date',
         'preferred_tenants',
-
+        'rejection_reason',
+        'sharing_type', 'food_included', 'notice_period',
+        'floor_number', 'total_floors', 'facing', 'parking', 'age_of_property',
+        'property_sub_type', 'parking_spaces', 'power_backup', 'washrooms', 'pantry',
+        'plot_type', 'zoning', 'frontage', 'depth', 'access_road', 'boundary_wall', 'gated_community',
     ];
 
     protected $casts = [
@@ -53,10 +57,21 @@ class Property extends Model
         'ready_to_move' => 'boolean',
         'available_from_date' => 'date',
         'possession_date' => 'date',
+        'food_included' => 'boolean',
+        'floor_number' => 'integer',
+        'total_floors' => 'integer',
+        'age_of_property' => 'integer',
+        'parking_spaces' => 'integer',
+        'power_backup' => 'boolean',
+        'washrooms' => 'integer',
+        'pantry' => 'boolean',
+        'frontage' => 'decimal:2',
+        'depth' => 'decimal:2',
+        'access_road' => 'boolean',
+        'boundary_wall' => 'boolean',
+        'gated_community' => 'boolean',
     ];
 
-     protected $guarded = [];
-     
     public function user()
     {
         return $this->belongsTo(User::class);

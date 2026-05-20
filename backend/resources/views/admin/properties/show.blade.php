@@ -77,11 +77,49 @@ $heroUrl = $imgUrls[0] ?? 'https://via.placeholder.com/1200x600?text=Property';
         <div class="bg-white rounded-xl shadow p-5 space-y-4">
             <div class="flex items-center justify-between">
                 <div class="text-3xl font-bold text-indigo-700">₹{{ number_format($property->price) }}</div>
-                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm {{ $property->status === 'active' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }}">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm {{ $property->status === 'active' ? 'bg-green-100 text-green-700' : ($property->status === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700') }}">
                     {{ ucfirst($property->status) }}
                 </span>
             </div>
             <div class="text-sm text-gray-600">Posted on {{ $property->created_at?->format('d M Y') ?? '-' }}</div>
+
+            {{-- Approve / Reject actions --}}
+            @if($property->status === 'pending' || $property->status === 'rejected')
+            <div class="border-t pt-3 mt-3">
+                @if($property->status === 'pending')
+                <p class="text-sm text-yellow-700 mb-3">This property is awaiting review.</p>
+                @else
+                <p class="text-sm text-red-600 mb-1">This property was rejected.</p>
+                @if($property->rejection_reason)
+                <p class="text-sm text-gray-600 mb-3">Reason: {{ $property->rejection_reason }}</p>
+                @endif
+                @endif
+
+                <div class="flex gap-2">
+                    <form method="POST" action="{{ route('admin.properties.approve', $property) }}">
+                        @csrf
+                        <button type="submit" class="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700">
+                            Approve
+                        </button>
+                    </form>
+                    <button type="button" onclick="document.getElementById('reject-form').classList.toggle('hidden')"
+                        class="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700">
+                        Reject
+                    </button>
+                </div>
+
+                <form id="reject-form" method="POST" action="{{ route('admin.properties.reject', $property) }}" class="hidden mt-3">
+                    @csrf
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Rejection Reason (required)</label>
+                    <textarea name="rejection_reason" rows="3" required
+                        class="w-full rounded border-gray-300 focus:ring-red-500 focus:border-red-500"
+                        placeholder="Explain why this property was rejected..."></textarea>
+                    <button type="submit" class="mt-2 px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700">
+                        Confirm Rejection
+                    </button>
+                </form>
+            </div>
+            @endif
             <div class="border-t"></div>
             <div>
                 <div class="text-sm text-gray-500">Owner</div>
@@ -130,6 +168,66 @@ $heroUrl = $imgUrls[0] ?? 'https://via.placeholder.com/1200x600?text=Property';
                 <div class="font-medium">{{ $property->ready_to_move ? 'Yes' : 'No' }}</div>
                 <div class="text-gray-500">Possession</div>
                 <div class="font-medium">{{ $property->possession_date?->format('d M Y') ?? '-' }}</div>
+                @endif
+
+                {{-- PG-specific fields --}}
+                @if($property->type === 'pg')
+                <div class="col-span-2 border-t pt-2 mt-1 text-xs font-semibold text-gray-400 uppercase">PG Details</div>
+                <div class="text-gray-500">Sharing Type</div>
+                <div class="font-medium">{{ $property->sharing_type ? ucfirst($property->sharing_type) : '-' }}</div>
+                <div class="text-gray-500">Food Included</div>
+                <div class="font-medium">{{ $property->food_included === true ? 'Yes' : ($property->food_included === false ? 'No' : '-') }}</div>
+                <div class="text-gray-500">Notice Period</div>
+                <div class="font-medium">{{ $property->notice_period ?? '-' }}</div>
+                @endif
+
+                {{-- Flat/House-specific fields --}}
+                @if(in_array($property->type, ['flat', 'house']))
+                <div class="col-span-2 border-t pt-2 mt-1 text-xs font-semibold text-gray-400 uppercase">Building Details</div>
+                <div class="text-gray-500">Floor</div>
+                <div class="font-medium">{{ $property->floor_number ?? '-' }}</div>
+                <div class="text-gray-500">Total Floors</div>
+                <div class="font-medium">{{ $property->total_floors ?? '-' }}</div>
+                <div class="text-gray-500">Facing</div>
+                <div class="font-medium">{{ $property->facing ? ucfirst($property->facing) : '-' }}</div>
+                <div class="text-gray-500">Parking</div>
+                <div class="font-medium">{{ $property->parking ? ucfirst($property->parking) : '-' }}</div>
+                <div class="text-gray-500">Age of Property</div>
+                <div class="font-medium">{{ $property->age_of_property ? $property->age_of_property . ' years' : '-' }}</div>
+                @endif
+
+                {{-- Commercial-specific fields --}}
+                @if($property->type === 'commercial')
+                <div class="col-span-2 border-t pt-2 mt-1 text-xs font-semibold text-gray-400 uppercase">Commercial Details</div>
+                <div class="text-gray-500">Sub Type</div>
+                <div class="font-medium">{{ $property->property_sub_type ? ucfirst($property->property_sub_type) : '-' }}</div>
+                <div class="text-gray-500">Parking Spaces</div>
+                <div class="font-medium">{{ $property->parking_spaces ?? '-' }}</div>
+                <div class="text-gray-500">Power Backup</div>
+                <div class="font-medium">{{ $property->power_backup === true ? 'Yes' : ($property->power_backup === false ? 'No' : '-') }}</div>
+                <div class="text-gray-500">Washrooms</div>
+                <div class="font-medium">{{ $property->washrooms ?? '-' }}</div>
+                <div class="text-gray-500">Pantry</div>
+                <div class="font-medium">{{ $property->pantry === true ? 'Yes' : ($property->pantry === false ? 'No' : '-') }}</div>
+                @endif
+
+                {{-- Land-specific fields --}}
+                @if($property->type === 'land')
+                <div class="col-span-2 border-t pt-2 mt-1 text-xs font-semibold text-gray-400 uppercase">Plot Details</div>
+                <div class="text-gray-500">Plot Type</div>
+                <div class="font-medium">{{ $property->plot_type ? ucfirst($property->plot_type) : '-' }}</div>
+                <div class="text-gray-500">Zoning</div>
+                <div class="font-medium">{{ $property->zoning ?? '-' }}</div>
+                <div class="text-gray-500">Frontage</div>
+                <div class="font-medium">{{ $property->frontage ? $property->frontage . ' ft' : '-' }}</div>
+                <div class="text-gray-500">Depth</div>
+                <div class="font-medium">{{ $property->depth ? $property->depth . ' ft' : '-' }}</div>
+                <div class="text-gray-500">Access Road</div>
+                <div class="font-medium">{{ $property->access_road === true ? 'Yes' : ($property->access_road === false ? 'No' : '-') }}</div>
+                <div class="text-gray-500">Boundary Wall</div>
+                <div class="font-medium">{{ $property->boundary_wall === true ? 'Yes' : ($property->boundary_wall === false ? 'No' : '-') }}</div>
+                <div class="text-gray-500">Gated Community</div>
+                <div class="font-medium">{{ $property->gated_community === true ? 'Yes' : ($property->gated_community === false ? 'No' : '-') }}</div>
                 @endif
             </div>
         </div>

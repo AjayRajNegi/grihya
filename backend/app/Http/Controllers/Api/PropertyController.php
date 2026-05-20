@@ -31,7 +31,7 @@ class PropertyController extends Controller
             });
         }
 
-        if (!$request->user()) { 
+        if (!$request->user() || !in_array($request->user()->role, ['owner', 'broker', 'builder', 'admin'])) {
             $q->where('status', 'active');
         }
 
@@ -108,6 +108,16 @@ class PropertyController extends Controller
 
         if ($userId = $request->query('user_id')) {
             $q->where('user_id', (int) $userId);
+        }
+
+        if ($subType = $request->query('property_sub_type')) {
+            $q->where('property_sub_type', $subType);
+        }
+        if ($plotType = $request->query('plot_type')) {
+            $q->where('plot_type', $plotType);
+        }
+        if ($sharingType = $request->query('sharing_type')) {
+            $q->where('sharing_type', $sharingType);
         }
 
         $lat = $request->query('lat');
@@ -276,14 +286,33 @@ class PropertyController extends Controller
                 'formatted_address'   => 'nullable|string|max:512',
                 'location_components' => 'nullable|json',
                 'location_tokens'     => 'nullable|string',
-                // NEW: allow passing status but default to active if not provided
-                'status'              => 'sometimes|in:pending,active',
-                // NEW optional fields
+                // optional fields
                 'available_immediately' => 'nullable|boolean',
                 'available_from_date'   => 'nullable|date',
                 'ready_to_move'         => 'nullable|boolean',
                 'possession_date'       => 'nullable|date',
                 'preferred_tenants'     => 'nullable|in:family,bachelor,both',
+                // category-specific fields
+                'sharing_type'       => 'nullable|in:single,double,triple',
+                'food_included'      => 'nullable|boolean',
+                'notice_period'      => 'nullable|string|max:255',
+                'floor_number'       => 'nullable|integer|min:0',
+                'total_floors'       => 'nullable|integer|min:1',
+                'facing'             => 'nullable|in:north,south,east,west,northeast,northwest,southeast,southwest',
+                'parking'            => 'nullable|in:none,covered,open,both',
+                'age_of_property'    => 'nullable|integer|min:0',
+                'property_sub_type'  => 'nullable|in:office,shop,warehouse,factory,coworking',
+                'parking_spaces'     => 'nullable|integer|min:0',
+                'power_backup'       => 'nullable|boolean',
+                'washrooms'          => 'nullable|integer|min:0',
+                'pantry'             => 'nullable|boolean',
+                'plot_type'          => 'nullable|in:residential,commercial,agricultural,farmhouse',
+                'zoning'             => 'nullable|string|max:255',
+                'frontage'           => 'nullable|numeric|min:0',
+                'depth'              => 'nullable|numeric|min:0',
+                'access_road'        => 'nullable|boolean',
+                'boundary_wall'      => 'nullable|boolean',
+                'gated_community'    => 'nullable|boolean',
             ], [
                 'images.*.file'      => 'The :nth image must be a valid file.',
                 'images.*.mimetypes' => 'The :nth image must be one of: JPEG, PNG, WEBP, AVIF, HEIC, HEIF, GIF, BMP, or TIFF.',
@@ -387,7 +416,27 @@ class PropertyController extends Controller
                 'ready_to_move'         => array_key_exists('ready_to_move', $data) ? (bool)$data['ready_to_move'] : null,
                 'possession_date'       => $data['possession_date'] ?? null,
                 'preferred_tenants'     => $data['preferred_tenants'] ?? null,
-                'status' => $data['status'] ?? 'active',
+                'status' => 'pending',
+                'sharing_type'       => $data['sharing_type'] ?? null,
+                'food_included'      => array_key_exists('food_included', $data) ? (bool)$data['food_included'] : null,
+                'notice_period'      => $data['notice_period'] ?? null,
+                'floor_number'       => $data['floor_number'] ?? null,
+                'total_floors'       => $data['total_floors'] ?? null,
+                'facing'             => $data['facing'] ?? null,
+                'parking'            => $data['parking'] ?? null,
+                'age_of_property'    => $data['age_of_property'] ?? null,
+                'property_sub_type'  => $data['property_sub_type'] ?? null,
+                'parking_spaces'     => $data['parking_spaces'] ?? null,
+                'power_backup'       => array_key_exists('power_backup', $data) ? (bool)$data['power_backup'] : null,
+                'washrooms'          => $data['washrooms'] ?? null,
+                'pantry'             => array_key_exists('pantry', $data) ? (bool)$data['pantry'] : null,
+                'plot_type'          => $data['plot_type'] ?? null,
+                'zoning'             => $data['zoning'] ?? null,
+                'frontage'           => $data['frontage'] ?? null,
+                'depth'              => $data['depth'] ?? null,
+                'access_road'        => array_key_exists('access_road', $data) ? (bool)$data['access_road'] : null,
+                'boundary_wall'      => array_key_exists('boundary_wall', $data) ? (bool)$data['boundary_wall'] : null,
+                'gated_community'    => array_key_exists('gated_community', $data) ? (bool)$data['gated_community'] : null,
             ]);
 
             return response()->json($doc, 201);
@@ -416,10 +465,18 @@ class PropertyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, string $id)
     {
         $doc = Property::with('user:id,name,phone,email,role')->find($id);
         if (!$doc) return response()->json(['message' => 'Not found'], 404);
+
+        if ($doc->status !== 'active') {
+            $user = $request->user();
+            if (!$user || ($doc->user_id !== $user->id && ($user->role ?? '') !== 'admin')) {
+                return response()->json(['message' => 'Not found'], 404);
+            }
+        }
+
         return response()->json($doc);
     }
 
@@ -429,6 +486,7 @@ class PropertyController extends Controller
 
         $q = Property::query()
             ->with('user:id,name,phone,email,role')
+            ->where('status', 'active')
             ->select('properties.*')
             ->selectRaw("
                 (
@@ -469,10 +527,15 @@ class PropertyController extends Controller
 
         if ($status === 'active') {
             $q->where('status', 'active');
+        } elseif ($status === 'pending') {
+            $q->where('status', 'pending');
+        } elseif ($status === 'rejected') {
+            $q->where('status', 'rejected');
         } elseif ($status === 'inactive') {
-            // Inactive = anything not 'active' (including null/pending)
             $q->where(function ($w) {
-                $w->whereNull('status')->orWhere('status', '!=', 'active');
+                $w->whereNull('status')
+                    ->orWhere('status', 'pending')
+                    ->orWhere('status', 'rejected');
             });
         }
 
@@ -571,12 +634,33 @@ class PropertyController extends Controller
                 'location_components' => 'nullable|json',
                 'location_tokens'     => 'nullable|string',
                 'status' => 'sometimes|in:pending,active',
-                // NEW optional fields
+                // optional fields
                 'available_immediately' => 'nullable|boolean',
                 'available_from_date'   => 'nullable|date',
                 'ready_to_move'         => 'nullable|boolean',
                 'possession_date'       => 'nullable|date',
                 'preferred_tenants'     => 'nullable|in:family,bachelor,both',
+                // category-specific fields
+                'sharing_type'       => 'nullable|in:single,double,triple',
+                'food_included'      => 'nullable|boolean',
+                'notice_period'      => 'nullable|string|max:255',
+                'floor_number'       => 'nullable|integer|min:0',
+                'total_floors'       => 'nullable|integer|min:1',
+                'facing'             => 'nullable|in:north,south,east,west,northeast,northwest,southeast,southwest',
+                'parking'            => 'nullable|in:none,covered,open,both',
+                'age_of_property'    => 'nullable|integer|min:0',
+                'property_sub_type'  => 'nullable|in:office,shop,warehouse,factory,coworking',
+                'parking_spaces'     => 'nullable|integer|min:0',
+                'power_backup'       => 'nullable|boolean',
+                'washrooms'          => 'nullable|integer|min:0',
+                'pantry'             => 'nullable|boolean',
+                'plot_type'          => 'nullable|in:residential,commercial,agricultural,farmhouse',
+                'zoning'             => 'nullable|string|max:255',
+                'frontage'           => 'nullable|numeric|min:0',
+                'depth'              => 'nullable|numeric|min:0',
+                'access_road'        => 'nullable|boolean',
+                'boundary_wall'      => 'nullable|boolean',
+                'gated_community'    => 'nullable|boolean',
             ], [
                 'images.*.file'      => 'The :nth image must be a valid file.',
                 'images.*.mimetypes' => 'The :nth image must be one of: JPEG, PNG, WEBP, AVIF, HEIC, HEIF, GIF, BMP, or TIFF.',
@@ -684,7 +768,27 @@ class PropertyController extends Controller
                 'ready_to_move'         => array_key_exists('ready_to_move', $data) ? (bool)$data['ready_to_move'] : $property->ready_to_move,
                 'possession_date'       => array_key_exists('possession_date', $data) ? $data['possession_date'] : $property->possession_date,
                 'preferred_tenants'     => array_key_exists('preferred_tenants', $data) ? $data['preferred_tenants'] : $property->preferred_tenants,
-                'status' => $data['status'] ?? $property->status,
+                'sharing_type'       => $data['sharing_type'] ?? $property->sharing_type,
+                'food_included'      => array_key_exists('food_included', $data) ? (bool)$data['food_included'] : $property->food_included,
+                'notice_period'      => $data['notice_period'] ?? $property->notice_period,
+                'floor_number'       => $data['floor_number'] ?? $property->floor_number,
+                'total_floors'       => $data['total_floors'] ?? $property->total_floors,
+                'facing'             => $data['facing'] ?? $property->facing,
+                'parking'            => $data['parking'] ?? $property->parking,
+                'age_of_property'    => $data['age_of_property'] ?? $property->age_of_property,
+                'property_sub_type'  => $data['property_sub_type'] ?? $property->property_sub_type,
+                'parking_spaces'     => $data['parking_spaces'] ?? $property->parking_spaces,
+                'power_backup'       => array_key_exists('power_backup', $data) ? (bool)$data['power_backup'] : $property->power_backup,
+                'washrooms'          => $data['washrooms'] ?? $property->washrooms,
+                'pantry'             => array_key_exists('pantry', $data) ? (bool)$data['pantry'] : $property->pantry,
+                'plot_type'          => $data['plot_type'] ?? $property->plot_type,
+                'zoning'             => $data['zoning'] ?? $property->zoning,
+                'frontage'           => $data['frontage'] ?? $property->frontage,
+                'depth'              => $data['depth'] ?? $property->depth,
+                'access_road'        => array_key_exists('access_road', $data) ? (bool)$data['access_road'] : $property->access_road,
+                'boundary_wall'      => array_key_exists('boundary_wall', $data) ? (bool)$data['boundary_wall'] : $property->boundary_wall,
+                'gated_community'    => array_key_exists('gated_community', $data) ? (bool)$data['gated_community'] : $property->gated_community,
+                'status' => $property->status === 'rejected' ? 'pending' : ($data['status'] ?? $property->status),
             ]);
 
             return response()->json($property->refresh(), 200);

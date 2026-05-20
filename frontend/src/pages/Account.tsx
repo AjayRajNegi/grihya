@@ -51,7 +51,7 @@ type ApiProperty = {
   price: number;
   location: string;
   images?: string[] | null;
-  status?: "pending" | "active" | null;
+  status?: "pending" | "active" | "rejected" | null;
   created_at: string;
 };
 
@@ -125,7 +125,7 @@ const Account: React.FC = () => {
     title?: string;
   }>({ open: false });
   const [statusFilter, setStatusFilter] = useState<
-    "all" | "active" | "inactive"
+    "all" | "active" | "inactive" | "rejected"
   >("all");
 
   const role = (user?.role || "tenant").toLowerCase();
@@ -1058,7 +1058,7 @@ const Account: React.FC = () => {
 
                   {/* Status Filter */}
                   <div className="inline-flex w-fit rounded-[8px] border bg-white p-1 shadow-sm">
-                    {["all", "active", "inactive"].map((s) => (
+                    {["all", "active", "inactive", "rejected"].map((s) => (
                       <button
                         key={s}
                         type="button"
@@ -1139,12 +1139,16 @@ const Account: React.FC = () => {
                                   className={`absolute left-3 top-3 z-10 rounded-full px-3 py-1 text-xs font-semibold shadow ${
                                     p.status === "active"
                                       ? "bg-green-600 text-white"
-                                      : "bg-gray-600 text-white"
+                                      : p.status === "rejected"
+                                        ? "bg-red-600 text-white"
+                                        : "bg-yellow-500 text-white"
                                   }`}
                                 >
                                   {p.status === "active"
                                     ? "Active"
-                                    : "Inactive"}
+                                    : p.status === "rejected"
+                                      ? "Rejected"
+                                      : "Pending Review"}
                                 </span>
                               )}
 
@@ -1186,36 +1190,44 @@ const Account: React.FC = () => {
 
                                   {menuOpenId === String(p.id) && (
                                     <div
-                                      className="absolute right-0 z-20 mt-1 w-36 overflow-hidden rounded-[8px] border bg-white shadow-lg"
+                                      className="absolute right-0 z-20 mt-1 w-48 overflow-hidden rounded-[8px] border bg-white shadow-lg"
                                       onClick={(e) => e.stopPropagation()}
                                     >
-                                      <button
-                                        type="button"
-                                        disabled={
-                                          statusSavingId === String(p.id) ||
-                                          p.status === "active"
-                                        }
-                                        onClick={() =>
-                                          handleSetStatus(p.id, "active")
-                                        }
-                                        className="block w-full px-3 py-2 text-left text-sm hover:bg-gray-50 disabled:opacity-60"
-                                      >
-                                        Active
-                                      </button>
-                                      <button
-                                        type="button"
-                                        disabled={
-                                          statusSavingId === String(p.id) ||
-                                          p.status === "pending" ||
-                                          p.status === null
-                                        }
-                                        onClick={() =>
-                                          handleSetStatus(p.id, "pending")
-                                        }
-                                        className="block w-full px-3 py-2 text-left text-sm hover:bg-gray-50 disabled:opacity-60"
-                                      >
-                                        Inactive
-                                      </button>
+                                      {p.status === "rejected" ? (
+                                        <div className="px-3 py-2 text-xs text-red-600">
+                                          This property was rejected. Please edit and resubmit.
+                                        </div>
+                                      ) : (
+                                        <>
+                                          <button
+                                            type="button"
+                                            disabled={
+                                              statusSavingId === String(p.id) ||
+                                              p.status === "active"
+                                            }
+                                            onClick={() =>
+                                              handleSetStatus(p.id, "active")
+                                            }
+                                            className="block w-full px-3 py-2 text-left text-sm hover:bg-gray-50 disabled:opacity-60"
+                                          >
+                                            Active
+                                          </button>
+                                          <button
+                                            type="button"
+                                            disabled={
+                                              statusSavingId === String(p.id) ||
+                                              p.status === "pending" ||
+                                              p.status === null
+                                            }
+                                            onClick={() =>
+                                              handleSetStatus(p.id, "pending")
+                                            }
+                                            className="block w-full px-3 py-2 text-left text-sm hover:bg-gray-50 disabled:opacity-60"
+                                          >
+                                            Inactive
+                                          </button>
+                                        </>
+                                      )}
                                     </div>
                                   )}
                                 </div>

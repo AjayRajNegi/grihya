@@ -88,6 +88,28 @@ type ExtraFields = {
   ready_to_move?: boolean | null;
   possession_date?: string | null; // YYYY-MM-DD
   preferred_tenants?: "family" | "bachelor" | "both" | null;
+  sharing_type?: string;
+  food_included?: boolean | null;
+  notice_period?: string;
+  floor_number?: number | null;
+  total_floors?: number | null;
+  facing?: string;
+  parking?: string;
+  age_of_property?: number | null;
+  property_sub_type?: string;
+  parking_spaces?: number | null;
+  power_backup?: boolean | null;
+  washrooms?: number | null;
+  pantry?: boolean | null;
+  plot_type?: string;
+  zoning?: string;
+  frontage?: number | null;
+  depth?: number | null;
+  access_road?: boolean | null;
+  boundary_wall?: boolean | null;
+  gated_community?: boolean | null;
+  rejection_reason?: string;
+  status?: string | null;
 };
 
 type ViewProperty = BaseProperty & ExtraFields;
@@ -117,6 +139,29 @@ type ApiProperty = {
   ready_to_move?: boolean | number | null;
   possession_date?: string | null;
   preferred_tenants?: "family" | "bachelor" | "both" | null;
+
+  // Category-specific fields
+  sharing_type?: string | null;
+  food_included?: boolean | number | null;
+  notice_period?: string | null;
+  floor_number?: number | string | null;
+  total_floors?: number | string | null;
+  facing?: string | null;
+  parking?: string | null;
+  age_of_property?: number | string | null;
+  property_sub_type?: string | null;
+  parking_spaces?: number | string | null;
+  power_backup?: boolean | number | null;
+  washrooms?: number | string | null;
+  pantry?: boolean | number | null;
+  plot_type?: string | null;
+  zoning?: string | null;
+  frontage?: number | string | null;
+  depth?: number | string | null;
+  access_road?: boolean | number | null;
+  boundary_wall?: boolean | number | null;
+  gated_community?: boolean | number | null;
+  rejection_reason?: string | null;
 
   status?: string | null;
   user?: ApiUser | null;
@@ -161,6 +206,30 @@ const toProperty = (p: ApiProperty): ViewProperty => {
     possession_date: p.possession_date ?? null,
     preferred_tenants: (p.preferred_tenants ??
       null) as ExtraFields["preferred_tenants"],
+
+    // Category-specific fields
+    sharing_type: p.sharing_type ?? undefined,
+    food_included: asBool(p.food_included),
+    notice_period: p.notice_period ?? undefined,
+    floor_number: p.floor_number != null ? Number(p.floor_number) : null,
+    total_floors: p.total_floors != null ? Number(p.total_floors) : null,
+    facing: p.facing ?? undefined,
+    parking: p.parking ?? undefined,
+    age_of_property: p.age_of_property != null ? Number(p.age_of_property) : null,
+    property_sub_type: p.property_sub_type ?? undefined,
+    parking_spaces: p.parking_spaces != null ? Number(p.parking_spaces) : null,
+    power_backup: asBool(p.power_backup),
+    washrooms: p.washrooms != null ? Number(p.washrooms) : null,
+    pantry: asBool(p.pantry),
+    plot_type: p.plot_type ?? undefined,
+    zoning: p.zoning ?? undefined,
+    frontage: p.frontage != null ? Number(p.frontage) : null,
+    depth: p.depth != null ? Number(p.depth) : null,
+    access_road: asBool(p.access_road),
+    boundary_wall: asBool(p.boundary_wall),
+    gated_community: asBool(p.gated_community),
+    rejection_reason: p.rejection_reason ?? undefined,
+    status: p.status ?? null,
   };
 };
 
@@ -409,6 +478,22 @@ const PropertyDetail: React.FC = () => {
             </div>
           </div>
 
+          {/* Status Banner for non-active properties */}
+          {property.status && property.status !== 'active' && (
+            <div className={`mb-6 rounded-lg border px-4 py-3 text-sm ${
+              property.status === 'rejected'
+                ? 'border-red-200 bg-red-50 text-red-700'
+                : 'border-yellow-200 bg-yellow-50 text-yellow-700'
+            }`}>
+              {property.status === 'rejected'
+                ? '⚠️ This property was rejected. Please edit and resubmit for review.'
+                : '⏳ This property is pending admin approval and is not visible to other users.'}
+              {property.status === 'rejected' && property.rejection_reason && (
+                <div className="mt-1 text-xs">Reason: {property.rejection_reason}</div>
+              )}
+            </div>
+          )}
+
           {/* Gallery */}
           <PropertyGallery
             images={galleryImages}
@@ -590,6 +675,223 @@ const PropertyDetail: React.FC = () => {
                         </div>
                       </div>
                     </div>
+
+                    {/* PG-specific fields */}
+                    {property.type === 'pg' && property.sharing_type && (
+                      <div className="flex items-start gap-4">
+                        <BedIcon className="h-6 w-6 text-[#2DB8D1]" />
+                        <div>
+                          <div className="text-sm text-gray-500">Sharing</div>
+                          <div className="text-lg font-medium capitalize text-gray-900">
+                            {property.sharing_type} Sharing
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {property.type === 'pg' && property.food_included !== null && property.food_included !== undefined && (
+                      <div className="flex items-start gap-4">
+                        <CoffeeIcon className="h-6 w-6 text-[#2DB8D1]" />
+                        <div>
+                          <div className="text-sm text-gray-500">Food Included</div>
+                          <div className="text-lg font-medium text-gray-900">
+                            {property.food_included ? 'Yes' : 'No'}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {property.type === 'pg' && property.notice_period && (
+                      <div className="flex items-start gap-4">
+                        <CalendarIcon className="h-6 w-6 text-[#2DB8D1]" />
+                        <div>
+                          <div className="text-sm text-gray-500">Notice Period</div>
+                          <div className="text-lg font-medium text-gray-900">
+                            {property.notice_period}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Flat/House-specific fields */}
+                    {['flat', 'house'].includes(property.type) && property.floor_number != null && (
+                      <div className="flex items-start gap-4">
+                        <BuildingIcon className="h-6 w-6 text-[#2DB8D1]" />
+                        <div>
+                          <div className="text-sm text-gray-500">Floor</div>
+                          <div className="text-lg font-medium text-gray-900">
+                            {property.floor_number}{property.total_floors ? ` / ${property.total_floors}` : ''}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {['flat', 'house'].includes(property.type) && property.facing && (
+                      <div className="flex items-start gap-4">
+                        <HomeIcon className="h-6 w-6 text-[#2DB8D1]" />
+                        <div>
+                          <div className="text-sm text-gray-500">Facing</div>
+                          <div className="text-lg font-medium capitalize text-gray-900">
+                            {property.facing}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {['flat', 'house'].includes(property.type) && property.parking && property.parking !== 'none' && (
+                      <div className="flex items-start gap-4">
+                        <CarIcon className="h-6 w-6 text-[#2DB8D1]" />
+                        <div>
+                          <div className="text-sm text-gray-500">Parking</div>
+                          <div className="text-lg font-medium capitalize text-gray-900">
+                            {property.parking}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {['flat', 'house'].includes(property.type) && property.age_of_property != null && (
+                      <div className="flex items-start gap-4">
+                        <CalendarIcon className="h-6 w-6 text-[#2DB8D1]" />
+                        <div>
+                          <div className="text-sm text-gray-500">Age of Property</div>
+                          <div className="text-lg font-medium text-gray-900">
+                            {property.age_of_property} years
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Commercial-specific fields */}
+                    {property.type === 'commercial' && property.property_sub_type && (
+                      <div className="flex items-start gap-4">
+                        <BuildingIcon className="h-6 w-6 text-[#2DB8D1]" />
+                        <div>
+                          <div className="text-sm text-gray-500">Sub Type</div>
+                          <div className="text-lg font-medium capitalize text-gray-900">
+                            {property.property_sub_type}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {property.type === 'commercial' && property.parking_spaces != null && (
+                      <div className="flex items-start gap-4">
+                        <CarIcon className="h-6 w-6 text-[#2DB8D1]" />
+                        <div>
+                          <div className="text-sm text-gray-500">Parking Spaces</div>
+                          <div className="text-lg font-medium text-gray-900">
+                            {property.parking_spaces}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {property.type === 'commercial' && property.power_backup !== null && property.power_backup !== undefined && (
+                      <div className="flex items-start gap-4">
+                        <CheckIcon className="h-6 w-6 text-[#2DB8D1]" />
+                        <div>
+                          <div className="text-sm text-gray-500">Power Backup</div>
+                          <div className="text-lg font-medium text-gray-900">
+                            {property.power_backup ? 'Yes' : 'No'}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {property.type === 'commercial' && property.washrooms != null && (
+                      <div className="flex items-start gap-4">
+                        <BathIcon className="h-6 w-6 text-[#2DB8D1]" />
+                        <div>
+                          <div className="text-sm text-gray-500">Washrooms</div>
+                          <div className="text-lg font-medium text-gray-900">
+                            {property.washrooms}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {property.type === 'commercial' && property.pantry !== null && property.pantry !== undefined && (
+                      <div className="flex items-start gap-4">
+                        <KitchenIcon className="h-6 w-6 text-[#2DB8D1]" />
+                        <div>
+                          <div className="text-sm text-gray-500">Pantry</div>
+                          <div className="text-lg font-medium text-gray-900">
+                            {property.pantry ? 'Yes' : 'No'}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Land-specific fields */}
+                    {property.type === 'land' && property.plot_type && (
+                      <div className="flex items-start gap-4">
+                        <SquareIcon className="h-6 w-6 text-[#2DB8D1]" />
+                        <div>
+                          <div className="text-sm text-gray-500">Plot Type</div>
+                          <div className="text-lg font-medium capitalize text-gray-900">
+                            {property.plot_type}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {property.type === 'land' && property.zoning && (
+                      <div className="flex items-start gap-4">
+                        <HomeIcon className="h-6 w-6 text-[#2DB8D1]" />
+                        <div>
+                          <div className="text-sm text-gray-500">Zoning</div>
+                          <div className="text-lg font-medium capitalize text-gray-900">
+                            {property.zoning}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {property.type === 'land' && property.frontage != null && (
+                      <div className="flex items-start gap-4">
+                        <SquareIcon className="h-6 w-6 text-[#2DB8D1]" />
+                        <div>
+                          <div className="text-sm text-gray-500">Frontage</div>
+                          <div className="text-lg font-medium text-gray-900">
+                            {property.frontage} ft
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {property.type === 'land' && property.depth != null && (
+                      <div className="flex items-start gap-4">
+                        <SquareIcon className="h-6 w-6 text-[#2DB8D1]" />
+                        <div>
+                          <div className="text-sm text-gray-500">Depth</div>
+                          <div className="text-lg font-medium text-gray-900">
+                            {property.depth} ft
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {property.type === 'land' && property.access_road !== null && property.access_road !== undefined && (
+                      <div className="flex items-start gap-4">
+                        <CheckIcon className="h-6 w-6 text-[#2DB8D1]" />
+                        <div>
+                          <div className="text-sm text-gray-500">Access Road</div>
+                          <div className="text-lg font-medium text-gray-900">
+                            {property.access_road ? 'Yes' : 'No'}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {property.type === 'land' && property.boundary_wall !== null && property.boundary_wall !== undefined && (
+                      <div className="flex items-start gap-4">
+                        <ShieldIcon className="h-6 w-6 text-[#2DB8D1]" />
+                        <div>
+                          <div className="text-sm text-gray-500">Boundary Wall</div>
+                          <div className="text-lg font-medium text-gray-900">
+                            {property.boundary_wall ? 'Yes' : 'No'}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {property.type === 'land' && property.gated_community !== null && property.gated_community !== undefined && (
+                      <div className="flex items-start gap-4">
+                        <ShieldIcon className="h-6 w-6 text-[#2DB8D1]" />
+                        <div>
+                          <div className="text-sm text-gray-500">Gated Community</div>
+                          <div className="text-lg font-medium text-gray-900">
+                            {property.gated_community ? 'Yes' : 'No'}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Description */}

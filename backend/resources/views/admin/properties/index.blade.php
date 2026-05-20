@@ -10,6 +10,7 @@
     <div class="bg-white rounded-lg shadow px-4 py-2 text-sm">Total: <span class="font-semibold">{{ number_format($totalProperties) }}</span></div>
     <div class="bg-white rounded-lg shadow px-4 py-2 text-sm">Active: <span class="font-semibold text-green-600">{{ number_format($activeProperties) }}</span></div>
     <div class="bg-white rounded-lg shadow px-4 py-2 text-sm">Pending: <span class="font-semibold text-yellow-600">{{ number_format($pendingProperties) }}</span></div>
+    <div class="bg-white rounded-lg shadow px-4 py-2 text-sm">Rejected: <span class="font-semibold text-red-600">{{ number_format($rejectedProperties) }}</span></div>
   </div>
 </div>
 
@@ -48,7 +49,7 @@
       <label class="text-sm text-gray-600">Status</label>
       <select name="status" class="mt-1 w-full rounded border-gray-300 focus:ring-indigo-600 focus:border-indigo-600">
         <option value="">Any</option>
-        @foreach(['active','pending'] as $s)
+        @foreach(['active','pending','rejected'] as $s)
         <option value="{{ $s }}" @selected(request('status')===$s)>{{ ucfirst($s) }}</option>
         @endforeach
       </select>
@@ -123,9 +124,6 @@
       @php
       $imgs = $prop->images ?? [];
       $thumb = $imgs[0] ?? null;
-      <!-- $thumbUrl = $thumb
-      ? (preg_match('/^https?:/i', $thumb) ? $thumb : asset('storage/' . ltrim($thumb, '/')))
-      : 'https://via.placeholder.com/120x80?text=IMG'; -->
       $thumbUrl = $thumb
     ? (preg_match('/^https?:/i', $thumb)
         ? str_replace('/storage/', '/public/storage/', $thumb)
@@ -162,7 +160,7 @@
         </td>
         <td class="px-4 py-3 font-semibold text-indigo-700">₹{{ number_format($prop->price) }}</td>
         <td class="px-4 py-3">
-          <span class="inline-flex items-center px-2 py-0.5 rounded bg-{{ $prop->status === 'active' ? 'green' : 'yellow' }}-100 text-{{ $prop->status === 'active' ? 'green' : 'yellow' }}-700">
+          <span class="inline-flex items-center px-2 py-0.5 rounded bg-{{ $prop->status === 'active' ? 'green' : ($prop->status === 'rejected' ? 'red' : 'yellow') }}-100 text-{{ $prop->status === 'active' ? 'green' : ($prop->status === 'rejected' ? 'red' : 'yellow') }}-700">
             {{ ucfirst($prop->status) }}
           </span>
         </td>

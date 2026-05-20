@@ -7,6 +7,9 @@ use App\Models\User;
 use App\Models\Property;
 use App\Models\BannedAccount;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PropertyApprovedMail;
+use App\Mail\PropertyRejectedMail;
 use Illuminate\Http\RedirectResponse;
 
 class AdminDashboardController extends Controller
@@ -38,7 +41,8 @@ class AdminDashboardController extends Controller
         $totalProperties   = Property::count();
         $activeProperties  = Property::where('status', 'active')->count();
         $pendingProperties = Property::where('status', 'pending')->count();
-        $inactiveProperties = $pendingProperties; // treat 'pending' as 'inactive' for KPI
+        $rejectedProperties = Property::where('status', 'rejected')->count();
+        $inactiveProperties = $pendingProperties + $rejectedProperties;
 
         $propertiesByType = Property::select('type', DB::raw('COUNT(*) as count'))
             ->groupBy('type')->pluck('count', 'type')->toArray();
@@ -79,8 +83,8 @@ class AdminDashboardController extends Controller
             'data'   => array_values($propertiesByFor),
         ];
         $chartStatus = [
-            'labels' => ['Active', 'Pending'],
-            'data'   => [$activeProperties, $pendingProperties],
+            'labels' => ['Active', 'Pending', 'Rejected'],
+            'data'   => [$activeProperties, $pendingProperties, $rejectedProperties],
         ];
 
         return view('admin.dashboard.overview', compact(
@@ -95,6 +99,7 @@ class AdminDashboardController extends Controller
             'activeProperties',
             'inactiveProperties',
             'pendingProperties',
+            'rejectedProperties',
             'latestUsers',
             'latestProperties',
             'chartUsersByRole',
@@ -187,12 +192,14 @@ class AdminDashboardController extends Controller
         $totalProperties   = Property::count();
         $activeProperties  = Property::where('status', 'active')->count();
         $pendingProperties = Property::where('status', 'pending')->count();
+        $rejectedProperties = Property::where('status', 'rejected')->count();
 
         return view('admin.properties.index', compact(
             'properties',
             'totalProperties',
             'activeProperties',
-            'pendingProperties'
+            'pendingProperties',
+            'rejectedProperties'
         ));
     }
 
@@ -300,6 +307,53 @@ class AdminDashboardController extends Controller
         });
 
         return redirect()->route('all-users')->with('success', 'User banned and removed successfully.');
+    }
+
+    public function approve(Property $property): RedirectResponse
+    {
+        $property->status = 'active';
+        $property->rejection_reason = null;
+        $property->save();
+
+        if ($property->user && $property->user->email) {
+            Mail::to($property->user->email)->send(
+                new PropertyApprovedMail(
+                    $property->user->name,
+                    $property->title,
+                    $property->id
+                )
+            );
+        }
+
+        return redirect()
+            ->route('property.detail', $property->id)
+            ->with('success', 'Property approved successfully.');
+    }
+
+    public function reject(Request $request, Property $property): RedirectResponse
+    {
+        $request->validate([
+            'rejection_reason' => 'required|string|max:1000',
+        ]);
+
+        $property->status = 'rejected';
+        $property->rejection_reason = $request->input('rejection_reason');
+        $property->save();
+
+        if ($property->user && $property->user->email) {
+            Mail::to($property->user->email)->send(
+                new PropertyRejectedMail(
+                    $property->user->name,
+                    $property->title,
+                    $property->id,
+                    $request->input('rejection_reason')
+                )
+            );
+        }
+
+        return redirect()
+            ->route('property.detail', $property->id)
+            ->with('success', 'Property rejected.');
     }
 
     public function destroy(Property $property): RedirectResponse

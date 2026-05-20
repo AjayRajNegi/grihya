@@ -54,6 +54,26 @@ const ListProperty: React.FC = () => {
     readyToMove: "" | "yes" | "no";
     possessionDate: string; // YYYY-MM-DD
     preferredTenants: "" | "family" | "bachelor" | "both";
+    sharing_type: string;
+    food_included: string;
+    notice_period: string;
+    floor_number: string;
+    total_floors: string;
+    facing: string;
+    parking: string;
+    age_of_property: string;
+    property_sub_type: string;
+    parking_spaces: string;
+    power_backup: string;
+    washrooms: string;
+    pantry: string;
+    plot_type: string;
+    zoning: string;
+    frontage: string;
+    depth: string;
+    access_road: string;
+    boundary_wall: string;
+    gated_community: string;
   }>({
     title: "",
     description: "",
@@ -72,6 +92,26 @@ const ListProperty: React.FC = () => {
     readyToMove: "",
     possessionDate: "",
     preferredTenants: "both",
+    sharing_type: "",
+    food_included: "",
+    notice_period: "",
+    floor_number: "",
+    total_floors: "",
+    facing: "",
+    parking: "",
+    age_of_property: "",
+    property_sub_type: "",
+    parking_spaces: "",
+    power_backup: "",
+    washrooms: "",
+    pantry: "",
+    plot_type: "",
+    zoning: "",
+    frontage: "",
+    depth: "",
+    access_road: "",
+    boundary_wall: "",
+    gated_community: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -93,6 +133,16 @@ const ListProperty: React.FC = () => {
       formData.type === "flat" ||
       formData.type === "house") &&
     formData.for === "rent";
+
+  // Category-specific field visibility
+  const showBedrooms = ['flat', 'house'].includes(formData.type);
+  const showBathrooms = ['pg', 'flat', 'house'].includes(formData.type);
+  const showFurnishing = ['pg', 'flat', 'house'].includes(formData.type);
+  const showAmenities = ['pg', 'flat', 'house'].includes(formData.type);
+  const showSharingType = formData.type === 'pg';
+  const showFloorDetails = ['flat', 'house'].includes(formData.type);
+  const showCommercialFields = formData.type === 'commercial';
+  const showLandFields = formData.type === 'land';
 
   // Google Places selection
   const [pickedPlace, setPickedPlace] = useState<PickedPlace | null>(null);
@@ -199,6 +249,28 @@ const ListProperty: React.FC = () => {
           readyToMove: toYesNo(data.ready_to_move),
           possessionDate: data.possession_date || "",
           preferredTenants: data.preferred_tenants || "both",
+
+          // Category-specific fields
+          sharing_type: data.sharing_type || '',
+          food_included: data.food_included !== null && data.food_included !== undefined ? String(data.food_included) : '',
+          notice_period: data.notice_period || '',
+          floor_number: data.floor_number ? String(data.floor_number) : '',
+          total_floors: data.total_floors ? String(data.total_floors) : '',
+          facing: data.facing || '',
+          parking: data.parking || '',
+          age_of_property: data.age_of_property ? String(data.age_of_property) : '',
+          property_sub_type: data.property_sub_type || '',
+          parking_spaces: data.parking_spaces ? String(data.parking_spaces) : '',
+          power_backup: data.power_backup !== null && data.power_backup !== undefined ? String(data.power_backup) : '',
+          washrooms: data.washrooms ? String(data.washrooms) : '',
+          pantry: data.pantry !== null && data.pantry !== undefined ? String(data.pantry) : '',
+          plot_type: data.plot_type || '',
+          zoning: data.zoning || '',
+          frontage: data.frontage ? String(data.frontage) : '',
+          depth: data.depth ? String(data.depth) : '',
+          access_road: data.access_road !== null && data.access_road !== undefined ? String(data.access_road) : '',
+          boundary_wall: data.boundary_wall !== null && data.boundary_wall !== undefined ? String(data.boundary_wall) : '',
+          gated_community: data.gated_community !== null && data.gated_community !== undefined ? String(data.gated_community) : '',
         });
         setImageFiles([]);
 
@@ -397,6 +469,28 @@ const ListProperty: React.FC = () => {
       if (formData.area.trim())
         form.append("area", String(Number(formData.area.trim())));
       if (formData.furnishing) form.append("furnishing", formData.furnishing);
+
+      // Category-specific fields
+      if (formData.sharing_type) form.append('sharing_type', formData.sharing_type);
+      if (formData.food_included !== '') form.append('food_included', formData.food_included);
+      if (formData.notice_period) form.append('notice_period', formData.notice_period);
+      if (formData.floor_number) form.append('floor_number', formData.floor_number);
+      if (formData.total_floors) form.append('total_floors', formData.total_floors);
+      if (formData.facing) form.append('facing', formData.facing);
+      if (formData.parking) form.append('parking', formData.parking);
+      if (formData.age_of_property) form.append('age_of_property', formData.age_of_property);
+      if (formData.property_sub_type) form.append('property_sub_type', formData.property_sub_type);
+      if (formData.parking_spaces) form.append('parking_spaces', formData.parking_spaces);
+      if (formData.power_backup !== '') form.append('power_backup', formData.power_backup);
+      if (formData.washrooms) form.append('washrooms', formData.washrooms);
+      if (formData.pantry !== '') form.append('pantry', formData.pantry);
+      if (formData.plot_type) form.append('plot_type', formData.plot_type);
+      if (formData.zoning) form.append('zoning', formData.zoning);
+      if (formData.frontage) form.append('frontage', formData.frontage);
+      if (formData.depth) form.append('depth', formData.depth);
+      if (formData.access_road !== '') form.append('access_road', formData.access_road);
+      if (formData.boundary_wall !== '') form.append('boundary_wall', formData.boundary_wall);
+      if (formData.gated_community !== '') form.append('gated_community', formData.gated_community);
 
       // Amenities
       (formData.amenities || []).forEach((amenity, index) => {
@@ -618,10 +712,12 @@ const ListProperty: React.FC = () => {
           <h2 className="mb-2 text-2xl font-bold text-gray-900">
             {isEditing
               ? "Property Updated Successfully!"
-              : "Property Listed Successfully!"}
+              : "Property Submitted Successfully!"}
           </h2>
           <p className="mb-6 text-gray-600">
-            Your property has been submitted for review.
+            {isEditing
+              ? "Your property has been updated successfully."
+              : "Your property has been submitted for admin review. You will be notified once it is approved."}
           </p>
           <p className="text-gray-600">You will be redirected shortly…</p>
         </div>
@@ -1110,6 +1206,7 @@ const ListProperty: React.FC = () => {
 
                   <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
                     {/* Bedrooms */}
+                    {showBedrooms && (
                     <div className="space-y-2">
                       <Label htmlFor="bedrooms">Bedrooms</Label>
                       <Input
@@ -1132,10 +1229,12 @@ const ListProperty: React.FC = () => {
                         </p>
                       )}
                     </div>
+                    )}
 
                     {/* Bathrooms */}
+                    {showBathrooms && (
                     <div className="space-y-2">
-                      <Label htmlFor="bathrooms">Bathrooms</Label>
+                      <Label htmlFor="bathrooms">{formData.type === 'pg' ? 'Shared Bathrooms' : 'Bathrooms'}</Label>
                       <Input
                         disabled={isBusy}
                         type="number"
@@ -1156,6 +1255,7 @@ const ListProperty: React.FC = () => {
                         </p>
                       )}
                     </div>
+                    )}
 
                     {/* Area */}
                     <div className="space-y-2">
@@ -1183,6 +1283,7 @@ const ListProperty: React.FC = () => {
                   </div>
 
                   {/* Furnishing */}
+                  {showFurnishing && (
                   <div className="mt-6 space-y-2">
                     <Label htmlFor="furnishing">Furnishing</Label>
 
@@ -1210,8 +1311,10 @@ const ListProperty: React.FC = () => {
                       </SelectContent>
                     </Select>
                   </div>
+                  )}
                 </div>
 
+                {showAmenities && (
                 <div className="border-t border-gray-200 pt-6">
                   <h2 className="mb-4 text-lg font-semibold text-gray-900">
                     Amenities
@@ -1269,6 +1372,161 @@ const ListProperty: React.FC = () => {
                     </p>
                   )}
                 </div>
+                )}
+
+                {/* PG Details */}
+                {showSharingType && (
+                  <div className="space-y-4 border-t border-gray-200 pt-6">
+                    <h3 className="text-lg font-semibold">PG Details</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>Sharing Type</Label>
+                        <select value={formData.sharing_type} onChange={e => setFormData({...formData, sharing_type: e.target.value})} className="w-full border rounded-md p-2">
+                          <option value="">Select</option>
+                          <option value="single">Single</option>
+                          <option value="double">Double</option>
+                          <option value="triple">Triple</option>
+                        </select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Food Included</Label>
+                        <select value={formData.food_included} onChange={e => setFormData({...formData, food_included: e.target.value})} className="w-full border rounded-md p-2">
+                          <option value="">Select</option>
+                          <option value="true">Yes</option>
+                          <option value="false">No</option>
+                        </select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Notice Period</Label>
+                        <Input placeholder="e.g. 30 days" value={formData.notice_period} onChange={e => setFormData({...formData, notice_period: e.target.value})} />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Building Details (Flat/House) */}
+                {showFloorDetails && (
+                  <div className="space-y-4 border-t border-gray-200 pt-6">
+                    <h3 className="text-lg font-semibold">Building Details</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>Floor Number</Label>
+                        <Input type="number" placeholder="e.g. 3" value={formData.floor_number} onChange={e => setFormData({...formData, floor_number: e.target.value})} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Total Floors</Label>
+                        <Input type="number" placeholder="e.g. 10" value={formData.total_floors} onChange={e => setFormData({...formData, total_floors: e.target.value})} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Facing</Label>
+                        <select value={formData.facing} onChange={e => setFormData({...formData, facing: e.target.value})} className="w-full border rounded-md p-2">
+                          <option value="">Select</option>
+                          <option value="north">North</option><option value="south">South</option>
+                          <option value="east">East</option><option value="west">West</option>
+                          <option value="northeast">North-East</option><option value="northwest">North-West</option>
+                          <option value="southeast">South-East</option><option value="southwest">South-West</option>
+                        </select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Parking</Label>
+                        <select value={formData.parking} onChange={e => setFormData({...formData, parking: e.target.value})} className="w-full border rounded-md p-2">
+                          <option value="">Select</option>
+                          <option value="none">None</option><option value="covered">Covered</option>
+                          <option value="open">Open</option><option value="both">Both</option>
+                        </select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Age of Property (years)</Label>
+                        <Input type="number" placeholder="e.g. 5" value={formData.age_of_property} onChange={e => setFormData({...formData, age_of_property: e.target.value})} />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Commercial Details */}
+                {showCommercialFields && (
+                  <div className="space-y-4 border-t border-gray-200 pt-6">
+                    <h3 className="text-lg font-semibold">Commercial Details</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>Property Sub Type</Label>
+                        <select value={formData.property_sub_type} onChange={e => setFormData({...formData, property_sub_type: e.target.value})} className="w-full border rounded-md p-2">
+                          <option value="">Select</option>
+                          <option value="office">Office</option><option value="shop">Shop</option>
+                          <option value="warehouse">Warehouse</option><option value="factory">Factory</option>
+                          <option value="coworking">Coworking Space</option>
+                        </select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Parking Spaces</Label>
+                        <Input type="number" placeholder="e.g. 5" value={formData.parking_spaces} onChange={e => setFormData({...formData, parking_spaces: e.target.value})} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Power Backup</Label>
+                        <select value={formData.power_backup} onChange={e => setFormData({...formData, power_backup: e.target.value})} className="w-full border rounded-md p-2">
+                          <option value="">Select</option><option value="true">Yes</option><option value="false">No</option>
+                        </select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Washrooms</Label>
+                        <Input type="number" placeholder="e.g. 2" value={formData.washrooms} onChange={e => setFormData({...formData, washrooms: e.target.value})} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Pantry</Label>
+                        <select value={formData.pantry} onChange={e => setFormData({...formData, pantry: e.target.value})} className="w-full border rounded-md p-2">
+                          <option value="">Select</option><option value="true">Yes</option><option value="false">No</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Plot Details (Land) */}
+                {showLandFields && (
+                  <div className="space-y-4 border-t border-gray-200 pt-6">
+                    <h3 className="text-lg font-semibold">Plot Details</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>Plot Type</Label>
+                        <select value={formData.plot_type} onChange={e => setFormData({...formData, plot_type: e.target.value})} className="w-full border rounded-md p-2">
+                          <option value="">Select</option>
+                          <option value="residential">Residential</option><option value="commercial">Commercial</option>
+                          <option value="agricultural">Agricultural</option><option value="farmhouse">Farmhouse</option>
+                        </select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Zoning</Label>
+                        <Input placeholder="e.g. R1 Residential" value={formData.zoning} onChange={e => setFormData({...formData, zoning: e.target.value})} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Frontage (ft)</Label>
+                        <Input type="number" placeholder="e.g. 40" value={formData.frontage} onChange={e => setFormData({...formData, frontage: e.target.value})} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Depth (ft)</Label>
+                        <Input type="number" placeholder="e.g. 60" value={formData.depth} onChange={e => setFormData({...formData, depth: e.target.value})} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Access Road</Label>
+                        <select value={formData.access_road} onChange={e => setFormData({...formData, access_road: e.target.value})} className="w-full border rounded-md p-2">
+                          <option value="">Select</option><option value="true">Yes</option><option value="false">No</option>
+                        </select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Boundary Wall</Label>
+                        <select value={formData.boundary_wall} onChange={e => setFormData({...formData, boundary_wall: e.target.value})} className="w-full border rounded-md p-2">
+                          <option value="">Select</option><option value="true">Yes</option><option value="false">No</option>
+                        </select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Gated Community</Label>
+                        <select value={formData.gated_community} onChange={e => setFormData({...formData, gated_community: e.target.value})} className="w-full border rounded-md p-2">
+                          <option value="">Select</option><option value="true">Yes</option><option value="false">No</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 <div className="border-t border-gray-200 pt-6">
                   <h2 className="mb-4 text-lg font-semibold text-gray-900">
