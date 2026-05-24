@@ -244,7 +244,7 @@ function LoginForm({ onSwitch }: LoginProps): JSX.Element {
           <button
             type="button"
             onClick={() => setFpOpen(true)}
-            className="text-sm text-[#2DB8D1] hover:text-[#1f8a78]"
+            className="text-sm text-[#2DB8D1] hover:text-[#2391a5]"
           >
             Forgot password?
           </button>

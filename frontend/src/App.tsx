@@ -25,6 +25,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Contact from "./pages/Contact";
 import LenisProvider from "./components/LenisProvider";
+import ResetPasswordModal from "./pages/auth/ResetPasswordModal";
 
 export function App() {
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
@@ -37,11 +38,15 @@ export function App() {
             <ScrollToTop />
             <div className="flex min-h-screen flex-col bg-gray-50">
               <Routes>
-                <Route
+                {/* <Route
                   path="/auth/forgot-password"
                   element={<ForgotPassword />}
-                />
+                /> */}
                 <Route path="/reset-password" element={<ResetPasswordPage />} />
+                <Route
+                  path="/reset-password-confirm"
+                  element={<ResetPasswordModal />}
+                />
 
                 <Route path="/verify-email" element={<VerifyEmailPage />} />
 
