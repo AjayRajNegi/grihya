@@ -75,30 +75,31 @@ class BlogAdminController extends Controller
 
     public function update(Request $request, Blog $blog)
     {
-        $data = $request->validate([
-            'title'                  => ['sometimes', 'string', 'max:255'],
-            'slug'                   => ['sometimes', 'string', 'max:255', Rule::unique('blogs', 'slug')->ignore($blog->id)],
-            'excerpt'                => ['nullable', 'string', 'max:500'],
+$data = $request->validate([
+    'title'                  => ['sometimes', 'string', 'max:255'],
+    'category'               => ['nullable', 'string', 'max:255'],
+    'slug'                   => ['sometimes', 'string', 'max:255', Rule::unique('blogs', 'slug')->ignore($blog->id)],
+    'excerpt'                => ['nullable', 'string', 'max:500'],
 
-            'content'                => ['sometimes', 'array'],
-            'content.*.type'         => ['required_with:content', Rule::in(['hero', 'heading', 'paragraph', 'image', 'quote', 'callout', 'problem_solution', 'list'])],
-            'content.*.data'         => ['nullable', 'array'],
-            'content.*.data.file'    => ['nullable', 'file', 'image', 'max:5120'],
-            'content.*.data.src_url' => ['nullable', 'string'],
-            'content.*.data.alt'     => ['nullable', 'string', 'max:255'],
-            'content.*.data.caption' => ['nullable', 'string', 'max:255'],
-            'content..data.style' => ['nullable', Rule::in(['ul', 'ol'])],
-            'content..data.items' => ['nullable', 'array'],
-            'content..data.items.' => ['nullable', 'string', 'max:500'],
+    'content'                => ['sometimes', 'array'],
+    'content.*.type'         => ['required_with:content', Rule::in(['hero', 'heading', 'paragraph', 'image', 'quote', 'callout', 'problem_solution', 'list'])],
+    'content.*.data'         => ['nullable', 'array'],
+    'content.*.data.file'    => ['nullable', 'file', 'image', 'max:5120'],
+    'content.*.data.src_url' => ['nullable', 'string'],
+    'content.*.data.alt'     => ['nullable', 'string', 'max:255'],
+    'content.*.data.caption' => ['nullable', 'string', 'max:255'],
+    'content..data.style'    => ['nullable', Rule::in(['ul', 'ol'])],
+    'content..data.items'    => ['nullable', 'array'],
+    'content..data.items.'   => ['nullable', 'string', 'max:500'],
 
-            'cover_image_path'       => ['nullable', 'string', 'max:255'],
-            'cover_image'            => ['nullable', 'image', 'max:5120'],
+    'cover_image_path'       => ['nullable', 'string', 'max:255'],
+    'cover_image'            => ['nullable', 'image', 'max:5120'],
 
-            'status'                 => ['sometimes', Rule::in(['draft', 'published'])],
-            'published_at'           => ['nullable', 'date'],
-            'meta_title'             => ['nullable', 'string', 'max:255'],
-            'meta_description'       => ['nullable', 'string', 'max:160'],
-        ]);
+    'status'                 => ['sometimes', Rule::in(['draft', 'published'])],
+    'published_at'           => ['nullable', 'date'],
+    'meta_title'             => ['nullable', 'string', 'max:255'],
+    'meta_description'       => ['nullable', 'string', 'max:160'],
+]);
 
         if ($request->hasFile('cover_image')) {
             $data['cover_image_path'] = $request->file('cover_image')->store('blog', 'public');

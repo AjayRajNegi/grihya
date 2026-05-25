@@ -111,11 +111,13 @@ const PostCard: React.FC<{ post: Post }> = ({ post }) => {
 
 export default function BlogSection({
   header,
+  category,
   title,
   highlight,
   description,
 }: {
   header?: string;
+  category?: string;
   title: string;
   highlight: string;
   description: string;
@@ -125,19 +127,28 @@ export default function BlogSection({
 
   useEffect(() => {
     let mounted = true;
+
     (async () => {
       try {
-        const res = await apiGet<Post[] | ApiPaginated<Post>>("/posts?limit=4");
+        const res = await apiGet<Post[] | ApiPaginated<Post>>("/posts", {
+          params: {
+            limit: 4,
+            ...(category ? { category } : {}),
+          },
+        });
+
         const list = isPaginated<Post>(res) ? res.data : res;
+
         if (mounted) setPosts(list || []);
       } finally {
         if (mounted) setLoading(false);
       }
     })();
+
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [category]);
 
   const itemVariants: Variants = {
     hidden: { opacity: 0, y: 30 },

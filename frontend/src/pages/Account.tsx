@@ -961,7 +961,7 @@ const Account: React.FC = () => {
                   </div>
 
                   {/* ACTIONS */}
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap items-end gap-3">
                     {!editingProfile ? (
                       <>
                         <button

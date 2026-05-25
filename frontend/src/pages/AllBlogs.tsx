@@ -141,6 +141,7 @@ export default function AllBlogs() {
       <BlogSection
         title="Top Articles on buying a"
         highlight="House"
+        // category="house"
         description="Editors' top picked blogs on House Related Properties"
       />
 

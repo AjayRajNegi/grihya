@@ -16,6 +16,8 @@ class BlogController extends Controller
         $limit = $request->integer('limit', 6);
         $q = trim((string) $request->query('q', ''));
 
+        $category = trim((string) $request->query('category', ''));
+
         $query = Blog::published()->latest('published_at');
 
         if ($q !== '') {
@@ -24,6 +26,10 @@ class BlogController extends Controller
                     ->orWhere('slug', 'like', "%{$q}%")
                     ->orWhere('excerpt', 'like', "%{$q}%");
             });
+        }
+
+        if ($category !== '') {
+            $query->where('category', $category);
         }
 
         $posts = $query->paginate($limit);
@@ -38,92 +44,63 @@ class BlogController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $data = $request->validate([
-            'title'                  => ['required', 'string', 'max:255'],
-            'slug'                   => ['required', 'string', 'max:255', Rule::unique('blogs', 'slug')],
-            'excerpt'                => ['nullable', 'string', 'max:500'],
+{
+    $data = $request->validate([
+        'title'                  => ['required', 'string', 'max:255'],
+        'category'               => ['nullable', 'string', 'max:255'],
+        'slug'                   => ['required', 'string', 'max:255', Rule::unique('blogs', 'slug')],
+        'excerpt'                => ['nullable', 'string', 'max:500'],
 
-            'content'                => ['required', 'array'],
-            'content.*.type'         => ['required', Rule::in(['hero', 'heading', 'paragraph', 'image', 'quote', 'callout', 'problem_solution', 'list'])],
-            'content.*.data'         => ['nullable', 'array'],
-            'content.*.data.file'    => ['nullable', 'file', 'image', 'max:5120'],
-            'content.*.data.src_url' => ['nullable', 'string'],
-            'content.*.data.alt'     => ['nullable', 'string', 'max:255'],
-            'content.*.data.caption' => ['nullable', 'string', 'max:255'],
-            'content..data.style' => ['nullable', Rule::in(['ul', 'ol'])],
-            'content..data.items' => ['nullable', 'array'],
-            'content..data.items.' => ['nullable', 'string', 'max:500'],
+        'content'                => ['required', 'array'],
+        'content.*.type'         => ['required', Rule::in([
+            'hero',
+            'heading',
+            'paragraph',
+            'image',
+            'quote',
+            'callout',
+            'problem_solution',
+            'list'
+        ])],
+        'content.*.data'         => ['nullable', 'array'],
+        'content.*.data.file'    => ['nullable', 'file', 'image', 'max:5120'],
+        'content.*.data.src_url' => ['nullable', 'string'],
+        'content.*.data.alt'     => ['nullable', 'string', 'max:255'],
+        'content.*.data.caption' => ['nullable', 'string', 'max:255'],
+        'content..data.style'    => ['nullable', Rule::in(['ul', 'ol'])],
+        'content..data.items'    => ['nullable', 'array'],
+        'content..data.items.'   => ['nullable', 'string', 'max:500'],
 
-            'cover_image_path'       => ['nullable', 'string', 'max:255'],
-            'cover_image'            => ['nullable', 'image', 'max:5120'],
+        'cover_image_path'       => ['nullable', 'string', 'max:255'],
+        'cover_image'            => ['nullable', 'image', 'max:5120'],
 
-            'status'                 => ['required', Rule::in(['draft', 'published'])],
-            'published_at'           => ['nullable', 'date'],
-            'meta_title'             => ['nullable', 'string', 'max:255'],
-            'meta_description'       => ['nullable', 'string', 'max:160'],
-        ]);
+        'status'                 => ['required', Rule::in(['draft', 'published'])],
+        'published_at'           => ['nullable', 'date'],
+        'meta_title'             => ['nullable', 'string', 'max:255'],
+        'meta_description'       => ['nullable', 'string', 'max:160'],
+    ]);
 
-        if ($request->hasFile('cover_image')) {
-            $data['cover_image_path'] = $request->file('cover_image')->store('blog', 'public');
-        }
-
-        $data['content'] = $this->processBlocks($request);
-
-        $data['likes_count']    = 0;
-        $data['shares_count']   = 0;
-        $data['comments_count'] = 0;
-
-        $blog = Blog::create($data);
-
-        if ($request->expectsJson()) {
-            return new PostResource($blog);
-        }
-
-        return redirect()
-            ->route('admin.submit-blog')
-            ->with('success', 'Blog created successfully!');
+    if ($request->hasFile('cover_image')) {
+        $data['cover_image_path'] = $request->file('cover_image')->store('blog', 'public');
     }
 
-    // public function update(Request $request, Blog $blog)
-    // {
-    //     $data = $request->validate([
-    //         'title'                  => ['sometimes', 'string', 'max:255'],
-    //         'slug'                   => ['sometimes', 'string', 'max:255', Rule::unique('blogs', 'slug')->ignore($blog->id)],
-    //         'excerpt'                => ['nullable', 'string', 'max:500'],
+    $data['content'] = $this->processBlocks($request);
 
-    //         'content'                => ['sometimes', 'array'],
-    //         'content.*.type'         => ['required_with:content', Rule::in(['hero', 'heading', 'paragraph', 'image', 'quote', 'callout', 'problem_solution', 'list'])],
-    //         'content.*.data'         => ['nullable', 'array'],
-    //         'content.*.data.file'    => ['nullable', 'file', 'image', 'max:5120'],
-    //         'content.*.data.src_url' => ['nullable', 'string'],
-    //         'content.*.data.alt'     => ['nullable', 'string', 'max:255'],
-    //         'content.*.data.caption' => ['nullable', 'string', 'max:255'],
-    //         'content..data.style' => ['nullable', Rule::in(['ul', 'ol'])],
-    //         'content..data.items' => ['nullable', 'array'],
-    //         'content..data.items.' => ['nullable', 'string', 'max:500'],
+    $data['likes_count']    = 0;
+    $data['shares_count']   = 0;
+    $data['comments_count'] = 0;
 
-    //         'cover_image_path'       => ['nullable', 'string', 'max:255'],
-    //         'cover_image'            => ['nullable', 'image', 'max:5120'],
+    $blog = Blog::create($data);
 
-    //         'status'                 => ['sometimes', Rule::in(['draft', 'published'])],
-    //         'published_at'           => ['nullable', 'date'],
-    //         'meta_title'             => ['nullable', 'string', 'max:255'],
-    //         'meta_description'       => ['nullable', 'string', 'max:160'],
-    //     ]);
+    if ($request->expectsJson()) {
+        return new PostResource($blog);
+    }
 
-    //     if ($request->hasFile('cover_image')) {
-    //         $data['cover_image_path'] = $request->file('cover_image')->store('blog', 'public');
-    //     }
+    return redirect()
+        ->route('admin.submit-blog')
+        ->with('success', 'Blog created successfully!');
+}
 
-    //     if ($request->has('content')) {
-    //         $data['content'] = $this->processBlocks($request);
-    //     }
-
-    //     $blog->update($data);
-
-    //     return new PostResource($blog);
-    // }
     private function processBlocks(Request $request): array
     {
         $blocks = $request->input('content', []);

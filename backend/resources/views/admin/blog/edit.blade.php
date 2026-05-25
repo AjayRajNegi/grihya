@@ -45,6 +45,15 @@
                 <input type="text" name="slug" value="{{ old('slug', $blog->slug) }}"
                     class="mt-1 w-full rounded border-gray-300 focus:ring-indigo-600 focus:border-indigo-600" required>
             </div>
+             <div>
+                <label class="text-sm text-gray-600">Category</label>
+                <select name="category" required class="mt-1 w-full rounded border-gray-300 focus:ring-indigo-600 focus:border-indigo-600">
+                    <option value="">Select category</option>
+                    <option value="land" {{ old('category') === 'land' ? 'selected' : '' }}>Land</option>
+                    <option value="commercial" {{ old('category') === 'commercial' ? 'selected' : '' }}>Commercial</option>
+                    <option value="house" {{ old('category') === 'house' ? 'selected' : '' }}>House</option>
+                </select>
+            </div>
         </div>
         <div class="mt-4">
             <label class="text-sm text-gray-600">Excerpt</label>

@@ -57,6 +57,7 @@ const Home = () => {
 
       <BlogSection
         title="Top Articles on buying a"
+        category="house"
         highlight="House"
         description="Editors' top picked blogs on House Related Properties"
       />
@@ -123,12 +124,12 @@ const Home = () => {
       />
       <BlogSection
         title="Top Articles on buying an Open Land"
+        category="land"
         highlight="Open Land"
         description="Editors' top picked blogs on Open Land Properties"
       />
       <FeaturedProperties
-        //type="land"
-        type="flat"
+        type="land"
         url="/properties?type=land&page=1"
         desc="Ready to buy a Landquick and easy?"
       />
@@ -173,12 +174,12 @@ const Home = () => {
       />
       <BlogSection
         title="Top Articles on buying an Open Land"
+        category="commercial"
         highlight="Open Land"
         description="Editors' top picked blogs on Open Land Properties"
       />
       <FeaturedProperties
         type="commercial"
-        //type="flat"
         url="/properties?type=commercial&page=1"
         desc="Ready to buy a Commercial Placequick and easy?"
       />
