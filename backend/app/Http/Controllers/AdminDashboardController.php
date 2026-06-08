@@ -315,19 +315,9 @@ class AdminDashboardController extends Controller
         $property->rejection_reason = null;
         $property->save();
 
-        if ($property->user && $property->user->email) {
-            Mail::to($property->user->email)->send(
-                new PropertyApprovedMail(
-                    $property->user->name,
-                    $property->title,
-                    $property->id
-                )
-            );
-        }
 
-        return redirect()
-            ->route('property.detail', $property->id)
-            ->with('success', 'Property approved successfully.');
+        return redirect()->back()->with('success', 'Property accepted.');
+
     }
 
     public function reject(Request $request, Property $property): RedirectResponse
@@ -340,21 +330,8 @@ class AdminDashboardController extends Controller
         $property->rejection_reason = $request->input('rejection_reason');
         $property->save();
 
-        if ($property->user && $property->user->email) {
-            Mail::to($property->user->email)->send(
-                new PropertyRejectedMail(
-                    $property->user->name,
-                    $property->title,
-                    $property->id,
-                    $request->input('rejection_reason')
-                )
-            );
-        }
-
-        return redirect()
-            ->route('property.detail', $property->id)
-            ->with('success', 'Property rejected.');
-    }
+        return redirect()->back()->with('success', 'Property rejected.');
+    }   
 
     public function destroy(Property $property): RedirectResponse
     {
