@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('propertys', function (Blueprint $table) {
+        Schema::table('properties', function (Blueprint $table) {
             $table->string('area_unit', 20)
                   ->nullable()
                   ->default('sqft')
@@ -18,7 +18,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('propertys', function (Blueprint $table) {
+        Schema::table('properties', function (Blueprint $table) {
             $table->dropColumn('area_unit');
         });
     }
