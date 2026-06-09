@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\AreaUnit;
 use App\Http\Controllers\Controller;
 use App\Models\Property;
 use Illuminate\Http\Request;
@@ -179,31 +180,6 @@ class PropertyController extends Controller
         }
 
 
-        // if ($lat !== null && $lng !== null && $lat !== '' && $lng !== '') {
-        //     $h = "(6371000 * acos(cos(radians(?)) * cos(radians(lat)) * cos(radians(lng) - radians(?)) + sin(radians(?)) * sin(radians(lat))))";
-        //     $q->select('*')->selectRaw("$h AS distance", [$lat, $lng, $lat])
-        //         ->whereNotNull('lat')->whereNotNull('lng')
-        //         ->whereRaw("$h < ?", [$lat, $lng, $lat, $radius])
-        //         ->orderBy('distance');
-        // } else {
-        //     $sortBy = $request->query('sortBy', 'newest');
-        //     switch ($sortBy) {
-        //         case 'oldest':
-        //             $q->orderBy('created_at', 'asc');
-        //             break;
-        //         case 'priceLowToHigh':
-        //             $q->orderBy('price', 'asc');
-        //             break;
-        //         case 'priceHighToLow':
-        //             $q->orderBy('price', 'desc');
-        //             break;
-        //         case 'newest':
-        //         default:
-        //             $q->orderBy('created_at', 'desc');
-        //     }
-        // }
-
-
         $perPage = (int) $request->query('per_page', 12);
         return response()->json($q->paginate($perPage));
     }
@@ -267,8 +243,9 @@ class PropertyController extends Controller
                 'price'       => 'required|integer|min:0',
                 'location'    => 'required|string|max:255',
                 'bedrooms'    => 'nullable|integer|min:0',
-                'bathrooms'   => 'nullable|integer|min:0',
-                'area'        => 'nullable|numeric|min:0',
+                'bathrooms'   => 'nullable|integer|min:0',   
+                'area'        => ['nullable', 'string', 'max:50'],
+                'area_unit'   => ['nullable', 'string', 'in:' . implode(',', AreaUnit::KEYS)],
                 'furnishing'  => 'nullable|in:furnished,semifurnished,unfurnished',
                 'amenities'   => 'nullable|array',
                 'amenities.*' => 'string',
@@ -407,6 +384,7 @@ class PropertyController extends Controller
                 'bedrooms'            => $data['bedrooms'] ?? null,
                 'bathrooms'           => $data['bathrooms'] ?? null,
                 'area'                => $data['area'] ?? null,
+                'area_unit'           => $data['area_unit'] ?? null,
                 'furnishing'          => $data['furnishing'] ?? null,
                 'amenities'           => $data['amenities'] ?? [],
                 'images'              => $images,
@@ -615,7 +593,8 @@ class PropertyController extends Controller
                 'location'       => 'sometimes|string|min:1|max:255',
                 'bedrooms'       => 'nullable|integer|min:0',
                 'bathrooms'      => 'nullable|integer|min:0',
-                'area'           => 'nullable|numeric|min:0',
+                'area'           => ['nullable', 'string', 'max:50'],
+                'area_unit'      => ['nullable', 'string', 'in:' . implode(',', AreaUnit::KEYS)],
                 'furnishing'     => 'nullable|in:furnished,semifurnished,unfurnished',
                 'amenities'      => 'nullable|array',
                 'amenities.*'    => 'string',
@@ -759,6 +738,7 @@ class PropertyController extends Controller
                 'bedrooms'            => $data['bedrooms'] ?? $property->bedrooms,
                 'bathrooms'           => $data['bathrooms'] ?? $property->bathrooms,
                 'area'                => $data['area'] ?? $property->area,
+                'area_unit'           => $data['area_unit'] ?? $property->area_unit,
                 'furnishing'          => $data['furnishing'] ?? $property->furnishing,
                 'amenities'           => $data['amenities'] ?? $property->amenities,
                 'images'              => $images,
