@@ -173,15 +173,15 @@ const Home = () => {
         }}
       />
       <BlogSection
-        title="Top Articles on buying an Open Land"
+        title="Top Articles on buying a"
         category="commercial"
-        highlight="Open Land"
-        description="Editors' top picked blogs on Open Land Properties"
+        highlight="Commercial Property"
+        description="Editors' top picked blogs on Commercial Properties"
       />
       <FeaturedProperties
         type="commercial"
         url="/properties?type=commercial&page=1"
-        desc="Ready to buy a Commercial Placequick and easy?"
+        desc="Ready to buy a Commercial Place quick and easy?"
       />
 
       <Testimonials />

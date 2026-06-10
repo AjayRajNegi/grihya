@@ -1,19 +1,8 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { PhoneIcon, MailIcon, UserIcon, ShieldIcon } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
-interface PropertyContactInfoProps {
-  ownerName: string;
-  ownerPhone: string;
-  ownerEmail: string;
-}
-
-const PropertyContactInfo: React.FC<PropertyContactInfoProps> = ({
-  ownerName,
-  ownerPhone,
-  ownerEmail,
-}) => {
+const PropertyContactInfo = () => {
   const { isAuthenticated } = useAuth();
 
   if (!isAuthenticated) {
@@ -53,10 +42,11 @@ const PropertyContactInfo: React.FC<PropertyContactInfoProps> = ({
       <div className="space-y-4">
         <div>
           <p className="text-sm text-gray-600">Name</p>
-          <p className="font-medium">{ownerName || "Not provided"}</p>
+          {/* <p className="font-medium">{ownerName || "Not provided"}</p> */}
+          <p className="font-medium">Grihya</p>
         </div>
 
-        {ownerPhone ? (
+        {/* {ownerPhone ? (
           <div>
             <p className="text-sm text-gray-600">Phone</p>
             <a
@@ -72,9 +62,20 @@ const PropertyContactInfo: React.FC<PropertyContactInfoProps> = ({
             <p className="text-sm text-gray-600">Phone</p>
             <p className="font-medium">Not provided</p>
           </div>
-        )}
+        )} */}
 
-        {ownerEmail ? (
+        <div>
+          <p className="text-sm text-gray-600">Phone</p>
+          <a
+            href={`tel:+91 8422950663`}
+            className="flex items-center font-medium text-[#2DB8D1]"
+          >
+            <PhoneIcon className="mr-2 h-4 w-4" />
+            +91 8422950663
+          </a>
+        </div>
+
+        {/* {ownerEmail ? (
           <div>
             <p className="text-sm text-gray-600">Email</p>
             <a
@@ -90,7 +91,18 @@ const PropertyContactInfo: React.FC<PropertyContactInfoProps> = ({
             <p className="text-sm text-gray-600">Email</p>
             <p className="font-medium">Not provided</p>
           </div>
-        )}
+        )} */}
+
+        <div>
+          <p className="text-sm text-gray-600">Email</p>
+          <a
+            href={`mailto:grihya.service@gmail.com`}
+            className="flex items-center font-medium text-[#2DB8D1]"
+          >
+            <MailIcon className="mr-2 h-4 w-4" />
+            grihya.service@gmail.com
+          </a>
+        </div>
       </div>
     </div>
   );

@@ -145,7 +145,7 @@ const Footer: React.FC = () => {
           className="mt-6 flex flex-col items-center justify-between gap-2 border-t border-gray-200 pt-4 md:mt-12 md:flex-row md:gap-4 md:pt-8"
           variants={itemVariants}
         >
-          <p className="text-sm text-gray-600">Copyright @2024 Grihya</p>
+          <p className="text-sm text-gray-600">Copyright @2026 Grihya</p>
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <a href="www.redsan.in">Developed by Redsan</a>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">

@@ -980,7 +980,9 @@ const PropertyDetail: React.FC = () => {
                       <div className="flex items-start gap-4">
                         <SquareIcon className="h-6 w-6 text-[#2DB8D1]" />
                         <div>
-                          <div className="text-sm text-gray-500">Frontage</div>
+                          <div className="text-sm text-gray-500">
+                            Frontage (width)
+                          </div>
                           <div className="text-lg font-medium text-gray-900">
                             {property.frontage} ft
                           </div>
@@ -991,7 +993,9 @@ const PropertyDetail: React.FC = () => {
                       <div className="flex items-start gap-4">
                         <SquareIcon className="h-6 w-6 text-[#2DB8D1]" />
                         <div>
-                          <div className="text-sm text-gray-500">Depth</div>
+                          <div className="text-sm text-gray-500">
+                            Depth (length)
+                          </div>
                           <div className="text-lg font-medium text-gray-900">
                             {property.depth} ft
                           </div>
@@ -1126,11 +1130,7 @@ const PropertyDetail: React.FC = () => {
                 >
                   Chat with Us to get personlized properties.
                 </button>
-                <PropertyContactInfo
-                  ownerName={property.owner.name}
-                  ownerPhone={property.owner.phone}
-                  ownerEmail={property.owner.email}
-                />
+                <PropertyContactInfo />
 
                 {/* Similar Properties */}
                 <div className="rounded-xl border border-gray-100 bg-white p-6 sm:p-8">
