@@ -496,7 +496,7 @@ const PropertyListing: React.FC = () => {
                           {property.area && (
                             <div className="flex items-center">
                               <SquareIcon className="mr-1 h-4 w-4" />
-                              <span>{formatArea(property)} sq.ft</span>
+                              <span>{formatArea(property)}</span>
                             </div>
                           )}
                         </div>

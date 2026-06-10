@@ -663,7 +663,7 @@ const PropertyDetail: React.FC = () => {
 
                           <div className="flex items-center gap-2">
                             <div className="text-lg font-medium text-gray-900">
-                              {property.area_unit ?? "sqft"}
+                              {formatArea(property)}
                             </div>
 
                             {/* <button
