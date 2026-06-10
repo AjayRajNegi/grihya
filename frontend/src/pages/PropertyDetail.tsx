@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import PropertyGallery from "../components/properties/PropertyGallery";
 import PropertyContactInfo from "../components/properties/PropertyContactInfo";
-import type { Property as BaseProperty } from "../data/mockData";
+import type { Property as BaseProperty, Property } from "../data/mockData";
 import L from "leaflet";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -124,7 +124,8 @@ type ApiProperty = {
   location: string;
   bedrooms: number | null;
   bathrooms: number | null;
-  area: number | null;
+  area: string | null;
+  area_unit: string | null;
   furnishing: "furnished" | "semifurnished" | "unfurnished" | null;
   amenities: string[] | null;
   images: string[] | null;
@@ -186,6 +187,7 @@ const toProperty = (p: ApiProperty): ViewProperty => {
     bedrooms: p.bedrooms ?? undefined,
     bathrooms: p.bathrooms ?? undefined,
     area: p.area ?? undefined,
+    area_unit: p.area_unit ?? undefined,
     furnishing: (p.furnishing || undefined) as BaseProperty["furnishing"],
     amenities: p.amenities ?? [],
     images: (p.images ?? []).map(absolutize).filter(Boolean) as string[],
@@ -247,35 +249,35 @@ const PropertyDetail: React.FC = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
     null,
   );
-  const [showAreaUnits, setShowAreaUnits] = useState(false);
+  // const [showAreaUnits, setShowAreaUnits] = useState(false);
 
-  const areaConversions = useMemo(() => {
-    if (!property?.area) {
-      return {
-        sqFt: 0,
-        sqM: 0,
-        sqYd: 0,
-        acres: 0,
-        hectares: 0,
-        bigha: 0,
-        kanal: 0,
-        marla: 0,
-      };
-    }
+  // const areaConversions = useMemo(() => {
+  //   if (!property?.area) {
+  //     return {
+  //       sqFt: 0,
+  //       sqM: 0,
+  //       sqYd: 0,
+  //       acres: 0,
+  //       hectares: 0,
+  //       bigha: 0,
+  //       kanal: 0,
+  //       marla: 0,
+  //     };
+  //   }
 
-    const sqFt = Number(property.area);
+  //   const sqFt = Number(property.area);
 
-    return {
-      sqFt,
-      sqM: sqFt * 0.09290304,
-      sqYd: sqFt / 9,
-      acres: sqFt / 43560,
-      hectares: sqFt / 107639.104167,
-      bigha: sqFt / 27225,
-      kanal: sqFt / 5445,
-      marla: sqFt / 272.25,
-    };
-  }, [property?.area]);
+  //   return {
+  //     sqFt,
+  //     sqM: sqFt * 0.09290304,
+  //     sqYd: sqFt / 9,
+  //     acres: sqFt / 43560,
+  //     hectares: sqFt / 107639.104167,
+  //     bigha: sqFt / 27225,
+  //     kanal: sqFt / 5445,
+  //     marla: sqFt / 272.25,
+  //   };
+  // }, [property?.area]);
 
   useEffect(() => {
     window.scrollTo({
@@ -480,6 +482,12 @@ const PropertyDetail: React.FC = () => {
     }
   };
 
+  function formatArea(property: Pick<Property, "area" | "area_unit">): string {
+    if (!property.area) return "—";
+    const unit = property.area_unit ?? "sqft";
+    return `${property.area} ${unit}`;
+  }
+
   return (
     <>
       <ScrollToTop />
@@ -498,7 +506,7 @@ const PropertyDetail: React.FC = () => {
             {property.area && (
               <div className="mb-4 flex items-center">
                 <div className="text-xl font-medium text-gray-600">
-                  {property.area} sq.ft
+                  {property.area_unit ?? "sqft"}
                 </div>
               </div>
             )}
@@ -655,19 +663,19 @@ const PropertyDetail: React.FC = () => {
 
                           <div className="flex items-center gap-2">
                             <div className="text-lg font-medium text-gray-900">
-                              {property.area} sq.ft
+                              {property.area_unit ?? "sqft"}
                             </div>
 
-                            <button
+                            {/* <button
                               type="button"
                               onClick={() => setShowAreaUnits((prev) => !prev)}
                               className="text-sm font-medium text-[#2DB8D1] hover:underline"
                             >
                               {showAreaUnits ? "Hide" : "Convert"}
-                            </button>
+                            </button> */}
                           </div>
 
-                          {showAreaUnits && (
+                          {/* {showAreaUnits && (
                             <div className="absolute left-0 top-full z-20 mt-2 w-72 rounded-lg border border-gray-200 bg-white p-4 shadow-lg">
                               <div className="grid grid-cols-2 text-sm">
                                 <div>
@@ -720,7 +728,7 @@ const PropertyDetail: React.FC = () => {
                                 </div>
                               </div>
                             </div>
-                          )}
+                          )} */}
                         </div>
                       </div>
                     )}

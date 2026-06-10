@@ -46,6 +46,7 @@ const ListProperty: React.FC = () => {
     bedrooms: string;
     bathrooms: string;
     area: string;
+    area_unit: string;
     furnishing: string;
     amenities: string[];
     existingImages?: string[];
@@ -84,6 +85,7 @@ const ListProperty: React.FC = () => {
     bedrooms: "",
     bathrooms: "",
     area: "",
+    area_unit: "",
     furnishing: "",
     amenities: [],
     existingImages: [],
@@ -239,6 +241,7 @@ const ListProperty: React.FC = () => {
           bedrooms: data.bedrooms ? String(data.bedrooms) : "",
           bathrooms: data.bathrooms ? String(data.bathrooms) : "",
           area: data.area ? String(data.area) : "",
+          area_unit: data.area_unit ? String(data.area_unit) : "",
           furnishing: data.furnishing || "",
           amenities: data.amenities || [],
           existingImages: Array.isArray(data.images) ? data.images : [],
@@ -395,11 +398,19 @@ const ListProperty: React.FC = () => {
     ) {
       newErrors.bathrooms = "Bathrooms must be a positive number.";
     }
-    if (
-      formData.area &&
-      (isNaN(Number(formData.area)) || Number(formData.area) < 0)
-    ) {
-      newErrors.area = "Area must be a positive number.";
+    if (formData.area !== undefined && formData.area !== "") {
+      const numericArea = Number(formData.area.trim());
+
+      if (isNaN(numericArea) || numericArea <= 0) {
+        newErrors.area = "Area must be a positive number greater than zero.";
+      }
+    }
+    if (formData.area_unit !== undefined && formData.area_unit !== "") {
+      const numericArea = Number(formData.area_unit.trim());
+
+      if (isNaN(numericArea) || numericArea <= 0) {
+        newErrors.area_unit = "Area unit must be selected.";
+      }
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -479,6 +490,8 @@ const ListProperty: React.FC = () => {
         form.append("bathrooms", String(Number(formData.bathrooms.trim())));
       if (formData.area.trim())
         form.append("area", String(Number(formData.area.trim())));
+      if (formData.area_unit.trim())
+        form.append("area_unit", String(Number(formData.area_unit.trim())));
       if (formData.furnishing) form.append("furnishing", formData.furnishing);
 
       // Category-specific fields
@@ -1297,26 +1310,49 @@ const ListProperty: React.FC = () => {
                       </div>
                     )}
 
-                    {/* Area */}
                     <div className="space-y-2">
-                      <Label htmlFor="area">Area (sq.ft)</Label>
-                      <Input
-                        disabled={isBusy}
-                        type="number"
-                        min={0}
-                        id="area"
-                        name="area"
-                        value={formData.area}
-                        onChange={handleChange}
-                        className={
-                          errors.area
-                            ? "rounded-[8px] border-destructive"
-                            : "rounded-[8px]"
-                        }
-                      />
+                      <Label htmlFor="area">Area</Label>
+                      <div className="flex gap-2">
+                        <Input
+                          disabled={isBusy}
+                          type="number"
+                          min={0}
+                          id="area"
+                          name="area"
+                          value={formData.area}
+                          onChange={handleChange}
+                          className={
+                            errors.area
+                              ? "flex-1 rounded-[8px] border-destructive"
+                              : "flex-1 rounded-[8px]"
+                          }
+                        />
+                        <select
+                          disabled={isBusy}
+                          id="area_unit"
+                          name="area_unit"
+                          value={formData.area_unit}
+                          onChange={handleChange}
+                          className={`w-32 rounded-[8px] border bg-background px-3 py-2 text-sm ${errors.area_unit ? "border-destructive" : "border-input"}`}
+                        >
+                          <option value="sqft">sq.ft</option>
+                          <option value="sqm">sq.m</option>
+                          <option value="acre">Acre</option>
+                          <option value="bigha">Bigha</option>
+                          <option value="hectare">Hectare</option>
+                          <option value="marla">Marla</option>
+                          <option value="kanal">Kanal</option>
+                          <option value="gaj">Gaj</option>
+                        </select>
+                      </div>
                       {errors.area && (
                         <p className="text-sm text-destructive">
                           {errors.area}
+                        </p>
+                      )}
+                      {errors.area_unit && (
+                        <p className="text-sm text-destructive">
+                          {errors.area_unit}
                         </p>
                       )}
                     </div>
@@ -1829,6 +1865,7 @@ const ListProperty: React.FC = () => {
       </div>
 
       {/* Map Picker modal (right before auth-gate) */}
+
       <MapPickerModal
         open={mapOpen}
         onClose={() => setMapOpen(false)}

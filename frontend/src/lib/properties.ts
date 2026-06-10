@@ -9,7 +9,9 @@ export type CreatePropertyInput = {
   location: string;
   bedrooms?: number;
   bathrooms?: number;
-  area?: number;
+  area?: string;
+  area_unit?: string;
+
   furnishing?: "furnished" | "semifurnished" | "unfurnished" | "";
   amenities?: string[];
   images?: string[];

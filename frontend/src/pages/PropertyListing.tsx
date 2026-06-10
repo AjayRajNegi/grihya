@@ -40,7 +40,8 @@ type ApiProperty = {
   location: string;
   bedrooms: number | null;
   bathrooms: number | null;
-  area: number | null;
+  area: string | null;
+  area_unit: string | null;
   furnishing: "furnished" | "semifurnished" | "unfurnished" | null;
   amenities: string[] | null;
   images: string[] | null;
@@ -143,6 +144,7 @@ const PropertyListing: React.FC = () => {
     bedrooms: p.bedrooms ?? undefined,
     bathrooms: p.bathrooms ?? undefined,
     area: p.area ?? undefined,
+    area_unit: p.area_unit ?? undefined,
     furnishing: (p.furnishing || undefined) as Property["furnishing"],
     amenities: p.amenities ?? [],
     images: p.images ?? [],
@@ -343,6 +345,12 @@ const PropertyListing: React.FC = () => {
     console.log(properties[0]);
   }
 
+  function formatArea(property: Pick<Property, "area" | "area_unit">): string {
+    if (!property.area) return "—";
+    const unit = property.area_unit ?? "sqft";
+    return `${property.area} ${unit}`;
+  }
+
   return (
     <div className="min-h-screen bg-white">
       <PropertiesSearch />
@@ -488,7 +496,7 @@ const PropertyListing: React.FC = () => {
                           {property.area && (
                             <div className="flex items-center">
                               <SquareIcon className="mr-1 h-4 w-4" />
-                              <span>{property.area} sq.ft</span>
+                              <span>{formatArea(property)} sq.ft</span>
                             </div>
                           )}
                         </div>
