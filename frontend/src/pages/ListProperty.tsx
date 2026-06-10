@@ -1312,7 +1312,7 @@ const ListProperty: React.FC = () => {
 
                     <div className="space-y-2">
                       <Label htmlFor="area">Area</Label>
-                      <div className="flex gap-2">
+                      <div className="flex min-w-20 gap-2">
                         <Input
                           disabled={isBusy}
                           type="number"
