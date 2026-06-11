@@ -24,13 +24,13 @@ export const Navbar = () => {
         <div className="-mb-[14px] flex h-16 items-center justify-between md:-mb-0 md:h-20">
           {/* Logo */}
           <div
-            className="flex max-w-[120px] cursor-pointer items-center gap-2 object-contain md:hidden"
+            className="flex max-w-[160px] cursor-pointer items-center gap-2 object-contain md:hidden"
             onClick={() => navigate("/")}
           >
             <img src="/logo/GrihyaLogoWithName.png" />
           </div>
           <div
-            className="hidden max-w-32 cursor-pointer items-center gap-2 object-contain md:flex"
+            className="hidden max-w-[340px] cursor-pointer items-center gap-2 overflow-clip rounded-[20px] object-contain md:flex"
             onClick={() => navigate("/")}
           >
             <img src="/logo/GrihyaLogoWithName.png" />
